@@ -53,7 +53,7 @@ compliance, performance and portability.
 
 %description -l pl
 Mozilla Firefox jest open sourcow± przegl±dark± sieci www, stworzon± z
-my¶l± o zgodno¶ci ze standartami, wydajno¶ci± i przeno¶no¶ci±.
+my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
 %package lang-en
 Summary:	English resources for Mozilla-firefox
