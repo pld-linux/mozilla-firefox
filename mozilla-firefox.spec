@@ -29,7 +29,7 @@ Patch4:		%{name}-freetype.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
-BuildRequires:	freetype-devel >= 1:2.1.8
+BuildRequires:	freetype-devel >= 1:2.1.9
 %else
 BuildRequires:	freetype-devel >= 2.1.3
 BuildRequires:	freetype-devel < 1:2.1.8
@@ -51,7 +51,6 @@ Requires:	%{name}-lang-resources = %{version}
 Requires:	freetype >= 1:2.1.3
 %else
 Requires:	freetype >= 2.1.3
-Requires:	freetype < 1:2.1.8
 Conflicts:	freetype = 2.1.8
 %endif
 Requires:	nspr >= 1:4.6-0.20041030.1
