@@ -1,4 +1,6 @@
-%bcond_with tests	# enable tests (whatever they check)
+#
+# Conditional build:
+%bcond_with	tests	# enable tests (whatever they check)
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
@@ -11,19 +13,27 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/fire
 # Source0-md5:	cdc85152f4219bf3e3f1a8dc46e04654
 Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
+Patch1:		%{name}-nspr.patch
+Patch2:		%{name}-nss.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	gtk+2-devel >= 2.0.0
 BuildRequires:  libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
+BuildRequires:	nspr-devel >= 1:4.5.0
+BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1.1.0
 BuildRequires:	zip
+Requires:	%{name}-lang-resources = %{version}
+Requires:	nspr >= 1:4.5.0
+Requires:	nss >= 3.8
 Obsoletes:	mozilla-firebird
-Requires:	%{name}-lang-resources
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define	_firefoxdir	%{_libdir}/%{name}
+%define		_firefoxdir	%{_libdir}/%{name}
+# mozilla and firefox provide their own versions
+%define		_noautoreqdep	libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -37,10 +47,10 @@ my¶l± o zgodno¶ci ze standartami, wydajno¶ci± i przeno¶no¶ci±.
 Summary:	English resources for Mozilla-firefox
 Summary(pl):	Anglojêzyczne zasoby dla Mozilla-FireFox
 Group:	X11/Applications/Networking
-Requires(post,postun):	mozilla-firefox >= %{version}-1.1
+Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
-Requires:	mozilla-firefox >= %{version}-1.1
-Provides:	%{name}-lang-resources
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-lang-resources = %{version}-%{release}
 Obsoletes:	%{name}-lang-resources
 
 %description lang-en
@@ -52,18 +62,18 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %prep
 %setup -q -n mozilla
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
 export MOZ_PHOENIX="1"
 
-./configure \
-	--with-system-jpeg \
-	--with-system-zlib \
-	--with-system-png \
-	--with-system-mng \
-	--with-pthreads \
+cp -f /usr/share/automake/config.* build/autoconf
+cp -f /usr/share/automake/config.* nsprpub/build/autoconf
+cp -f /usr/share/automake/config.* directory/c-sdk/config/autoconf
+%configure2_13 \
 %if %{with debug}
 	--enable-debug \
 	--enable-debug-modules \
@@ -71,31 +81,35 @@ export MOZ_PHOENIX="1"
 	--disable-debug \
 	--disable-debug-modules \
 %endif
-	--disable-xprint \
-	--disable-mailnews \
 	--disable-composer \
-	--disable-ldap \
-	--disable-jsd \
 	--disable-dtd-debug \
+	--disable-installer \
+	--disable-jsd \
+	--disable-ldap \
+	--disable-mailnews \
 %if %{with tests}
 	--enable-tests \
 %else
 	--disable-tests \
 %endif
-	--disable-installer \
-	--enable-plaintext-editor-only \
-	--enable-optimize="%{optflags}" \
+	--disable-xprint \
 	--enable-crypto \
+	--enable-freetype2 \
+	--enable-mathml \
+	--enable-optimize="%{optflags}" \
+	--enable-plaintext-editor-only \
+	--enable-reorder \
 	--enable-strip \
 	--enable-strip-libs \
-	--enable-reorder \
-	--enable-mathml \
 	--enable-xinerama \
-	--enable-freetype2 \
 	--enable-xft \
-	--enable-default-toolkit="gtk2"
+	--enable-default-toolkit="gtk2" \
+	--with-pthreads \
+	--with-system-jpeg \
+	--with-system-nspr \
+	--with-system-png \
+	--with-system-zlib
 
-#{__make} %{?_smp_mflags}
 %{__make}
 
 %install
@@ -104,7 +118,8 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
-	MOZILLA_BIN="\$(DIST)/bin/firefox-bin"
+	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
+	EXCLUDE_NSPR_LIBS=1
 
 #install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -sf %{_firefoxdir}/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
@@ -130,6 +145,12 @@ rm -rf $RPM_BUILD_ROOT
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
+%postun
+if [ "$1" != "0" ]; then
+	umask 022
+	cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+fi
+
 %post lang-en
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
@@ -143,7 +164,11 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %attr(755,root,root) %{_bindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
-%{_firefoxdir}/components
+%dir %{_firefoxdir}/components
+%attr(755,root,root) %{_firefoxdir}/components/*.so
+%{_firefoxdir}/components/*.js
+%{_firefoxdir}/components/*.xpt
+%{_firefoxdir}/components/myspell
 %{_firefoxdir}/plugins
 %{_firefoxdir}/searchplugins
 %{_firefoxdir}/icons
@@ -159,16 +184,21 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %ifarch %{ix86}
 %attr(755,root,root) %{_firefoxdir}/elf-dynstr-gc
 %endif
-%attr(755,root,root) %{_firefoxdir}/libsoftokn3.chk
-%attr(755,root,root) %{_firefoxdir}/shlibsign
 %{_firefoxdir}/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
 
 %dir %{_firefoxdir}/chrome
 %{_firefoxdir}/chrome/browser.jar
+# -chat subpackage?
+#%{_firefoxdir}/chrome/chatzilla.jar
 %{_firefoxdir}/chrome/classic.jar
 %{_firefoxdir}/chrome/comm.jar
+%{_firefoxdir}/chrome/content-packs.jar
+%{_firefoxdir}/chrome/help.jar
+# -dom-inspector subpackage?
+#%{_firefoxdir}/chrome/inspector.jar
+%{_firefoxdir}/chrome/modern.jar
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
