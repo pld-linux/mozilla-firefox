@@ -86,7 +86,7 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin"
 
 #install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-ln -sf %{_libdir}/mozilla-firefox/firefox-bin $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+ln -sf %{_libdir}/mozilla-firefox/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
