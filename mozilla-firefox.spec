@@ -2,9 +2,9 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.8
-Release:	0.1
+Release:	0.2
 License:	MPL/LGPL
-Group:		Applications/Networking
+Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
 # Source0-md5:	cdc85152f4219bf3e3f1a8dc46e04654
 Source1:	%{name}.desktop
@@ -17,6 +17,7 @@ BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	pango-devel >= 1.1.0
 BuildRequires:	zip
+Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
