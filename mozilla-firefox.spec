@@ -96,7 +96,7 @@ export MOZ_PHOENIX="1"
 	--enable-default-toolkit="gtk2"
 
 #{__make} %{?_smp_mflags}
-%{__make} -f client.mk build
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
