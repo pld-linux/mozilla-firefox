@@ -14,7 +14,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0
-Release:	2
+Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.0/source/firefox-1.0-source.tar.bz2
@@ -259,7 +259,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 #%{_firefoxdir}/chrome/content-packs.jar
 %{_firefoxdir}/chrome/help.jar
 # -dom-inspector subpackage?
-#%{_firefoxdir}/chrome/inspector.jar
+%{_firefoxdir}/chrome/inspector.jar
 %{_firefoxdir}/chrome/modern.jar
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
