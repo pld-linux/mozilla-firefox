@@ -1,4 +1,9 @@
 #
+# TODO:
+# - handle locales differently (runtime, since it's possible to do)
+# - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
+#   for hints how to make locales and other stuff like extensions working
+#
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 #
@@ -6,7 +11,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.9.2
-Release:	1
+Release:	1.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-%{version}-source.tar.bz2
@@ -30,6 +35,7 @@ BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.5.0
 Requires:	nss >= 3.8
+PreReq:		XFree86-Xvfb
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -147,24 +153,22 @@ rm -rf $RPM_BUILD_ROOT
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
-cat << EOF
-
- ****************************************************
- *                                                  *
- *  NOTE:                                           *
- *  After upgrade from 0.9 you have to              *
- *  manually remove ~/.phoenix dir, and answer:     *
- *  "don't import anything" when asked about        *
- *  importing settings                              *
- *                                                  *
- ****************************************************
-
-EOF
+/usr/X11R6/bin/Xvfb :69 -nolisten tcp -ac -terminate >/dev/null 2>&1 & \
+	DISPLAY=:69 %{_bindir}/mozilla-firefox -install-global-extension -install-global-theme >/dev/null 2>&1 & \
+	sleep 5
 
 %postun
 if [ "$1" != "0" ]; then
 	umask 022
 	cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+fi
+
+%preun
+if [ "$1" == "0" ]; then
+  rm -rf %{_firefoxdir}/chrome/overlayinfo
+  rm -rf %{_firefoxdir}/components
+  rm -f  %{_firefoxdir}/chrome/*.rdf
+  rm -rf %{_firefoxdir}/extensions
 fi
 
 %post lang-en
