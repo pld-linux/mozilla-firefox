@@ -6,7 +6,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.9.2
-Release:	0.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-%{version}-source.tar.bz2
@@ -146,6 +146,20 @@ rm -rf $RPM_BUILD_ROOT
 %post
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+
+cat << EOF
+
+ ****************************************************
+ *                                                  *
+ *  NOTE:                                           *
+ *  After upgrade from 0.9 you have to              *
+ *  manually remove ~/.phoenix dir, and answer:     *
+ *  "don't import anything" when asked about        *
+ *  importing settings                              *
+ *                                                  *
+ ****************************************************
+
+EOF
 
 %postun
 if [ "$1" != "0" ]; then
