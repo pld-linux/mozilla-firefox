@@ -83,6 +83,8 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 export CFLAGS="%{rpmcflags}"
 export CXXFLAGS="%{rpmcflags}"
 export MOZ_PHOENIX="1"
+export BUILD_OFFICIAL="1"
+export MOZILLA_OFFICIAL="1"
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
@@ -119,8 +121,8 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--enable-xft \
 	--enable-default-toolkit="gtk2" \
 	--with-pthreads \
-	--with-system-jpeg \
 	--without-system-nspr \
+	--with-system-jpeg \
 	--with-system-png \
 	--with-system-zlib \
 	--enable-single-profile \
