@@ -25,6 +25,7 @@ Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
+BuildRequires:	freetype-devel >= 1:2.1.8
 BuildRequires:	gtk+2-devel >= 2.0.0
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
@@ -35,6 +36,7 @@ BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
+Requires:	freetype >= 1:2.1.8
 Requires:	nspr >= 1:4.5.0
 Requires:	nss >= 3.8
 PreReq:		XFree86-Xvfb
