@@ -41,6 +41,7 @@ BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1:1.1.0
+BuildRequires:	perl(Time::localtime)
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 %if %{with ft218}
