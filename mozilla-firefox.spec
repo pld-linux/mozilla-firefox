@@ -14,7 +14,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0
-Release:	1
+Release:	1.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.0/source/firefox-1.0-source.tar.bz2
@@ -55,7 +55,6 @@ Conflicts:	freetype = 2.1.8
 %endif
 Requires:	nspr >= 1:4.6-0.20041030.1
 Requires:	nss >= 3.8
-PreReq:		XFree86-Xvfb
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -142,7 +141,9 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--with-system-png \
 	--with-system-zlib \
 	--enable-single-profile \
-	--disable-profilesharing
+	--disable-profilesharing \
+	--enable-extensions=cookie,xml-rpc,xmlextras,pref,transformiix,universalchardet,webservices,inspector,gnomevfs,negotiateauth
+	
 
 %{__make}
 
@@ -196,35 +197,7 @@ export LD_LIBRARY_PATH
 %{_firefoxdir}/regxpcom >/dev/null  || echo "E: regxpcom was exited: $?" >&2
 %{_firefoxdir}/regchrome >/dev/null || echo "E: regchrome was exited: $?" >&2
 
-TDIR=`mktemp -d /tmp/mozilla-firefox-pkg.XXXXXX` || exit 1
-HOME="$TDIR"
-export TDIR HOME
-
-mkdir -p $TDIR/.mozilla/firefox/default
-cp -rf %{_firefoxdir}/defaults/profile/* $TDIR/.mozilla/firefox/default
-
-# preseed profiles.ini
-cat > $TDIR/.mozilla/firefox/profiles.ini <<EOF
-[General]
-StartWithLastProfile=1
-
-[Profile0]
-Name=default
-IsRelative=1
-Path=default
-
-EOF
-
-
-( \
-	/usr/X11R6/bin/Xvfb :69 -nolisten tcp -ac -terminate >/dev/null 2>&1 & \
-	xvfb_pid=${!}; \
-	DISPLAY=:69 %{_firefoxdir}/firefox-bin -list-global-items >/dev/null 2>&1 & \
-	sleep 15; \
-	kill ${xvfb_pid} >/dev/null 2>&1 \
-)
-
-rm -rf $TDIR
+%{_firefoxdir}/firefox -register
 
 %postun
 if [ "$1" != "0" ]; then
@@ -257,7 +230,6 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %attr(755,root,root) %{_firefoxdir}/components/*.so
 %{_firefoxdir}/components/*.js
 %{_firefoxdir}/components/*.xpt
-%{_firefoxdir}/components/myspell
 %{_firefoxdir}/plugins
 %{_firefoxdir}/searchplugins
 %{_firefoxdir}/icons
@@ -284,7 +256,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 #%{_firefoxdir}/chrome/chatzilla.jar
 %{_firefoxdir}/chrome/classic.jar
 %{_firefoxdir}/chrome/comm.jar
-%{_firefoxdir}/chrome/content-packs.jar
+#%{_firefoxdir}/chrome/content-packs.jar
 %{_firefoxdir}/chrome/help.jar
 # -dom-inspector subpackage?
 #%{_firefoxdir}/chrome/inspector.jar
