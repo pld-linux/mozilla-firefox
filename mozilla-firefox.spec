@@ -2,7 +2,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.8
-Release:	1
+Release:	1.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
@@ -19,6 +19,8 @@ BuildRequires:	pango-devel >= 1.1.0
 BuildRequires:	zip
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define	_firefoxdir	%{_libdir}/%{name}
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -87,43 +89,51 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin"
 
 #install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-ln -sf %{_libdir}/mozilla-firefox/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+ln -sf %{_firefoxdir}/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
 install browser/base/skin/Throbber.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firefox/defaults/profile/
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firefox/defaults/profile/US/
+#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
+#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
+
+grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/firefox-en-US-installed-chrome.txt
+grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/firefox-misc-installed-chrome.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+umask 022
+cd %{_chromedir}
+cat *-installed-chrome.txt >installed-chrome.txt
+
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-%dir %{_libdir}/mozilla-firefox
-%{_libdir}/mozilla-firefox/res
-%{_libdir}/mozilla-firefox/chrome
-%{_libdir}/mozilla-firefox/components
-%{_libdir}/mozilla-firefox/plugins
-%{_libdir}/mozilla-firefox/searchplugins
-%{_libdir}/mozilla-firefox/icons
-%{_libdir}/mozilla-firefox/defaults
-%{_libdir}/mozilla-firefox/ipc
-%attr(755,root,root) %{_libdir}/mozilla-firefox/*.so
-%attr(755,root,root) %{_libdir}/mozilla-firefox/*.sh
-%attr(755,root,root) %{_libdir}/mozilla-firefox/m*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/f*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/reg*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/x*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/T*
+%dir %{_firefoxdir}
+%{_firefoxdir}/res
+%{_firefoxdir}/chrome
+%{_firefoxdir}/components
+%{_firefoxdir}/plugins
+%{_firefoxdir}/searchplugins
+%{_firefoxdir}/icons
+%{_firefoxdir}/defaults
+%{_firefoxdir}/ipc
+%attr(755,root,root) %{_firefoxdir}/*.so
+%attr(755,root,root) %{_firefoxdir}/*.sh
+%attr(755,root,root) %{_firefoxdir}/m*
+%attr(755,root,root) %{_firefoxdir}/f*
+%attr(755,root,root) %{_firefoxdir}/reg*
+%attr(755,root,root) %{_firefoxdir}/x*
+%attr(755,root,root) %{_firefoxdir}/T*
 %ifarch %{ix86}
-%attr(755,root,root) %{_libdir}/mozilla-firefox/elf-dynstr-gc
+%attr(755,root,root) %{_firefoxdir}/elf-dynstr-gc
 %endif
-%attr(755,root,root) %{_libdir}/mozilla-firefox/libsoftokn3.chk
-%attr(755,root,root) %{_libdir}/mozilla-firefox/shlibsign
-%{_libdir}/mozilla-firefox/bloaturls.txt
+%attr(755,root,root) %{_firefoxdir}/libsoftokn3.chk
+%attr(755,root,root) %{_firefoxdir}/shlibsign
+%{_firefoxdir}/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
