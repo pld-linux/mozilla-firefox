@@ -5,17 +5,16 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	0.8
-Release:	3
+Version:	0.9
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
-# Source0-md5:	cdc85152f4219bf3e3f1a8dc46e04654
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-%{version}-source.tar.bz2
+# Source0-md5:	1dda543d1245db09cea9ad7b9a44146c
 Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
 Patch1:		%{name}-nspr.patch
 Patch2:		%{name}-nss.patch
-Patch3:		%{name}-amd64.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	gtk+2-devel >= 2.0.0
@@ -65,7 +64,6 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 export CFLAGS="%{rpmcflags}"
