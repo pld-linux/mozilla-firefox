@@ -14,7 +14,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.10.1
-Release:	0.2
+Release:	0.3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-1.0PR-source.tar.bz2
@@ -58,6 +58,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep	libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libnspr4.so
+%define		_noautoprovfiles libnspr4.so libplc4.so libplds4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -285,7 +286,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
-%{_firefoxdir}/chrome/icons/default/default.xpm
+%{_firefoxdir}/chrome/icons/default
 
 %files lang-en
 %defattr(644,root,root,755)
