@@ -15,6 +15,7 @@ Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
 Patch1:		%{name}-nspr.patch
 Patch2:		%{name}-nss.patch
+Patch3:		%{name}-lib_path.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	gtk+2-devel >= 2.0.0
@@ -64,6 +65,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 export CFLAGS="%{rpmcflags}"
