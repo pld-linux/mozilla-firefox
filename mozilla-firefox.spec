@@ -1,6 +1,7 @@
 #
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
+# - move most of %%post to external script as it's done in debian
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 #
@@ -11,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.9.2
-Release:	1.1
+Release:	1.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-%{version}-source.tar.bz2
@@ -151,11 +152,54 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 umask 022
-cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
 
-/usr/X11R6/bin/Xvfb :69 -nolisten tcp -ac -terminate >/dev/null 2>&1 & \
-	DISPLAY=:69 %{_bindir}/mozilla-firefox -install-global-extension -install-global-theme >/dev/null 2>&1 & \
-	sleep 5
+unset MOZILLA_FIVE_HOME || :
+MOZILLA_FIVE_HOME=%{_firefoxdir}
+export MOZILLA_FIVE_HOME
+
+# PATH
+PATH=%{_firefoxdir}:$PATH
+export PATH
+
+# added /usr/lib : don't load your local library
+LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH
+
+/sbin/ldconfig || :
+
+%{_firefoxdir}/regxpcom >/dev/null  || echo "E: regxpcom was exited: $?" >&2
+%{_firefoxdir}/regchrome >/dev/null || echo "E: regchrome was exited: $?" >&2
+
+TDIR=`mktemp -d /tmp/mozilla-firefox-pkg.XXXXXX` || exit 1
+HOME="$TDIR"
+export TDIR HOME
+
+mkdir -p $TDIR/.mozilla/firefox/default
+cp -rf %{_firefoxdir}/defaults/profile/* $TDIR/.mozilla/firefox/default
+
+# preseed profiles.ini
+cat > $TDIR/.mozilla/firefox/profiles.ini <<EOF
+[General]
+StartWithLastProfile=1
+
+[Profile0]
+Name=default
+IsRelative=1
+Path=default
+
+EOF
+
+
+( \
+	/usr/X11R6/bin/Xvfb :69 -nolisten tcp -ac -terminate >/dev/null 2>&1 & \
+	xvfb_pid=${!}; \
+	DISPLAY=:69 %{_bindir}/mozilla-firefox -list-global-items >/dev/null 2>&1 & \
+	sleep 15; \
+	kill ${xvfb_pid} >/dev/null 2>&1 \
+)
+
+rm -rf $TDIR
 
 %postun
 if [ "$1" != "0" ]; then
