@@ -68,8 +68,8 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch3 -p1
 
 %build
-export CFLAGS="%{optflags}"
-export CXXFLAGS="%{optflags}"
+export CFLAGS="%{rpmcflags}"
+export CXXFLAGS="%{rpmcflags}"
 export MOZ_PHOENIX="1"
 
 cp -f /usr/share/automake/config.* build/autoconf
@@ -98,7 +98,7 @@ cp -f /usr/share/automake/config.* directory/c-sdk/config/autoconf
 	--enable-crypto \
 	--enable-freetype2 \
 	--enable-mathml \
-	--enable-optimize="%{optflags}" \
+	--enable-optimize="%{rpmcflags}" \
 	--enable-plaintext-editor-only \
 	--enable-reorder \
 	--enable-strip \
