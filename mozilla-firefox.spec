@@ -9,7 +9,7 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/fire
 # Source0-md5:	cdc85152f4219bf3e3f1a8dc46e04654
 Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
-URL:		http://www.mozilla.org/projects/firebird/
+URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	gtk+2-devel >= 2.0.0
 BuildRequires:  libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
@@ -30,7 +30,7 @@ my¶l± o zgodno¶ci ze standartami, wydajno¶ci± i przeno¶no¶ci±.
 %setup -q -n mozilla
 %patch0 -p1
 
-### FIXME: Shouldn't the default firebird config be part of original source ?
+### FIXME: Shouldn't the default firefox config be part of original source ?
 cat <<EOF >.mozconfig
 export MOZ_PHOENIX="1"
 mk_add_options MOZ_PHOENIX="1"
@@ -81,17 +81,17 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 
 %{__make} -C xpinstall/packager \
-	MOZ_PKG_APPNAME="mozilla-firebird" \
-	MOZILLA_BIN="\$(DIST)/bin/MozillaFirefox-bin"
+	MOZ_PKG_APPNAME="mozilla-firefox" \
+	MOZILLA_BIN="\$(DIST)/bin/firefox-bin"
 
-#install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firebird
-ln -sf %{_libdir}/mozilla-firebird/MozillaFirefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firebird
+#install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+ln -sf %{_libdir}/mozilla-firefox/firefox-bin $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
-tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firebird-*-linux-gnu.tar.gz
+tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
-install browser/base/skin/Throbber.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firebird.png
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firebird/defaults/profile/
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firebird/defaults/profile/US/
+install browser/base/skin/Throbber.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
+#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firefox/defaults/profile/
+#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/mozilla-firefox/defaults/profile/US/
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
@@ -101,30 +101,30 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-## TODO:  %{_libdir}/mozilla-firebird/MozillaFirefox* powinny miec +x 
+## TODO:  %{_libdir}/mozilla-firefox/MozillaFirefox* powinny miec +x 
 ##         ale niewiem jak to prosto zorbic.
-%dir %{_libdir}/mozilla-firebird
-%{_libdir}/mozilla-firebird/res
-%{_libdir}/mozilla-firebird/chrome
-%{_libdir}/mozilla-firebird/components
-%{_libdir}/mozilla-firebird/plugins
-%{_libdir}/mozilla-firebird/searchplugins
-%{_libdir}/mozilla-firebird/icons
-%{_libdir}/mozilla-firebird/defaults
-%{_libdir}/mozilla-firebird/ipc
-%attr(755,root,root) %{_libdir}/mozilla-firebird/*.so
-%attr(755,root,root) %{_libdir}/mozilla-firebird/*.sh
-%attr(755,root,root) %{_libdir}/mozilla-firebird/m*
-%attr(755,root,root) %{_libdir}/mozilla-firebird/M*
-%attr(755,root,root) %{_libdir}/mozilla-firebird/reg*
-%attr(755,root,root) %{_libdir}/mozilla-firebird/x*
-%attr(755,root,root) %{_libdir}/mozilla-firebird/t*
-%attr(755,root,root) %{_libdir}/mozilla-firebird/T*
+%dir %{_libdir}/mozilla-firefox
+%{_libdir}/mozilla-firefox/res
+%{_libdir}/mozilla-firefox/chrome
+%{_libdir}/mozilla-firefox/components
+%{_libdir}/mozilla-firefox/plugins
+%{_libdir}/mozilla-firefox/searchplugins
+%{_libdir}/mozilla-firefox/icons
+%{_libdir}/mozilla-firefox/defaults
+%{_libdir}/mozilla-firefox/ipc
+%attr(755,root,root) %{_libdir}/mozilla-firefox/*.so
+%attr(755,root,root) %{_libdir}/mozilla-firefox/*.sh
+%attr(755,root,root) %{_libdir}/mozilla-firefox/m*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/M*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/reg*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/x*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/t*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/T*
 %ifarch %{ix86}
-%attr(755,root,root) %{_libdir}/mozilla-firebird/elf-dynstr-gc
+%attr(755,root,root) %{_libdir}/mozilla-firefox/elf-dynstr-gc
 %endif
-%attr(755,root,root) %{_libdir}/mozilla-firebird/libsoftokn3.chk
-%attr(755,root,root) %{_libdir}/mozilla-firebird/shlibsign
-%{_libdir}/mozilla-firebird/bloaturls.txt
+%attr(755,root,root) %{_libdir}/mozilla-firefox/libsoftokn3.chk
+%attr(755,root,root) %{_libdir}/mozilla-firefox/shlibsign
+%{_libdir}/mozilla-firefox/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
