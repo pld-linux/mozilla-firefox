@@ -291,5 +291,4 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %files lang-en
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
-%{_firefoxdir}/chrome/US.jar
 %{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
