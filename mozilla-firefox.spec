@@ -44,6 +44,7 @@ BuildRequires:	nspr-devel >= 1:4.6-0.20041030.1
 BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl(Time::localtime)
+BuildRequires:	pkgconfig
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 %if %{with ft218}
