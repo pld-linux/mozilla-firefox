@@ -99,15 +99,15 @@ install browser/base/skin/Throbber.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-fir
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/firefox-en-US-installed-chrome.txt
-grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/firefox-misc-installed-chrome.txt
+grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
+grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 umask 022
-cd %{_chromedir}
+cd %{_firefoxdir}/chrome
 cat *-installed-chrome.txt >installed-chrome.txt
 
 %files
