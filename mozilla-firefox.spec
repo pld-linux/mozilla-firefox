@@ -171,6 +171,7 @@ cat *-installed-chrome.txt >installed-chrome.txt
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 
 %files lang-en
+%defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
 %{_firefoxdir}/chrome/en-unix.jar
 %{_firefoxdir}/chrome/US.jar
