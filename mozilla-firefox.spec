@@ -19,7 +19,7 @@ Patch3:		%{name}-amd64.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	gtk+2-devel >= 2.0.0
-BuildRequires:  libIDL-devel >= 0.8.0
+BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
