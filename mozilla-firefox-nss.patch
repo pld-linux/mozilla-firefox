@@ -1,5 +1,6 @@
---- mozilla/config/config.mk~	Wed Apr 23 02:54:06 2003
-+++ mozilla/config/config.mk	Thu May 15 10:23:19 2003
+diff -ur firefox.orig/config/config.mk firefox/config/config.mk
+--- firefox.orig/config/config.mk	2004-06-05 02:26:13.000000000 +0200
++++ firefox/config/config.mk	2004-06-16 09:42:32.000000000 +0200
 @@ -169,7 +169,7 @@
  
  NSS_LIBS	= \
@@ -21,18 +22,23 @@
  	$(NULL)
  
  MOZ_UNICHARUTIL_LIBS = $(DIST)/lib/$(LIB_PREFIX)unicharutil_s.$(LIB_SUFFIX)
---- mozilla/security/manager/Makefile.in~	Wed Apr 23 02:54:08 2003
-+++ mozilla/security/manager/Makefile.in	Thu May 15 10:25:59 2003
-@@ -116,37 +116,6 @@
+diff -ur firefox.orig/security/manager/Makefile.in firefox/security/manager/Makefile.in
+--- firefox.orig/security/manager/Makefile.in	2004-03-23 05:15:56.000000000 +0100
++++ firefox/security/manager/Makefile.in	2004-06-16 09:48:35.000000000 +0200
+@@ -148,43 +148,6 @@
  else
  	cd $(DIST)/lib; cp -f $(LIB_PREFIX)mozdbm_s.$(LIB_SUFFIX) $(LIB_PREFIX)dbm.$(LIB_SUFFIX); $(RANLIB) $(LIB_PREFIX)dbm.$(LIB_SUFFIX)
  endif
 -	$(MAKE) -C $(topsrcdir)/security/nss/lib $(DEFAULT_GMAKE_FLAGS)
+-ifndef SKIP_CHK
 -	$(MAKE) -C $(topsrcdir)/security/nss/cmd/lib $(DEFAULT_GMAKE_FLAGS)
 -	$(MAKE) -C $(topsrcdir)/security/nss/cmd/shlibsign $(DEFAULT_GMAKE_FLAGS)
+-endif
 -ifndef DISABLE_DIST_GRE
 -	$(INSTALL) -m 755 $(DIST)/lib/$(LOADABLE_ROOT_MODULE) $(GRE_DIST)
+-ifndef SKIP_CHK
 -	$(INSTALL) -m 644 $(DIST)/lib/$(SOFTOKEN3_CHK) $(GRE_DIST)
+-endif
 -	$(INSTALL) -m 755 $(DIST)/lib/$(SOFTOKEN3_LIB) $(GRE_DIST)
 -	$(INSTALL) -m 755 $(DIST)/lib/$(NSS3_LIB) $(GRE_DIST)
 -	$(INSTALL) -m 755 $(DIST)/lib/$(SSL3_LIB) $(GRE_DIST)
@@ -46,7 +52,9 @@
 -endif
 -ifndef _SKIP_OLD_GRE_INSTALL
 -	$(INSTALL) -m 755 $(DIST)/lib/$(LOADABLE_ROOT_MODULE) $(DIST)/bin
+-ifndef SKIP_CHK
 -	$(INSTALL) -m 644 $(DIST)/lib/$(SOFTOKEN3_CHK) $(DIST)/bin
+-endif
 -	$(INSTALL) -m 755 $(DIST)/lib/$(SOFTOKEN3_LIB) $(DIST)/bin
 -	$(INSTALL) -m 755 $(DIST)/lib/$(NSS3_LIB) $(DIST)/bin
 -	$(INSTALL) -m 755 $(DIST)/lib/$(SSL3_LIB) $(DIST)/bin
@@ -61,9 +69,10 @@
  	$(MAKE) -C boot $@
  	$(MAKE) -C ssl $@
  ifdef MOZ_XUL
---- mozilla/security/manager/ssl/src/Makefile.in~	Fri Apr 11 02:56:20 2003
-+++ mozilla/security/manager/ssl/src/Makefile.in	Thu May 15 10:27:52 2003
-@@ -114,7 +114,7 @@
+diff -ur firefox.orig/security/manager/ssl/src/Makefile.in firefox/security/manager/ssl/src/Makefile.in
+--- firefox.orig/security/manager/ssl/src/Makefile.in	2004-01-07 14:36:51.000000000 +0100
++++ firefox/security/manager/ssl/src/Makefile.in	2004-06-16 09:42:34.000000000 +0200
+@@ -116,7 +116,7 @@
  
  # Use local includes because they are inserted before INCLUDES
  # so that Mozilla's nss.h is used, not glibc's
