@@ -18,6 +18,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	pango-devel >= 1.1.0
 BuildRequires:	zip
 Obsoletes:	mozilla-firebird
+Requires:	%{name}-lang-resources
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define	_firefoxdir	%{_libdir}/%{name}
@@ -29,6 +30,22 @@ compliance, performance and portability.
 %description -l pl
 Mozilla Firefox jest open sourcow± przegl±dark± sieci www, stworzon± z
 my¶l± o zgodno¶ci ze standartami, wydajno¶ci± i przeno¶no¶ci±.
+
+%package lang-en
+Summary:	English resources for Mozilla-firefox
+Summary(pl):	Anglojêzyczne zasoby dla Mozilla-FireFox
+Group:	X11/Applications/Networking
+Requires(post,postun):	mozilla-firefox >= %{version}-1.1
+Requires(post,postun):	textutils
+Requires:	mozilla-firefox >= %{version}-1.1
+Provides:	%{name}-lang-resources
+Obsoletes:	%{name}-lang-resources
+
+%description lang-en
+English resources for Mozilla-firefox
+
+%description lang-en -l pl
+Anglojêzyczne zasoby dla Mozilla-FireFox
 
 %prep
 %setup -q -n mozilla
@@ -102,10 +119,18 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
 grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
 
+rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki toolkit
+rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post lang-en
+umask 022
+cd %{_firefoxdir}/chrome
+cat *-installed-chrome.txt >installed-chrome.txt
+
+%postun lang-en
 umask 022
 cd %{_firefoxdir}/chrome
 cat *-installed-chrome.txt >installed-chrome.txt
@@ -115,7 +140,6 @@ cat *-installed-chrome.txt >installed-chrome.txt
 %attr(755,root,root) %{_bindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
-%{_firefoxdir}/chrome
 %{_firefoxdir}/components
 %{_firefoxdir}/plugins
 %{_firefoxdir}/searchplugins
@@ -137,3 +161,17 @@ cat *-installed-chrome.txt >installed-chrome.txt
 %{_firefoxdir}/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
+
+%dir %{_firefoxdir}/chrome
+%{_firefoxdir}/chrome/browser.jar
+%{_firefoxdir}/chrome/classic.jar
+%{_firefoxdir}/chrome/comm.jar
+%{_firefoxdir}/chrome/pip*.jar
+%{_firefoxdir}/chrome/toolkit.jar
+%{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
+
+%files lang-en
+%{_firefoxdir}/chrome/en-US.jar
+%{_firefoxdir}/chrome/en-unix.jar
+%{_firefoxdir}/chrome/US.jar
+%{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
