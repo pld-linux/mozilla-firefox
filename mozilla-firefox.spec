@@ -20,7 +20,7 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/fire
 # Source0-md5:	b81ebc5f01448313add23ed44c47cf5e
 Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
-Patch1:		%{name}-nspr.patch
+#Patch1:		%{name}-nspr.patch
 Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
@@ -32,13 +32,13 @@ BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
-BuildRequires:	nspr-devel >= 1:4.5.0
+#BuildRequires:	nspr-devel >= 1:4.5.0
 BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 Requires:	freetype >= 1:2.1.8
-Requires:	nspr >= 1:4.5.0
+#Requires:	nspr >= 1:4.5.0
 Requires:	nss >= 3.8
 PreReq:		XFree86-Xvfb
 Obsoletes:	mozilla-firebird
@@ -59,7 +59,7 @@ my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 %package lang-en
 Summary:	English resources for Mozilla-firefox
 Summary(pl):	Anglojêzyczne zasoby dla Mozilla-FireFox
-Group:	X11/Applications/Networking
+Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
 Requires:	%{name} = %{version}-%{release}
@@ -74,7 +74,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %prep
 %setup -q -n mozilla
 %patch0 -p1
-%patch1 -p1
+#patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -84,9 +84,9 @@ export CFLAGS="%{rpmcflags}"
 export CXXFLAGS="%{rpmcflags}"
 export MOZ_PHOENIX="1"
 
-cp -f /usr/share/automake/config.* build/autoconf
-cp -f /usr/share/automake/config.* nsprpub/build/autoconf
-cp -f /usr/share/automake/config.* directory/c-sdk/config/autoconf
+cp -f %{_datadir}/automake/config.* build/autoconf
+cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
+cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 %configure2_13 \
 %if %{?debug:1}0
 	--enable-debug \
@@ -120,9 +120,11 @@ cp -f /usr/share/automake/config.* directory/c-sdk/config/autoconf
 	--enable-default-toolkit="gtk2" \
 	--with-pthreads \
 	--with-system-jpeg \
-	--with-system-nspr \
+	--without-system-nspr \
 	--with-system-png \
-	--with-system-zlib
+	--with-system-zlib \
+	--enable-single-profile \
+	--disable-profilesharing
 
 %{__make}
 
@@ -140,7 +142,7 @@ ln -sf %{_firefoxdir}/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
-install browser/base/skin/Throbber.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
+install other-licenses/branding/firefox/content/icon32.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 #install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
 #install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
@@ -242,7 +244,8 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/searchplugins
 %{_firefoxdir}/icons
 %{_firefoxdir}/defaults
-%{_firefoxdir}/ipc
+%{_firefoxdir}/greprefs
+%dir %{_firefoxdir}/init.d
 %attr(755,root,root) %{_firefoxdir}/*.so
 %attr(755,root,root) %{_firefoxdir}/*.sh
 %attr(755,root,root) %{_firefoxdir}/m*
@@ -275,6 +278,5 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %files lang-en
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
-%{_firefoxdir}/chrome/en-unix.jar
 %{_firefoxdir}/chrome/US.jar
 %{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
