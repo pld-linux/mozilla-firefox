@@ -285,7 +285,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
-%{_firefoxdir}/chrome/icons//default/default.xpm
+%{_firefoxdir}/chrome/icons/default/default.xpm
 
 %files lang-en
 %defattr(644,root,root,755)
