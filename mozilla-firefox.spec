@@ -1,8 +1,10 @@
+%bcond_with tests	# enable tests (whatever they check)
+#
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.8
-Release:	1.2
+Release:	1.3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
@@ -51,50 +53,49 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %setup -q -n mozilla
 %patch0 -p1
 
-### FIXME: Shouldn't the default firefox config be part of original source ?
-cat <<EOF >.mozconfig
-export MOZ_PHOENIX="1"
-mk_add_options MOZ_PHOENIX="1"
-ac_add_options --with-system-jpeg
-ac_add_options --with-system-zlib
-ac_add_options --with-system-png
-ac_add_options --with-system-mng
-ac_add_options --with-pthreads
-ac_add_options --disable-tests
-ac_add_options --disable-debug
-ac_add_options --disable-debug-modules
-ac_add_options --disable-xprint
-ac_add_options --disable-mailnews
-ac_add_options --disable-composer
-ac_add_options --disable-ldap
-ac_add_options --disable-jsd
-ac_add_options --disable-dtd-debug
-ac_add_options --disable-gtktest
-ac_add_options --disable-freetypetest
-ac_add_options --disable-installer
-ac_add_options --enable-plaintext-editor-only
-ac_add_options --enable-optimize="%{optflags}"
-ac_add_options --enable-crypto
-ac_add_options --enable-strip
-ac_add_options --enable-strip-libs
-ac_add_options --enable-reorder
-ac_add_options --enable-mathml
-ac_add_options --enable-xinerama
-ac_add_options --enable-extensions="pref,cookie,wallet"
-ac_add_options --enable-freetype2
-ac_add_options --enable-xft
-ac_add_options --enable-default-toolkit="gtk2"
-EOF
-
 %build
-#export MOZ_PHOENIX="1"
-#configure
-#{__make} %{?_smp_mflags}
-
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
 export MOZ_PHOENIX="1"
 
+./configure \
+	--with-system-jpeg \
+	--with-system-zlib \
+	--with-system-png \
+	--with-system-mng \
+	--with-pthreads \
+%if %{with debug}
+	--enable-debug \
+	--enable-debug-modules \
+%else
+	--disable-debug \
+	--disable-debug-modules \
+%endif
+	--disable-xprint \
+	--disable-mailnews \
+	--disable-composer \
+	--disable-ldap \
+	--disable-jsd \
+	--disable-dtd-debug \
+%if %{with tests}
+	--enable-tests \
+%else
+	--disable-tests \
+%endif
+	--disable-installer \
+	--enable-plaintext-editor-only \
+	--enable-optimize="%{optflags}" \
+	--enable-crypto \
+	--enable-strip \
+	--enable-strip-libs \
+	--enable-reorder \
+	--enable-mathml \
+	--enable-xinerama \
+	--enable-freetype2 \
+	--enable-xft \
+	--enable-default-toolkit="gtk2"
+
+#{__make} %{?_smp_mflags}
 %{__make} -f client.mk build
 
 %install
