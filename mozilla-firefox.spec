@@ -40,6 +40,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	nss-devel >= 3.8
+BuildRequires:	nspr-devel
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl(Time::localtime)
 BuildRequires:	zip
