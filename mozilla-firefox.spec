@@ -225,6 +225,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
