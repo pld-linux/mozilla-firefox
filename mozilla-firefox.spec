@@ -149,7 +149,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
@@ -173,14 +173,12 @@ grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_
 rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki toolkit
 rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
+cat << EOF > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
+#!/bin/sh
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
-
-unset MOZILLA_FIVE_HOME || :
+rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
+rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
 MOZILLA_FIVE_HOME=%{_firefoxdir}
 export MOZILLA_FIVE_HOME
 
@@ -192,25 +190,28 @@ export PATH
 LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
-/sbin/ldconfig || :
-
-%{_firefoxdir}/regxpcom >/dev/null  || echo "E: regxpcom was exited: $?" >&2
-%{_firefoxdir}/regchrome >/dev/null || echo "E: regchrome was exited: $?" >&2
-
+%{_firefoxdir}/regxpcom
+%{_firefoxdir}/regchrome
 %{_firefoxdir}/firefox -register
+EOF
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+%{_sbindir}/firefox-chrome+xpcom-generate
 
 %postun
 if [ "$1" != "0" ]; then
-	umask 022
-	cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+	%{_sbindir}/firefox-chrome+xpcom-generate
 fi
 
 %preun
 if [ "$1" == "0" ]; then
-  rm -rf %{_firefoxdir}/chrome/overlayinfo
-  rm -rf %{_firefoxdir}/components
-  rm -f  %{_firefoxdir}/chrome/*.rdf
-  rm -rf %{_firefoxdir}/extensions
+	rm -rf %{_firefoxdir}/chrome/overlayinfo
+	rm -f  %{_firefoxdir}/chrome/*.rdf
+	rm -rf %{_firefoxdir}/components
+	rm -rf %{_firefoxdir}/extensions
 fi
 
 %post lang-en
