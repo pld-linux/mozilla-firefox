@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.9.3
-Release:	0.1
+Release:	0.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-%{version}-source.tar.bz2
@@ -194,7 +194,7 @@ EOF
 ( \
 	/usr/X11R6/bin/Xvfb :69 -nolisten tcp -ac -terminate >/dev/null 2>&1 & \
 	xvfb_pid=${!}; \
-	DISPLAY=:69 %{_bindir}/mozilla-firefox -list-global-items >/dev/null 2>&1 & \
+	DISPLAY=:69 %{_firefoxdir}/firefox-bin -list-global-items >/dev/null 2>&1 & \
 	sleep 15; \
 	kill ${xvfb_pid} >/dev/null 2>&1 \
 )
