@@ -1,6 +1,4 @@
 #
-# TODO: amd64 port (problably easy basing on mozilla-amd64 patch)
-#
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 #
@@ -8,7 +6,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.8
-Release:	2.1
+Release:	4
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
@@ -17,6 +15,7 @@ Source1:	%{name}.desktop
 Patch0:		%{name}-alpha-gcc3.patch
 Patch1:		%{name}-nspr.patch
 Patch2:		%{name}-nss.patch
+Patch3:		%{name}-amd64.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	gtk+2-devel >= 2.0.0
 BuildRequires:  libIDL-devel >= 0.8.0
@@ -65,6 +64,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 export CFLAGS="%{optflags}"
