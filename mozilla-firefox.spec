@@ -22,9 +22,9 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/fire
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
-Patch2:		%{name}-nss.patch
-Patch3:		%{name}-lib_path.patch
-Patch4:		%{name}-freetype.patch
+Patch1:		%{name}-nss.patch
+Patch2:		%{name}-lib_path.patch
+Patch3:		%{name}-freetype.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -85,9 +85,9 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %prep
 %setup -q -n mozilla
 %patch0 -p1
+%patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%{?with_ft218:%patch4 -p1}
+%{?with_ft218:%patch3 -p1}
 
 %build
 export CFLAGS="%{rpmcflags}"
