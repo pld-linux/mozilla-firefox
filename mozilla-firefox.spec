@@ -102,8 +102,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
-## TODO:  %{_libdir}/mozilla-firefox/MozillaFirefox* powinny miec +x 
-##         ale niewiem jak to prosto zorbic.
 %dir %{_libdir}/mozilla-firefox
 %{_libdir}/mozilla-firefox/res
 %{_libdir}/mozilla-firefox/chrome
@@ -116,10 +114,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/mozilla-firefox/*.so
 %attr(755,root,root) %{_libdir}/mozilla-firefox/*.sh
 %attr(755,root,root) %{_libdir}/mozilla-firefox/m*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/M*
+%attr(755,root,root) %{_libdir}/mozilla-firefox/f*
 %attr(755,root,root) %{_libdir}/mozilla-firefox/reg*
 %attr(755,root,root) %{_libdir}/mozilla-firefox/x*
-%attr(755,root,root) %{_libdir}/mozilla-firefox/t*
 %attr(755,root,root) %{_libdir}/mozilla-firefox/T*
 %ifarch %{ix86}
 %attr(755,root,root) %{_libdir}/mozilla-firefox/elf-dynstr-gc
