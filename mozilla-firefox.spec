@@ -14,7 +14,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0
-Release:	0.1
+Release:	0.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.0/source/firefox-1.0-source.tar.bz2
@@ -22,9 +22,10 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.0/source/fire
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
-Patch1:		%{name}-nss.patch
-Patch2:		%{name}-lib_path.patch
-Patch3:		%{name}-freetype.patch
+Patch1:		%{name}-nspr.patch
+Patch2:		%{name}-nss.patch
+Patch3:		%{name}-lib_path.patch
+Patch4:		%{name}-freetype.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -39,8 +40,8 @@ BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
+BuildRequires:	nspr-devel >= 1:4.6-0.20041030.1
 BuildRequires:	nss-devel >= 3.8
-BuildRequires:	nspr-devel
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl(Time::localtime)
 BuildRequires:	zip
@@ -52,6 +53,7 @@ Requires:	freetype >= 2.1.3
 Requires:	freetype < 1:2.1.8
 Conflicts:	freetype = 2.1.8
 %endif
+Requires:	nspr >= 1:4.6-0.20041030.1
 Requires:	nss >= 3.8
 PreReq:		XFree86-Xvfb
 Obsoletes:	mozilla-firebird
@@ -59,8 +61,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
-%define		_noautoreqdep	libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libnspr4.so
-%define		_noautoprovfiles libnspr4.so libplc4.so libplds4.so
+%define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
+%define		_noautoprovfiles	libplc4.so libplds4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -90,7 +92,8 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%{?with_ft218:%patch3 -p1}
+%patch3 -p1
+%{?with_ft218:%patch4 -p1}
 
 %build
 export CFLAGS="%{rpmcflags}"
@@ -134,7 +137,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--enable-xft \
 	--enable-default-toolkit="gtk2" \
 	--with-pthreads \
-	--without-system-nspr \
+	--with-system-nspr \
 	--with-system-jpeg \
 	--with-system-png \
 	--with-system-zlib \
