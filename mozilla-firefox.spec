@@ -65,7 +65,7 @@ Mozilla Firefox is an open-source web browser, designed for standards
 compliance, performance and portability.
 
 %description -l pl
-Mozilla Firefox jest open sourcow± przegl±dark± sieci www, stworzon± z
+Mozilla Firefox jest open sourcow± przegl±dark± sieci WWW, stworzon± z
 my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
 %package lang-en
