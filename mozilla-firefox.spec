@@ -8,37 +8,50 @@
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
+%bcond_with	ft218	# compile with freetype >= 2.1.8
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.10.1
-Release:	0.1
+Release:	0.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-1.0PR-source.tar.bz2
 # Source0-md5:	ff9eae3b90b8573bf44293ea44bf3c50
 Source1:	%{name}.desktop
+Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
-#Patch1:		%{name}-nspr.patch
 Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
+%if %{with ft218}
 Patch4:		%{name}-freetype.patch
+%endif
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
+%if %{with ft218}
 BuildRequires:	freetype-devel >= 1:2.1.8
+%else
+BuildRequires:	freetype-devel >= 2.1.3
+BuildRequires:	freetype-devel < 1:2.1.8
+BuildConflicts:	freetype-devel = 2.1.8
+%endif
 BuildRequires:	gtk+2-devel >= 2.0.0
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
-#BuildRequires:	nspr-devel >= 1:4.5.0
 BuildRequires:	nss-devel >= 3.8
 BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
-Requires:	freetype >= 1:2.1.8
-#Requires:	nspr >= 1:4.5.0
+%if %{with ft218}
+Requires:	freetype >= 1:2.1.3
+%else
+Requires:	freetype >= 2.1.3
+Requires:	freetype < 1:2.1.8
+Conflicts:	freetype = 2.1.8
+%endif
 Requires:	nss >= 3.8
 PreReq:		XFree86-Xvfb
 Obsoletes:	mozilla-firebird
@@ -46,7 +59,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
-%define		_noautoreqdep	libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
+%define		_noautoreqdep	libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libnspr4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -74,10 +87,11 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %prep
 %setup -q -n mozilla
 %patch0 -p1
-#patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%if %{with ft218}
 %patch4 -p1
+%endif
 
 %build
 export CFLAGS="%{rpmcflags}"
@@ -139,8 +153,7 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
 	EXCLUDE_NSPR_LIBS=1
 
-#install -m0755 %{name}.sh $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-ln -sf %{_firefoxdir}/firefox $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
@@ -276,6 +289,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
+%{_firefoxdir}/chrome/icons//default/default.xpm
 
 %files lang-en
 %defattr(644,root,root,755)
