@@ -2,7 +2,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	0.8
-Release:	1.1
+Release:	1.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/firefox-source-%{version}.tar.bz2
@@ -125,15 +125,17 @@ rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+umask 022
+cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+
 %post lang-en
 umask 022
-cd %{_firefoxdir}/chrome
-cat *-installed-chrome.txt >installed-chrome.txt
+cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
 %postun lang-en
 umask 022
-cd %{_firefoxdir}/chrome
-cat *-installed-chrome.txt >installed-chrome.txt
+cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
 %files
 %defattr(644,root,root,755)
