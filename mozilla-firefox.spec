@@ -4,7 +4,6 @@
 # - move most of %%post to external script as it's done in debian
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-# - SECURITY: http://securitytracker.com/alerts/2004/Sep/1011318.html
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
