@@ -1,7 +1,6 @@
 #
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
-# - move most of %%post to external script as it's done in debian
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 #
