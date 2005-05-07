@@ -1,0 +1,1 @@
+- link against heimdal, not shishi (patch from Mariusz Kryñski mrk (at) sed.pl)
