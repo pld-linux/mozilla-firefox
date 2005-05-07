@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.3
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -44,6 +44,7 @@ BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	zip
+BuildRequires:  heimdal-devel
 Requires:	%{name}-lang-resources = %{version}
 %if %{with ft218}
 Requires:	freetype >= 1:2.1.3
@@ -91,6 +92,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch2 -p1
 %patch3 -p1
 %{?with_ft218:%patch4 -p1}
+sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
 export CFLAGS="%{rpmcflags}"
