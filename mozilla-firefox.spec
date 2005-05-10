@@ -3,6 +3,7 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
+# - security http://secunia.com/advisories/15292/
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
