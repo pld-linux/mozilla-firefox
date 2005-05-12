@@ -3,7 +3,6 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-# - security http://secunia.com/advisories/15292/
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -12,12 +11,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.0.3
-Release:	2
+Version:	1.0.4
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	f1a9a8da0547564a0f8a249f9d56bdf4
+# Source0-md5:	0f5d0586750fde79ba98ecf3ee4425a7
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
