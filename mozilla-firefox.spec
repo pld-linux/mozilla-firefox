@@ -173,7 +173,7 @@ grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_
 rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki toolkit
 rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 
-cat << EOF > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
+cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
 cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
