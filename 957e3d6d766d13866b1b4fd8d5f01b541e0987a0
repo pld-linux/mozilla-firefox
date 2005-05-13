@@ -1,0 +1,5 @@
+- unset TMPDIR and TMP before calling regchrome, to allow package install with sudo work:
+  May 13 22:43:48 maki gconfd (root-5167): starting (version 2.10.0), pid 5167 user 'root'
+  May 13 22:43:48 maki gconfd (root-5167): Owner of /home/users/glen/tmp/orbit-root is not the current user
+  May 13 22:43:48 maki gconfd (root-5167): Owner of /home/users/glen/tmp/gconfd-root is not the current user
+  May 13 22:43:48 maki gconfd (root-5167): Failed to get lock for daemon, exiting: Directory /home/users/glen/tmp/gconfd-root has a problem, gconfd can't use it
