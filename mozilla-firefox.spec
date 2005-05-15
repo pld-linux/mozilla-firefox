@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.4
-Release:	2
+Release:	2.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -69,6 +69,19 @@ compliance, performance and portability.
 %description -l pl
 Mozilla Firefox jest open sourcow± przegl±dark± sieci WWW, stworzon± z
 my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
+
+%package devel
+Summary:	Headers for developing programs that will use Mozilla Firefox
+Summary(pl):	Mozilla Firefox - pliki nag³ówkowe i biblioteki
+Group:		X11/Development/Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	nspr-devel >= 1:4.6-0.20041030.1
+
+%description devel
+Mozilla development package.
+
+%description devel -l pl
+Biblioteki i pliki nag³ówkowe.
 
 %package lang-en
 Summary:	English resources for Mozilla-firefox
@@ -149,8 +162,11 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir},%{_pixmapsdir},%{_desktopdir}}
-
+install -d \
+	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
+	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
+	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
+	
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
@@ -170,9 +186,35 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
 grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
 
-rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki toolkit
+rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki
 rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 
+# header/developement files
+cp -rfL dist/include/*	$RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -rfL dist/idl/*	$RPM_BUILD_ROOT%{_includedir}/%{name}/idl
+
+install dist/bin/regchrome $RPM_BUILD_ROOT%{_bindir}
+install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
+install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
+install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
+install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
+
+# pkgconfig files
+for f in build/unix/*.pc ; do
+        sed -e 's/firefox-%{version}/mozilla-firefox/' $f \
+	    > $RPM_BUILD_ROOT%{_pkgconfigdir}/$(basename $f)
+done
+
+# already provided by standalone packages
+rm -f $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
+
+sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g' \
+	$RPM_BUILD_ROOT%{_pkgconfigdir}/*.pc
+
+# includedir/dom CFLAGS		
+sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
+	$RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-plugin.pc
+	
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
@@ -225,7 +267,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/mozilla*
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
@@ -269,6 +311,16 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/regchrome
+%attr(755,root,root) %{_bindir}/regxpcom
+%attr(755,root,root) %{_bindir}/xpidl
+%attr(755,root,root) %{_bindir}/xpt_dump
+%attr(755,root,root) %{_bindir}/xpt_link
+%{_includedir}/%{name}
+%{_pkgconfigdir}/*
 
 %files lang-en
 %defattr(644,root,root,755)
