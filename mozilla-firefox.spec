@@ -174,7 +174,6 @@ install -d \
 	EXCLUDE_NSPR_LIBS=1
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-sed -i $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox -e "s@/usr/lib/@%{_libdir}/@g"
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
 
