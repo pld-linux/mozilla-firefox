@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.4
-Release:	3
+Release:	4
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -202,6 +202,9 @@ install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 	
+# CA certificates
+ln -s %{_libdir}/libnssckbi.so $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
+
 # pkgconfig files
 for f in build/unix/*.pc ; do
         sed -e 's/firefox-%{version}/mozilla-firefox/' $f \
