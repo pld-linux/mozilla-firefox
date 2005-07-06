@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.4
-Release:	4
+Release:	5
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -44,7 +44,7 @@ BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	zip
-BuildRequires:  heimdal-devel
+BuildRequires:  heimdal-devel >= 0.7
 Requires:	%{name}-lang-resources = %{version}
 %if %{with ft218}
 Requires:	freetype >= 1:2.1.3
