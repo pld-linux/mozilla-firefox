@@ -24,6 +24,7 @@ Patch1:		%{name}-gfx.patch
 Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
+Patch5:		%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -106,6 +107,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch2 -p1
 %patch3 -p1
 %{?with_ft218:%patch4 -p1}
+%patch5 -p0
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
