@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.4
-Release:	6
+Release:	7
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -25,6 +25,7 @@ Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
 Patch5:		%{name}-searchplugins.patch
+Patch6:		%{name}-gcc-bugs.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -108,6 +109,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch3 -p1
 %{?with_ft218:%patch4 -p1}
 %patch5 -p0
+%patch6 -p0
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
