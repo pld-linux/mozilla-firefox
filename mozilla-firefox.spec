@@ -6,7 +6,7 @@
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
-%bcond_with	ft218	# compile with freetype >= 2.1.8
+%bcond_without	ft218	# compile with freetype < 2.1.8
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
