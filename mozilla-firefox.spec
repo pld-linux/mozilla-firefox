@@ -11,12 +11,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.0.4
-Release:	8
+Version:	1.0.5
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	0f5d0586750fde79ba98ecf3ee4425a7
+# Source0-md5:	b50fe116305b7f56b2105d464110228d
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
@@ -113,8 +113,8 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
-export CFLAGS="%{rpmcflags}"
-export CXXFLAGS="%{rpmcflags}"
+export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
+export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export MOZ_PHOENIX="1"
 export BUILD_OFFICIAL="1"
 export MOZILLA_OFFICIAL="1"
