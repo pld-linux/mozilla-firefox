@@ -36,6 +36,7 @@ BuildRequires:	freetype-devel < 1:2.1.8
 BuildConflicts:	freetype-devel = 2.1.8
 %endif
 BuildRequires:	gtk+2-devel >= 1:2.0.0
+BuildRequires:	heimdal-devel >= 0.7
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
@@ -46,7 +47,6 @@ BuildRequires:	pango-devel >= 1:1.1.0
 BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	zip
-BuildRequires:  heimdal-devel >= 0.7
 Requires:	%{name}-lang-resources = %{version}
 %if %{with ft218}
 Requires:	freetype >= 1:2.1.3
