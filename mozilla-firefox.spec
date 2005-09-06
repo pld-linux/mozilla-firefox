@@ -146,7 +146,6 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--enable-freetype2 \
 	--enable-mathml \
 	--enable-optimize="%{rpmcflags}" \
-	--enable-plaintext-editor-only \
 	--enable-reorder \
 	--enable-strip \
 	--enable-strip-libs \
