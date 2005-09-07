@@ -159,8 +159,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--with-system-zlib \
 	--enable-single-profile \
 	--disable-profilesharing \
-	--enable-extensions=cookie,xml-rpc,xmlextras,pref,transformiix,universalchardet,webservices,inspector,gnomevfs,negotiateauth
-	
+	--enable-extensions=all
 
 %{__make}
 
