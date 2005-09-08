@@ -1,0 +1,22 @@
+Index: toolkit/mozapps/installer/packager.mk
+===================================================================
+RCS file: /cvsroot/mozilla/toolkit/mozapps/installer/packager.mk,v
+retrieving revision 1.13
+diff -d -u -p -6 -r1.13 packager.mk
+--- toolkit/mozapps/installer/packager.mk	1 Jul 2005 01:18:49 -0000	1.13
++++ toolkit/mozapps/installer/packager.mk	18 Jul 2005 06:00:20 -0000
+@@ -207,13 +207,13 @@ ifdef MOZ_PKG_MANIFEST
+ 	$(PERL) $(topsrcdir)/xpinstall/packager/xptlink.pl -s $(DIST) -d $(DIST)/xpt -f $(DIST)/$(MOZ_PKG_APPNAME)/components -v -o $(PKGCP_OS)
+ else # !MOZ_PKG_MANIFEST
+ ifeq ($(MOZ_PKG_FORMAT),DMG)
+ 	@cd $(DIST) && rsync -auvL $(_APPNAME) $(MOZ_PKG_APPNAME)
+ else
+ 	@cd $(DIST)/bin && tar $(TAR_CREATE_FLAGS) - * | (cd ../$(MOZ_PKG_APPNAME); tar -xf -)
+-ifdef MOZ_NATIVE_NSPR
++ifndef MOZ_NATIVE_NSPR
+ ifndef EXCLUDE_NSPR_LIBS
+ 	@echo "Copying NSPR libs..."
+ 	@cp -p $(NSPR_LDIR)/*$(DLL_SUFFIX) $(DIST)/$(MOZ_PKG_APPNAME)
+ 	@chmod 755 $(DIST)/$(MOZ_PKG_APPNAME)/*$(DLL_SUFFIX)
+ endif
+ endif
