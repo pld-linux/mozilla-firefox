@@ -6,35 +6,34 @@
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
-%bcond_without	ft218	# compile with freetype < 2.1.8
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.0.6
-Release:	2
+%define	_rc	a2
+Version:	1.1
+Release:	0.%{_rc}.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	7b4c1d10d478dcb4c52fbbe3e41745d9
+# Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/deerpark/alpha2/source/firefox-%{version}%{_rc}-source.tar.bz2
+# Source0-md5:	109b48c9be1f7b80bf45c7ad40601ac5
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
-Patch0:		%{name}-alpha-gcc3.patch
-Patch1:		%{name}-gfx.patch
+#Patch0:		%{name}-alpha-gcc3.patch
+#Patch1:		%{name}-gfx.patch
 Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
-Patch4:		%{name}-freetype.patch
-Patch5:		%{name}-searchplugins.patch
-Patch6:		%{name}-gcc-bugs.patch
+#Patch5:		%{name}-searchplugins.patch
+#Patch6:		%{name}-gcc-bugs.patch
+Patch7:		%{name}-gcc4.patch
+Patch8:		%{name}-pango-cairo.patch
+Patch9:		%{name}-canvas-system-cairo.patch
+Patch10:	%{name}-dont-package-nspr-libs.patch
+Patch11:	%{name}-nss-system-nspr.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
-%if %{with ft218}
-BuildRequires:	freetype-devel >= 1:2.1.9
-%else
-BuildRequires:	freetype-devel >= 2.1.3
-BuildRequires:	freetype-devel < 1:2.1.8
-BuildConflicts:	freetype-devel = 2.1.8
-%endif
+BuildRequires:	cairo-devel >= 1.0.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7
 BuildRequires:	libIDL-devel >= 0.8.0
@@ -48,12 +47,6 @@ BuildRequires:	perl-modules
 BuildRequires:	pkgconfig
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
-%if %{with ft218}
-Requires:	freetype >= 1:2.1.3
-%else
-Requires:	freetype >= 2.1.3
-Conflicts:	freetype = 2.1.8
-%endif
 Requires:	nspr >= 1:4.6-0.20041030.1
 Requires:	nss >= 3.8
 Obsoletes:	mozilla-firebird
@@ -103,13 +96,17 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 
 %prep
 %setup -q -n mozilla
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1
+#%patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%{?with_ft218:%patch4 -p1}
-%patch5 -p0
-%patch6 -p0
+#%patch5 -p0
+#%patch6 -p0
+%patch7 -p0
+%patch8 -p1
+%patch9 -p0
+%patch10 -p0
+%patch11 -p1
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
@@ -132,6 +129,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 %endif
 	--disable-composer \
 	--disable-dtd-debug \
+	--disable-freetype \
 	--disable-installer \
 	--disable-jsd \
 	--disable-ldap \
@@ -142,16 +140,20 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--disable-tests \
 %endif
 	--disable-xprint \
+	--enable-application=browser \
 	--enable-crypto \
-	--enable-freetype2 \
 	--enable-mathml \
 	--enable-optimize="%{rpmcflags}" \
 	--enable-reorder \
 	--enable-strip \
 	--enable-strip-libs \
 	--enable-xinerama \
-	--enable-xft \
 	--enable-default-toolkit="gtk2" \
+	--enable-pango \
+	--enable-system-cairo \
+	--enable-svg \
+	--enable-canvas \
+	--enable-xft \
 	--with-pthreads \
 	--with-system-nspr \
 	--with-system-jpeg \
