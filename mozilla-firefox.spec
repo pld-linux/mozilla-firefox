@@ -10,14 +10,14 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-%define	_rc	a2
-Version:	1.1
+%define	_rc	b1
+Version:	1.5
 Release:	0.%{_rc}.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 # Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/deerpark/alpha2/source/firefox-%{version}%{_rc}-source.tar.bz2
-# Source0-md5:	109b48c9be1f7b80bf45c7ad40601ac5
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{_rc}/source/firefox-%{version}%{_rc}-source.tar.bz2
+# Source0-md5:	a1b2549a31c74e7366213bb2ba76876f
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 #Patch0:		%{name}-alpha-gcc3.patch
@@ -26,10 +26,10 @@ Patch2:		%{name}-nss.patch
 Patch3:		%{name}-lib_path.patch
 #Patch5:		%{name}-searchplugins.patch
 #Patch6:		%{name}-gcc-bugs.patch
-Patch7:		%{name}-gcc4.patch
-Patch8:		%{name}-pango-cairo.patch
-Patch9:		%{name}-canvas-system-cairo.patch
-Patch10:	%{name}-dont-package-nspr-libs.patch
+#Patch7:		%{name}-gcc4.patch
+#Patch8:		%{name}-pango-cairo.patch
+#Patch9:		%{name}-canvas-system-cairo.patch
+#Patch10:	%{name}-dont-package-nspr-libs.patch
 Patch11:	%{name}-nss-system-nspr.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
@@ -102,10 +102,10 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch3 -p1
 #%patch5 -p0
 #%patch6 -p0
-%patch7 -p0
-%patch8 -p1
-%patch9 -p0
-%patch10 -p0
+#%patch7 -p0
+#%patch8 -p1
+#%patch9 -p0
+#%patch10 -p0
 %patch11 -p1
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
