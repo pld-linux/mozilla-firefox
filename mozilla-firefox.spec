@@ -179,9 +179,9 @@ install -d \
 
 install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
-tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*-linux-gnu.tar.gz
+tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*linux*.tar.gz
 
-install other-licenses/branding/firefox/content/icon32.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
+install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 #install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
 #install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
@@ -197,7 +197,6 @@ rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 cp -rfL dist/include/*	$RPM_BUILD_ROOT%{_includedir}/%{name}
 cp -rfL dist/idl/*	$RPM_BUILD_ROOT%{_includedir}/%{name}/idl
 
-install dist/bin/regchrome $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
@@ -244,7 +243,6 @@ export LD_LIBRARY_PATH
 
 unset TMPDIR TMP || :
 %{_firefoxdir}/regxpcom
-%{_firefoxdir}/regchrome
 %{_firefoxdir}/firefox -register
 EOF
 
@@ -297,11 +295,11 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %attr(755,root,root) %{_firefoxdir}/f*
 %attr(755,root,root) %{_firefoxdir}/reg*
 %attr(755,root,root) %{_firefoxdir}/x*
-%attr(755,root,root) %{_firefoxdir}/T*
-%ifarch %{ix86}
-%attr(755,root,root) %{_firefoxdir}/elf-dynstr-gc
-%endif
-%{_firefoxdir}/bloaturls.txt
+#%attr(755,root,root) %{_firefoxdir}/T*
+#%ifarch %{ix86}
+#%attr(755,root,root) %{_firefoxdir}/elf-dynstr-gc
+#%endif
+#%{_firefoxdir}/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
 
@@ -314,7 +312,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 #%{_firefoxdir}/chrome/content-packs.jar
 %{_firefoxdir}/chrome/help.jar
 # -dom-inspector subpackage?
-%{_firefoxdir}/chrome/inspector.jar
+#%{_firefoxdir}/chrome/inspector.jar
 %{_firefoxdir}/chrome/modern.jar
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
@@ -324,7 +322,6 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/regchrome
 %attr(755,root,root) %{_bindir}/regxpcom
 %attr(755,root,root) %{_bindir}/xpidl
 %attr(755,root,root) %{_bindir}/xpt_dump
