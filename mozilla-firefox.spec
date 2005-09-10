@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.6
-Release:	2
+Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -159,7 +159,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--with-system-zlib \
 	--enable-single-profile \
 	--disable-profilesharing \
-	--enable-extensions=all
+	--enable-extensions=default
 
 %{__make}
 
