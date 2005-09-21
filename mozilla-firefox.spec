@@ -147,11 +147,11 @@ mk_add_options MOZILLA_OFFICIAL=1
 
 ac_add_options --enable-optimize="%{rpmcflags}"
 %if %{?debug:1}0
-ac_add_options --disable-debug
-ac_add_options --disable-debug-modules
-%else
 ac_add_options --enable-debug
 ac_add_options --enable-debug-modules
+%else
+ac_add_options --disable-debug
+ac_add_options --disable-debug-modules
 %endif
 %if %{with tests}
 ac_add_options --enable-tests
