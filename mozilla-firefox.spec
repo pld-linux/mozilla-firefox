@@ -24,7 +24,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.7
-Release:	1
+Release:	0.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -127,55 +127,67 @@ sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
 cd mozilla
+rm -f .mozconfig
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
-export MOZ_PHOENIX="1"
-export BUILD_OFFICIAL="1"
-export MOZILLA_OFFICIAL="1"
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
 cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
-%configure2_13 \
-%if %{?debug:1}0
-	--enable-debug \
-	--enable-debug-modules \
-%else
-	--disable-debug \
-	--disable-debug-modules \
-%endif
-	--disable-composer \
-	--disable-dtd-debug \
-	--disable-installer \
-	--disable-jsd \
-	--disable-ldap \
-	--disable-mailnews \
-%if %{with tests}
-	--enable-tests \
-%else
-	--disable-tests \
-%endif
-	--disable-xprint \
-	--enable-crypto \
-	--enable-freetype2 \
-	--enable-mathml \
-	--enable-optimize="%{rpmcflags}" \
-	--enable-reorder \
-	--enable-strip \
-	--enable-strip-libs \
-	--enable-xinerama \
-	--enable-xft \
-	--enable-default-toolkit="gtk2" \
-	--with-pthreads \
-	--with-system-nspr \
-	--with-system-jpeg \
-	--with-system-png \
-	--with-system-zlib \
-	--enable-single-profile \
-	--disable-profilesharing \
-	--enable-extensions=default
 
-%{__make}
+LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
+
+echo << EOF > .mozconfig
+. $topsrcdir/browser/config/mozconfig
+
+export BUILD_OFFICIAL=1
+export MOZILLA_OFFICIAL=1
+mk_add_options BUILD_OFFICIAL=1
+mk_add_options MOZILLA_OFFICIAL=1
+
+ac_add_options --enable-optimize="%{rpmcflags}"
+%if %{?debug:1}0
+ac_add_options --disable-debug
+ac_add_options --disable-debug-modules
+%else
+ac_add_options --enable-debug
+ac_add_options --enable-debug-modules
+%endif
+%if %{with tests}
+ac_add_options --enable-tests
+%else
+ac_add_options --disable-tests
+%endif
+ac_add_options --disable-composer
+ac_add_options --disable-dtd-debug
+ac_add_options --disable-installer
+ac_add_options --disable-jsd
+ac_add_options --disable-ldap
+ac_add_options --disable-mailnews
+ac_add_options --disable-xprint
+ac_add_options --disable-profilesharing
+ac_add_options --enable-xpctools
+ac_add_options --enable-native-uconv
+ac_add_options --enable-crypto
+ac_add_options --enable-freetype2
+ac_add_options --enable-mathml
+ac_add_options --enable-reorder
+ac_add_options --enable-strip
+ac_add_options --enable-strip-libs
+ac_add_options --enable-xinerama
+ac_add_options --enable-xft
+ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --with-pthreads
+ac_add_options --with-system-nspr
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-png
+ac_add_options --with-system-zlib
+ac_add_options --enable-single-profile
+EOF
+
+%{__make} -f client.mk build \
+	CC="%{__cc}" \
+	CXX="%{__cxx}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
