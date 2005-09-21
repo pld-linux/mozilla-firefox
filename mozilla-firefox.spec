@@ -3,6 +3,18 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
+# - unpackaged files check
+#   /usr/lib/mozilla-firefox/LICENSE
+#   /usr/lib/mozilla-firefox/README.txt
+#   /usr/lib/mozilla-firefox/browserconfig.properties
+#   /usr/lib/mozilla-firefox/chrome/chatzilla.jar
+#   /usr/lib/mozilla-firefox/chrome/chromelist.txt
+#   /usr/lib/mozilla-firefox/chrome/content-packs.jar
+#   /usr/lib/mozilla-firefox/chrome/embed-sample.jar
+#   /usr/lib/mozilla-firefox/chrome/installed-chrome.txt
+#   /usr/lib/mozilla-firefox/components/myspell/en-US.aff
+#   /usr/lib/mozilla-firefox/components/myspell/en-US.dic
+#   /usr/lib/mozilla-firefox/init.d/README
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -12,7 +24,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.6
-Release:	3
+Release:	4
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -26,6 +38,7 @@ Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
 Patch5:		%{name}-searchplugins.patch
 Patch6:		%{name}-gcc-bugs.patch
+Patch7:		%{name}-1.0.6-GLSA105396.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -102,7 +115,8 @@ English resources for Mozilla-firefox
 Anglojêzyczne zasoby dla Mozilla-FireFox
 
 %prep
-%setup -q -n mozilla
+%setup -q -c
+cd mozilla
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -110,9 +124,11 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %{?with_ft218:%patch4 -p1}
 %patch5 -p0
 %patch6 -p0
+%patch7 -p1
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
+cd mozilla
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export MOZ_PHOENIX="1"
@@ -165,6 +181,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
