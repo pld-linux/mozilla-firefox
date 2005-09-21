@@ -137,8 +137,8 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
 
-echo << EOF > .mozconfig
-. $topsrcdir/browser/config/mozconfig
+cat << EOF > .mozconfig
+. \$topsrcdir/browser/config/mozconfig
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
