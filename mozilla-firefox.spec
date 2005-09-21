@@ -23,12 +23,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.0.6
-Release:	4
+Version:	1.0.7
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	7b4c1d10d478dcb4c52fbbe3e41745d9
+# Source0-md5:	5704a8c36de84b408e069afb0c5bc1df
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-alpha-gcc3.patch
@@ -38,7 +38,6 @@ Patch3:		%{name}-lib_path.patch
 Patch4:		%{name}-freetype.patch
 Patch5:		%{name}-searchplugins.patch
 Patch6:		%{name}-gcc-bugs.patch
-Patch7:		%{name}-1.0.6-GLSA105396.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 %if %{with ft218}
@@ -124,7 +123,6 @@ cd mozilla
 %{?with_ft218:%patch4 -p1}
 %patch5 -p0
 %patch6 -p0
-%patch7 -p1
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
