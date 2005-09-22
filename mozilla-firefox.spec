@@ -47,6 +47,7 @@ BuildRequires:	freetype-devel >= 2.1.3
 BuildRequires:	freetype-devel < 1:2.1.8
 BuildConflicts:	freetype-devel = 2.1.8
 %endif
+BuildRequires:	gnome-vfs2-devel
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7
 BuildRequires:	libIDL-devel >= 0.8.0
