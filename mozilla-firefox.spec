@@ -186,7 +186,7 @@ ac_add_options --with-system-zlib
 ac_add_options --enable-single-profile
 EOF
 
-%{__make} -f client.mk build \
+%{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
 
