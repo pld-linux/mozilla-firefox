@@ -24,7 +24,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.7
-Release:	0.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -48,6 +48,8 @@ BuildRequires:	freetype-devel < 1:2.1.8
 BuildConflicts:	freetype-devel = 2.1.8
 %endif
 BuildRequires:	gnome-vfs2-devel
+BuildRequires:	libgnome-devel >= 2.0
+BuildRequires:	GConf2-devel
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7
 BuildRequires:	libIDL-devel >= 0.8.0
