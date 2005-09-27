@@ -24,7 +24,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.7
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -148,6 +148,19 @@ export MOZILLA_OFFICIAL=1
 mk_add_options BUILD_OFFICIAL=1
 mk_add_options MOZILLA_OFFICIAL=1
 
+ac_add_options --prefix=%{_prefix}
+ac_add_options --exec-prefix=%{_exec_prefix}
+ac_add_options --bindir=%{_bindir}
+ac_add_options --sbindir=%{_sbindir}
+ac_add_options --sysconfdir=%{_sysconfdir}
+ac_add_options --datadir=%{_datadir}
+ac_add_options --includedir=%{_includedir}
+ac_add_options --libdir=%{_libdir}
+ac_add_options --libexecdir=%{_libexecdir}
+ac_add_options --localstatedir=%{_localstatedir}
+ac_add_options --sharedstatedir=%{_sharedstatedir}
+ac_add_options --mandir=%{_mandir}
+ac_add_options --infodir=%{_infodir}
 ac_add_options --enable-optimize="%{rpmcflags}"
 %if %{?debug:1}0
 ac_add_options --enable-debug
