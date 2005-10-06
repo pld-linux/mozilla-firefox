@@ -1,13 +1,5 @@
 #
 # TODO:
-# - from official Mozilla documentation:
-#   ac_add_options --enable-xft
-#      Enables XFT advanced font rendering. This is only available with
-#      --enable-default-toolkit=gtk2, and it is recommended with gtk2
-#   ac_add_options --enable-freetype2
-#      Enables freetype font rendering. This is the default for the GTK toolkit.
-#      Not compatible with --enable-xft
-#      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # - review building options (like disable-mailnews and disable-composer,
 #   these are not meant for firefox)
 # - handle locales differently (runtime, since it's possible to do)
@@ -201,25 +193,25 @@ ac_add_options --disable-installer
 ac_add_options --disable-jsd
 ac_add_options --disable-ldap
 ac_add_options --disable-mailnews
-ac_add_options --disable-xprint
 ac_add_options --disable-profilesharing
-ac_add_options --enable-xpctools
-ac_add_options --enable-native-uconv
+ac_add_options --disable-xft
+ac_add_options --disable-xprint
 ac_add_options --enable-crypto
+ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-freetype2
 ac_add_options --enable-mathml
+ac_add_options --enable-native-uconv
 ac_add_options --enable-reorder
+ac_add_options --enable-single-profile
 ac_add_options --enable-strip
 ac_add_options --enable-strip-libs
 ac_add_options --enable-xinerama
-ac_add_options --enable-xft
-ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --enable-xpctools
 ac_add_options --with-pthreads
-ac_add_options --with-system-nspr
 ac_add_options --with-system-jpeg
+ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_add_options --enable-single-profile
 EOF
 
 %{__make} -j1 -f client.mk build \
