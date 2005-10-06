@@ -1,20 +1,33 @@
 #
 # TODO:
+# - review building options (like disable-mailnews and disable-composer,
+#   these are not meant for firefox)
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 # - unpackaged files check
 #   /usr/lib/mozilla-firefox/LICENSE
+#   ^- officially packaged, probably not for PLD
 #   /usr/lib/mozilla-firefox/README.txt
+#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/browserconfig.properties
+#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/chrome/chatzilla.jar
+#   ^- chatzilla to be disabled
 #   /usr/lib/mozilla-firefox/chrome/chromelist.txt
+#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/chrome/content-packs.jar
+#   ^- no sign of this file
 #   /usr/lib/mozilla-firefox/chrome/embed-sample.jar
+#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/chrome/installed-chrome.txt
+#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/components/myspell/en-US.aff
+#   ^- myspell to be disabled
 #   /usr/lib/mozilla-firefox/components/myspell/en-US.dic
+#   ^- as above
 #   /usr/lib/mozilla-firefox/init.d/README
+#   ^- officially packaged but not needed
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
