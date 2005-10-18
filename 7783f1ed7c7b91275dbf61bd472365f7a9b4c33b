@@ -1,0 +1,1 @@
+- %{_bindir}/mozilla-firebird should point to MozillaFirebird, not MozillaFirebird.bin
