@@ -35,7 +35,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.0.7
-Release:	2.2
+Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -187,21 +187,21 @@ ac_add_options --disable-tests
 %endif
 ac_add_options --disable-composer
 ac_add_options --disable-dtd-debug
+ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-jsd
 ac_add_options --disable-ldap
 ac_add_options --disable-mailnews
 ac_add_options --disable-profilesharing
-ac_add_options --enable-xft
 ac_add_options --disable-xprint
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --disable-freetype2
 ac_add_options --enable-mathml
 ac_add_options --enable-reorder
 ac_add_options --enable-single-profile
 ac_add_options --enable-strip
 ac_add_options --enable-strip-libs
+ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
 ac_add_options --with-pthreads
