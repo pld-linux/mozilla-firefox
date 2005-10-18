@@ -20,8 +20,6 @@
 #   ^- no sign of this file
 #   /usr/lib/mozilla-firefox/chrome/embed-sample.jar
 #   ^- officially packaged
-#   /usr/lib/mozilla-firefox/chrome/installed-chrome.txt
-#   ^- officially packaged
 #   /usr/lib/mozilla-firefox/components/myspell/en-US.aff
 #   ^- myspell to be disabled
 #   /usr/lib/mozilla-firefox/components/myspell/en-US.dic
@@ -373,6 +371,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/chrome/pip*.jar
 %{_firefoxdir}/chrome/toolkit.jar
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
+%ghost %{_firefoxdir}/chrome/installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
 
