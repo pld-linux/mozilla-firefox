@@ -10,14 +10,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-%define	_rc	b1
 Version:	1.5
-Release:	0.%{_rc}.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
-# Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{_rc}/source/firefox-%{version}%{_rc}-source.tar.bz2
-# Source0-md5:	a1b2549a31c74e7366213bb2ba76876f
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
+# Source0-md5:	fa915ddcadecda30ed3e13694f26a779
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 #Patch0:		%{name}-alpha-gcc3.patch
