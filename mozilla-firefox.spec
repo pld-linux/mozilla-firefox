@@ -18,17 +18,13 @@ Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/sour
 # Source0-md5:	fa915ddcadecda30ed3e13694f26a779
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
-#Patch0:		%{name}-alpha-gcc3.patch
-#Patch1:		%{name}-gfx.patch
-Patch2:		%{name}-nss.patch
-Patch3:		%{name}-lib_path.patch
-#Patch5:		%{name}-searchplugins.patch
-#Patch6:		%{name}-gcc-bugs.patch
-#Patch7:		%{name}-gcc4.patch
-#Patch8:		%{name}-pango-cairo.patch
-#Patch9:		%{name}-canvas-system-cairo.patch
-#Patch10:	%{name}-dont-package-nspr-libs.patch
-Patch11:	%{name}-nss-system-nspr.patch
+Patch0:		%{name}-nss.patch
+Patch1:		%{name}-lib_path.patch
+Patch2:		%{name}-nss-system-nspr.patch
+# !NEEDED?
+#PatchX:		%{name}-gfx.patch
+# UPDATE or DROP?
+#PatchX:		%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
@@ -94,18 +90,9 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 
 %prep
 %setup -q -n mozilla
-#%patch0 -p1
-#%patch1 -p1
+%patch0 -p1
+%patch1 -p1
 %patch2 -p1
-%patch3 -p1
-#%patch5 -p0
-#%patch6 -p0
-#%patch7 -p0
-#%patch8 -p1
-#%patch9 -p0
-#%patch10 -p0
-%patch11 -p1
-sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
