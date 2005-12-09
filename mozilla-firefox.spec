@@ -6,6 +6,7 @@
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
+%bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
@@ -24,18 +25,21 @@ Patch2:		%{name}-nss-system-nspr.patch
 # UPDATE or DROP?
 #PatchX:		%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
+%{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	heimdal-devel >= 0.7
+%{?with_gnome:BuildRequires:	gnome-vfs-devel >= 2.0}
 BuildRequires:	libIDL-devel >= 0.8.0
+%{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
+%{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6-0.20041030.1
 BuildRequires:	nss-devel >= 3.8
-BuildRequires:	pango-devel >= 1:1.1.0
-BuildRequires:	perl-modules
+BuildRequires:	pango-devel >= 1:1.6.0
+BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
@@ -113,6 +117,7 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 	--disable-composer \
 	--disable-dtd-debug \
 	--disable-freetype \
+	%{!?with_gnome:--disable-gnomevfs --disable-gnomeui} \
 	--disable-installer \
 	--disable-jsd \
 	--disable-ldap \
