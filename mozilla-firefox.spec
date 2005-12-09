@@ -21,8 +21,6 @@ Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
 Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
-# !NEEDED?
-#PatchX:		%{name}-gfx.patch
 # UPDATE or DROP?
 #PatchX:		%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
