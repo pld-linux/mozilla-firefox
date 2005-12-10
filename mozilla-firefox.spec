@@ -29,7 +29,7 @@ URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-%{?with_gnome:BuildRequires:	gnome-vfs-devel >= 2.0}
+%{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
