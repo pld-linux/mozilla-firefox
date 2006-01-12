@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5
-Release:	1
+Release:	1.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -22,6 +22,7 @@ Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
 Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
+Patch3:		%{name}-nopangoxft.patch
 # UPDATE or DROP?
 #PatchX:		%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -95,6 +96,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
