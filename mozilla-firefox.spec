@@ -295,17 +295,22 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 
 %dir %{_firefoxdir}/chrome
 %{_firefoxdir}/chrome/browser.jar
+%{_firefoxdir}/chrome/browser.manifest
 # -chat subpackage?
 #%{_firefoxdir}/chrome/chatzilla.jar
 %{_firefoxdir}/chrome/classic.jar
+%{_firefoxdir}/chrome/classic.manifest
 %{_firefoxdir}/chrome/comm.jar
+%{_firefoxdir}/chrome/comm.manifest
 #%{_firefoxdir}/chrome/content-packs.jar
 %{_firefoxdir}/chrome/help.jar
 # -dom-inspector subpackage?
 #%{_firefoxdir}/chrome/inspector.jar
 %{_firefoxdir}/chrome/modern.jar
-%{_firefoxdir}/chrome/pip*.jar
+%{_firefoxdir}/chrome/pippki.jar
+%{_firefoxdir}/chrome/pippki.manifest
 %{_firefoxdir}/chrome/toolkit.jar
+%{_firefoxdir}/chrome/toolkit.manifest
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
@@ -322,4 +327,5 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %files lang-en
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
+%{_firefoxdir}/chrome/en-US.manifest
 %{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
