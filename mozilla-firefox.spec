@@ -50,6 +50,8 @@ BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6-0.20041030.1
 Requires:	nss >= 3.8
+# for /etc/ld.so.conf.d
+Requires:	glibc >= 6:2.3.5-7.6
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -199,7 +201,7 @@ install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 
 # dirty hack agains finding libraries
 install -d $RPM_BUILD_ROOT/etc/ld.so.conf.d
-echo '%{_libdir}/%{name}' > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}.conf
+echo '%{_libdir}/%{name}' > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_lib}.conf
 
 ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
