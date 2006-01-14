@@ -52,6 +52,7 @@ Requires:	nspr >= 1:4.6-0.20041030.1
 Requires:	nss >= 3.8
 # for /etc/ld.so.conf.d
 Requires:	glibc >= 6:2.3.5-7.6
+Requires(post,postun):	/sbin/ldconfig
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
