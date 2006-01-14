@@ -3,7 +3,10 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-#
+# BOOKMARKS issue:
+# - after upgrade menu bookmarks is empty (chgw why?)
+# - mange bookmakrs shows old bookmarks
+# - add any page will show your bookmarks in this session.
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
@@ -12,7 +15,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5
-Release:	1.1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -158,9 +161,10 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d \
-	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
+# extensions dir is needed (it can be empty)
 	
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
@@ -191,6 +195,10 @@ install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
+
+# dirty hack agains finding libraries
+install -d $RPM_BUILD_ROOT/etc/ld.so.conf.d
+echo '%{_libdir}/%{name}' > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}.conf
 
 ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
@@ -240,9 +248,11 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
+/sbin/ldconfig
 %{_sbindir}/firefox-chrome+xpcom-generate
 
 %postun
+/sbin/ldconfig
 if [ "$1" != "0" ]; then
 	%{_sbindir}/firefox-chrome+xpcom-generate
 fi
@@ -267,6 +277,8 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
 %attr(755,root,root) %{_sbindir}/*
+# dirty hack agains libraries
+/etc/ld.so.conf.d/*.conf
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
@@ -278,6 +290,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_firefoxdir}/icons
 %{_firefoxdir}/defaults
 %{_firefoxdir}/greprefs
+%dir %{_firefoxdir}/extensions
 %dir %{_firefoxdir}/init.d
 %attr(755,root,root) %{_firefoxdir}/*.so
 %attr(755,root,root) %{_firefoxdir}/*.sh
@@ -294,23 +307,13 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %{_desktopdir}/*
 
 %dir %{_firefoxdir}/chrome
-%{_firefoxdir}/chrome/browser.jar
-%{_firefoxdir}/chrome/browser.manifest
+%{_firefoxdir}/chrome/*.jar
+%{_firefoxdir}/chrome/*.manifest
 # -chat subpackage?
 #%{_firefoxdir}/chrome/chatzilla.jar
-%{_firefoxdir}/chrome/classic.jar
-%{_firefoxdir}/chrome/classic.manifest
-%{_firefoxdir}/chrome/comm.jar
-%{_firefoxdir}/chrome/comm.manifest
 #%{_firefoxdir}/chrome/content-packs.jar
-%{_firefoxdir}/chrome/help.jar
 # -dom-inspector subpackage?
 #%{_firefoxdir}/chrome/inspector.jar
-%{_firefoxdir}/chrome/modern.jar
-%{_firefoxdir}/chrome/pippki.jar
-%{_firefoxdir}/chrome/pippki.manifest
-%{_firefoxdir}/chrome/toolkit.jar
-%{_firefoxdir}/chrome/toolkit.manifest
 %{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
