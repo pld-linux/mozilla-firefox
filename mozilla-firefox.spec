@@ -31,6 +31,7 @@ URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 BuildRequires:	gtk+2-devel >= 1:2.0.0
+BuildRequires:	heimdal-devel >= 0.7.1
 %{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
@@ -102,6 +103,7 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
 rm -f .mozconfig
