@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5
-Release:	2.2
+Release:	2.3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -214,10 +214,6 @@ install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 
-# dirty hack agains finding libraries
-install -d $RPM_BUILD_ROOT/etc/ld.so.conf.d
-echo '%{_libdir}/%{name}' > $RPM_BUILD_ROOT/etc/ld.so.conf.d/%{name}-%{_lib}.conf
-
 ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 	
@@ -259,8 +255,8 @@ LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 unset TMPDIR TMP || :
-%{_firefoxdir}/regxpcom
-%{_firefoxdir}/firefox -register
+MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/regxpcom
+MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/firefox -register
 EOF
 
 %clean
@@ -305,8 +301,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
 %attr(755,root,root) %{_sbindir}/*
-# dirty hack agains libraries
-/etc/ld.so.conf.d/*.conf
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
