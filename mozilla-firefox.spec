@@ -4,11 +4,6 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 # - rpm upgrade is broken. First you need uninstall Firefox 1.0.x. 
-# BOOKMARKS issue:
-# - after upgrade menu bookmarks is empty (chgw why?)
-# - mange bookmakrs shows old bookmarks
-# - add any page will show your bookmarks in this session.
-# - bookmarks toolbar folder doesn't work
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
