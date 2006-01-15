@@ -204,8 +204,8 @@ install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pix
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
-grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
+#grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
+#grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
 
 rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki
 rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
@@ -337,7 +337,7 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 #%{_firefoxdir}/chrome/content-packs.jar
 # -dom-inspector subpackage?
 #%{_firefoxdir}/chrome/inspector.jar
-%{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
+#%{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
 
@@ -354,4 +354,4 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
 %{_firefoxdir}/chrome/en-US.manifest
-%{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
+#%{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
