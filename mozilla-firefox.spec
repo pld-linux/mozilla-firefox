@@ -12,7 +12,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5
-Release:	2.1
+Release:	2.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -243,7 +243,8 @@ sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
-cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
+#There is no such files (*-installed-chrome.txt). IMO obsolete.
+#cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
 rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
 rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
 MOZILLA_FIVE_HOME=%{_firefoxdir}
@@ -268,6 +269,15 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/ldconfig
 %{_sbindir}/firefox-chrome+xpcom-generate
+%banner %{name} -e <<EOF
+###################################################################
+#                                                                 #
+# NOTICE:                                                         #
+# If you have problem with upgrade old mozilla-firefox 1.0.x, you #
+# should remove it first.                                         #
+#                                                                 #
+###################################################################
+EOF
 
 %postun
 /sbin/ldconfig
@@ -283,13 +293,13 @@ if [ "$1" == "0" ]; then
 	rm -rf %{_firefoxdir}/extensions
 fi
 
-%post lang-en
-umask 022
-cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+#%post lang-en
+#umask 022
+#cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
-%postun lang-en
-umask 022
-cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
+#%postun lang-en
+#umask 022
+#cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
 
 %files
 %defattr(644,root,root,755)
@@ -316,11 +326,6 @@ cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installe
 %attr(755,root,root) %{_firefoxdir}/f*
 %attr(755,root,root) %{_firefoxdir}/reg*
 %attr(755,root,root) %{_firefoxdir}/x*
-#%attr(755,root,root) %{_firefoxdir}/T*
-#%ifarch %{ix86}
-#%attr(755,root,root) %{_firefoxdir}/elf-dynstr-gc
-#%endif
-#%{_firefoxdir}/bloaturls.txt
 %{_pixmapsdir}/*
 %{_desktopdir}/*
 
