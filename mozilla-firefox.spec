@@ -161,13 +161,17 @@ ac_add_options --disable-ldap
 ac_add_options --disable-mailnews
 ac_add_options --disable-profilesharing
 ac_add_options --disable-xprint
+ac_add_options --enable-canvas
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-mathml
+ac_add_options --enable-pango
 ac_add_options --enable-reorder
 ac_add_options --enable-single-profile
 ac_add_options --enable-strip
 ac_add_options --enable-strip-libs
+ac_add_options --enable-svg
+ac_add_options --enable-system-cairo
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
