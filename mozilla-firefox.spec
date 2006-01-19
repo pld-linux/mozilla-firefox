@@ -24,7 +24,6 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
-Patch5:		%{name}-lang.patch
 # official patches
 # certain ui operations cause prolonged hang (cpu at 100%)
 Patch100:	%{name}-bug305970.patch
@@ -107,7 +106,6 @@ Anglojêzyczne zasoby dla Mozilla-FireFox
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-#%patch5 -p1
 
 # official patches
 %patch100 -p1
