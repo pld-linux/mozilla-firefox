@@ -275,14 +275,14 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/ldconfig
 %{_sbindir}/firefox-chrome+xpcom-generate
+
+# TODO: rather remove the cause than use this banner.
 %banner %{name} -e <<EOF
-###################################################################
-#                                                                 #
-# NOTICE:                                                         #
-# If you have problem with upgrade old mozilla-firefox 1.0.x, you #
-# should remove it first.                                         #
-#                                                                 #
-###################################################################
+NOTICE:
+If you have problem with upgrade old mozilla-firefox 1.0.x, You should
+remove it first:
+rpm -e mozilla-firefox
+poldek -u mozilla-firefox
 EOF
 
 %postun
