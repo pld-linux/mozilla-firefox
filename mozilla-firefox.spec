@@ -54,6 +54,7 @@ Requires:	nss >= 3.8
 # for /etc/ld.so.conf.d
 Requires:	glibc >= 6:2.3.5-7.6
 Requires(post,postun):	/sbin/ldconfig
+Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
