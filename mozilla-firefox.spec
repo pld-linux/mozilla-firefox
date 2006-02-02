@@ -77,14 +77,14 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	nspr-devel >= 1:4.6-0.20041030.1
 
 %description devel
-Mozilla development package.
+Mozilla Firefox development package.
 
 %description devel -l pl
-Biblioteki i pliki nag³ówkowe.
+Biblioteki i pliki nag³ówkowe Mozilla Firefox.
 
 %package lang-en
-Summary:	English resources for Mozilla-firefox
-Summary(pl):	Anglojêzyczne zasoby dla Mozilla-FireFox
+Summary:	English resources for Mozilla Firefox
+Summary(pl):	Anglojêzyczne zasoby dla Mozilla Firefox
 Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
@@ -92,10 +92,10 @@ Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
 %description lang-en
-English resources for Mozilla-firefox
+English resources for Mozilla Firefox
 
 %description lang-en -l pl
-Anglojêzyczne zasoby dla Mozilla-FireFox
+Anglojêzyczne zasoby dla Mozilla Firefox
 
 %prep
 %setup -q -n mozilla
