@@ -70,7 +70,7 @@ my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
 %package devel
 Summary:	Headers for developing programs that will use Mozilla Firefox
-Summary(pl):	Mozilla Firefox - pliki nag³ówkowe i biblioteki
+Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
 Obsoletes:	mozilla-devel
 Requires:	%{name} = %{epoch}:%{version}-%{release}
@@ -80,11 +80,11 @@ Requires:	nspr-devel >= 1:4.6-0.20041030.1
 Mozilla Firefox development package.
 
 %description devel -l pl
-Biblioteki i pliki nag³ówkowe Mozilla Firefox.
+Pliki nag³ówkowe przegl±darki Mozilla Firefox.
 
 %package lang-en
 Summary:	English resources for Mozilla Firefox
-Summary(pl):	Anglojêzyczne zasoby dla Mozilla Firefox
+Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox
 Group:		X11/Applications/Networking
 Requires(post,postun):	%{name} = %{version}-%{release}
 Requires(post,postun):	textutils
@@ -92,10 +92,10 @@ Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
 %description lang-en
-English resources for Mozilla Firefox
+English resources for Mozilla Firefox.
 
 %description lang-en -l pl
-Anglojêzyczne zasoby dla Mozilla Firefox
+Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 
 %prep
 %setup -q -n mozilla
