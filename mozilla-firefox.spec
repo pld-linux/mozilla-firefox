@@ -3,7 +3,7 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-# - rpm upgrade is broken. First you need uninstall Firefox 1.0.x. 
+# - rpm upgrade is broken. First you need uninstall Firefox 1.0.x.
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
@@ -25,14 +25,14 @@ Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
 # UPDATE or DROP?
-#PatchX:		%{name}-searchplugins.patch
+#PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
+%{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7.1
-%{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -72,9 +72,9 @@ my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 Summary:	Headers for developing programs that will use Mozilla Firefox
 Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
-Obsoletes:	mozilla-devel
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	nspr-devel >= 1:4.6-0.20041030.1
+Obsoletes:	mozilla-devel
 
 %description devel
 Mozilla Firefox development package.
@@ -193,7 +193,7 @@ install -d \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
 # extensions dir is needed (it can be empty)
-	
+
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
@@ -226,7 +226,7 @@ install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 
 ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
-	
+
 # CA certificates
 ln -s %{_libdir}/libnssckbi.so $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
 
@@ -242,10 +242,10 @@ rm -f $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
 sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g' \
 	$RPM_BUILD_ROOT%{_pkgconfigdir}/*.pc
 
-# includedir/dom CFLAGS		
+# includedir/dom CFLAGS
 sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 	$RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-plugin.pc
-	
+
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
