@@ -199,7 +199,7 @@ install -d \
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
 	EXCLUDE_NSPR_LIBS=1
 
-install %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
 tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*linux*.tar.gz
 
