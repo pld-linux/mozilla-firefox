@@ -209,9 +209,6 @@ install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pix
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-#grep locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-en-US-installed-chrome.txt
-#grep -v locale $RPM_BUILD_ROOT%{_firefoxdir}/chrome/installed-chrome.txt > $RPM_BUILD_ROOT%{_firefoxdir}/chrome/%{name}-misc-installed-chrome.txt
-
 rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki
 rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
 
@@ -249,8 +246,6 @@ sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
-#There is no such files (*-installed-chrome.txt). IMO obsolete.
-#cat %{_firefoxdir}/chrome/*-installed-chrome.txt > %{_firefoxdir}/chrome/installed-chrome.txt
 rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
 rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
 MOZILLA_FIVE_HOME=%{_firefoxdir}
@@ -299,14 +294,6 @@ if [ "$1" == "0" ]; then
 	rm -rf %{_firefoxdir}/extensions
 fi
 
-#%post lang-en
-#umask 022
-#cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
-
-#%postun lang-en
-#umask 022
-#cat %{_firefoxdir}/chrome/*-installed-chrome.txt >%{_firefoxdir}/chrome/installed-chrome.txt
-
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
@@ -341,7 +328,6 @@ fi
 #%{_firefoxdir}/chrome/content-packs.jar
 # -dom-inspector subpackage?
 #%{_firefoxdir}/chrome/inspector.jar
-#%{_firefoxdir}/chrome/mozilla-firefox-misc-installed-chrome.txt
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
 
@@ -358,4 +344,3 @@ fi
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
 %{_firefoxdir}/chrome/en-US.manifest
-#%{_firefoxdir}/chrome/mozilla-firefox-en-US-installed-chrome.txt
