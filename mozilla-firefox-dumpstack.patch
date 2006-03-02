@@ -1,0 +1,203 @@
+Index: xpcom/base/nsTraceRefcntImpl.cpp
+===================================================================
+RCS file: /cvs/mozilla/xpcom/base/nsTraceRefcntImpl.cpp,v
+retrieving revision 1.98
+diff -p -u -1 -2 -r1.98 nsTraceRefcntImpl.cpp
+--- xpcom/base/nsTraceRefcntImpl.cpp	3 Feb 2006 19:35:14 -0000	1.98
++++ xpcom/base/nsTraceRefcntImpl.cpp	6 Feb 2006 20:30:53 -0000
+@@ -41,37 +41,24 @@
+ #include "nsISupports.h"
+ #include "nsVoidArray.h"
+ #include "prprf.h"
+ #include "prlog.h"
+ #include "plstr.h"
+ #include <stdlib.h>
+ #include "nsCOMPtr.h"
+ #include "nsCRT.h"
+ #include <math.h>
+ 
+ #if defined(_WIN32)
+ #include <windows.h>
+-#elif defined(linux) && defined(__GLIBC__) && (defined(__i386) || defined(PPC))
+-#include <setjmp.h>
+-
+-//
+-// On glibc 2.1, the Dl_info api defined in <dlfcn.h> is only exposed
+-// if __USE_GNU is defined.  I suppose its some kind of standards
+-// adherence thing.
+-//
+-#if (__GLIBC_MINOR__ >= 1) && !defined(__USE_GNU)
+-#define __USE_GNU
+-#endif
+-
+-#include <dlfcn.h>
+ #endif
+ 
+ #ifdef HAVE_LIBDL
+ #include <dlfcn.h>
+ #endif
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ NS_COM void 
+ NS_MeanAndStdDev(double n, double sumOfValues, double sumOfSquaredValues,
+                  double *meanResult, double *stdDevResult)
+ {
+@@ -451,25 +438,25 @@ static PRIntn PR_CALLBACK DumpSerialNumb
+                             record->COMPtrCount);
+ #else
+   fprintf((FILE*) aClosure, "%d (%d references)\n",
+                             record->serialNumber,
+                             record->refCount);
+ #endif
+   return HT_ENUMERATE_NEXT;
+ }
+ 
+ 
+ #endif /* NS_BUILD_REFCNT_LOGGING */
+ 
+-nsresult
++NS_COM nsresult
+ nsTraceRefcntImpl::DumpStatistics(StatisticsType type, FILE* out)
+ {
+   nsresult rv = NS_OK;
+ #ifdef NS_BUILD_REFCNT_LOGGING
+   if (gBloatLog == nsnull || gBloatView == nsnull) {
+     return NS_ERROR_FAILURE;
+   }
+   if (out == nsnull) {
+     out = gBloatLog;
+   }
+ 
+   LOCK_TRACELOG();
+@@ -528,25 +515,25 @@ nsTraceRefcntImpl::DumpStatistics(Statis
+   if (gSerialNumbers) {
+     fprintf(out, "\n\nSerial Numbers of Leaked Objects:\n");
+     PL_HashTableEnumerateEntries(gSerialNumbers, DumpSerialNumbers, out);
+   }
+ 
+ done:
+   gLogging = wasLogging;
+   UNLOCK_TRACELOG();
+ #endif
+   return rv;
+ }
+ 
+-void
++NS_COM void
+ nsTraceRefcntImpl::ResetStatistics()
+ {
+ #ifdef NS_BUILD_REFCNT_LOGGING
+   LOCK_TRACELOG();
+   if (gBloatView) {
+     PL_HashTableDestroy(gBloatView);
+     gBloatView = nsnull;
+   }
+   UNLOCK_TRACELOG();
+ #endif
+ }
+ 
+@@ -812,43 +799,43 @@ static void InitTraceLog(void)
+ 
+   if (gBloatLog || gRefcntsLog || gAllocLog || gLeakyLog || gCOMPtrLog) {
+     gLogging = PR_TRUE;
+   }
+ 
+   gTraceLock = PR_NewLock();
+ }
+ 
+ #endif
+ 
+ #if defined(_WIN32) && defined(_M_IX86) && !defined(WINCE) // WIN32 x86 stack walking code
+ #include "nsStackFrameWin.h"
+-void
++NS_COM void
+ nsTraceRefcntImpl::WalkTheStack(FILE* aStream)
+ {
+   DumpStackToFile(aStream);
+ }
+ 
+ // WIN32 x86 stack walking code
+ // i386 or PPC Linux stackwalking code or Solaris
+-#elif (defined(linux) && defined(__GLIBC__) && (defined(__i386) || defined(PPC))) || (defined(__sun) && (defined(__sparc) || defined(sparc) || defined(__i386) || defined(i386)))
++#elif (defined(linux) && defined(__GNUC__) && (defined(__i386) || defined(PPC))) || (defined(__sun) && (defined(__sparc) || defined(sparc) || defined(__i386) || defined(i386)))
+ #include "nsStackFrameUnix.h"
+-void
++NS_COM void
+ nsTraceRefcntImpl::WalkTheStack(FILE* aStream)
+ {
+   DumpStackToFile(aStream);
+ }
+ 
+ #else // unsupported platform.
+ 
+-void
++NS_COM void
+ nsTraceRefcntImpl::WalkTheStack(FILE* aStream)
+ {
+ 	fprintf(aStream, "write me, dammit!\n");
+ }
+ 
+ #endif
+ 
+ //----------------------------------------------------------------------
+ 
+ // This thing is exported by libstdc++
+ // Yes, this is a gcc only hack
+ #if defined(MOZ_DEMANGLE_SYMBOLS)
+Index: xpcom/base/nsStackFrameUnix.cpp
+===================================================================
+RCS file: /cvs/mozilla/xpcom/base/nsStackFrameUnix.cpp,v
+retrieving revision 1.14
+diff -p -u -1 -2 -r1.14 nsStackFrameUnix.cpp
+--- xpcom/base/nsStackFrameUnix.cpp	3 Feb 2006 19:35:14 -0000	1.14
++++ xpcom/base/nsStackFrameUnix.cpp	6 Feb 2006 20:28:06 -0000
+@@ -74,43 +74,33 @@ void DemangleSymbol(const char * aSymbol
+     /* See demangle.h in the gcc source for the voodoo */
+     char * demangled = abi::__cxa_demangle(aSymbol,0,0,0);
+     
+     if (demangled)
+     {
+         strncpy(aBuffer,demangled,aBufLen);
+         free(demangled);
+     }
+ #endif // MOZ_DEMANGLE_SYMBOLS
+ }
+ 
+ 
+-#if defined(linux) && defined(__GLIBC__) && (defined(__i386) || defined(PPC)) // i386 or PPC Linux stackwalking code
++#if defined(linux) && defined(__GNUC__) && (defined(__i386) || defined(PPC)) // i386 or PPC Linux stackwalking code
+ 
+-#include <setjmp.h>
+-//
+ 
+ void DumpStackToFile(FILE* aStream)
+ {
+-  jmp_buf jb;
+-  setjmp(jb);
+-
+   // Stack walking code courtesy Kipp's "leaky".
+ 
+-  // Get the frame pointer out of the jmp_buf
+-  void **bp = (void**)
+-#if defined(__i386) 
+-    (jb[0].__jmpbuf[JB_BP]);
+-#elif defined(PPC)
+-    (jb[0].__jmpbuf[JB_GPR1]);
+-#endif
++  // Get the frame pointer
++  void **bp = (void**) __builtin_frame_address(0);
+ 
+   int skip = 2;
+   for ( ; (void**)*bp > bp; bp = (void**)*bp) {
+     void *pc = *(bp+1);
+     if (--skip <= 0) {
+       Dl_info info;
+       int ok = dladdr(pc, &info);
+       if (!ok) {
+         fprintf(aStream, "UNKNOWN %p\n", pc);
+         continue;
+       }
+ 
+
+
