@@ -1,5 +1,10 @@
 #
 # TODO:
+# - with new gcc version (it is possible that)
+#   - -fvisibility=hiddenn and ac_cv_visibility_pragma=no can be removed
+# - with new firefox version (it is possible that)
+#   - -fno-strict-aliasing can be removed (needs to be tested carefuly,
+#      not to be fixed soon, imho)
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
@@ -24,6 +29,8 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
+Patch5:		%{name}-dumpstack.patch
+Patch6:		%{name}-pango-typo.patch
 # UPDATE or DROP?
 #PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -104,6 +111,8 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p0
+%patch6 -p0
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
@@ -180,10 +189,11 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
+ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc}" \
+	CC="%{__cc} -fno-strict-aliasing -fvisibility=hidden" \
 	CXX="%{__cxx}"
 
 %install
