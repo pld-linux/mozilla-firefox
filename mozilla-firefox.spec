@@ -9,6 +9,7 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 # - rpm upgrade is broken. First you need uninstall Firefox 1.0.x.
+#
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
@@ -55,9 +56,6 @@ BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1
 Requires:	nss >= 3.10.2
-# for /etc/ld.so.conf.d
-Requires:	glibc >= 6:2.3.5-7.6
-Requires(post,postun):	/sbin/ldconfig
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -278,7 +276,6 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig
 %{_sbindir}/firefox-chrome+xpcom-generate
 %banner %{name} -e <<EOF
 ###################################################################
@@ -291,7 +288,6 @@ rm -rf $RPM_BUILD_ROOT
 EOF
 
 %postun
-/sbin/ldconfig
 if [ "$1" != "0" ]; then
 	%{_sbindir}/firefox-chrome+xpcom-generate
 fi
