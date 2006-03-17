@@ -187,11 +187,10 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc} -fno-strict-aliasing -fvisibility=hidden" \
+	CC="%{__cc} -fno-strict-aliasing" \
 	CXX="%{__cxx}"
 
 %install
