@@ -18,7 +18,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5.0.1
-Release:	3
+Release:	4
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -201,6 +201,9 @@ install -d \
 	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
 # extensions dir is needed (it can be empty)
 
+ln -s firefox %{_bindir}/mozilla-firefox
+install %{_bindir}/mozilla-firefox firefox
+
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
 	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
@@ -302,6 +305,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
+%attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
