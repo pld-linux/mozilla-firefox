@@ -201,8 +201,7 @@ install -d \
 	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
 # extensions dir is needed (it can be empty)
 
-ln -s firefox %{_bindir}/mozilla-firefox
-install %{_bindir}/mozilla-firefox firefox
+ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
