@@ -17,12 +17,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.1
-Release:	2
+Version:	1.5.0.2
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	c76f02956645bc823241379e27f76bb5
+# Source0-md5:	6bd65d899e9bcb16c28225899cc61a1e
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -30,8 +30,6 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
-Patch5:		%{name}-dumpstack.patch
-Patch6:		%{name}-pango-typo.patch
 # UPDATE or DROP?
 #PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -109,8 +107,6 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p0
-%patch6 -p0
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
@@ -187,11 +183,10 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc} -fno-strict-aliasing -fvisibility=hidden" \
+	CC="%{__cc} -fno-strict-aliasing" \
 	CXX="%{__cxx}"
 
 %install
@@ -201,6 +196,8 @@ install -d \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
 # extensions dir is needed (it can be empty)
+
+ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 %{__make} -C xpinstall/packager \
 	MOZ_PKG_APPNAME="mozilla-firefox" \
@@ -303,6 +300,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mozilla*
+%attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
@@ -332,10 +330,12 @@ fi
 # -chat subpackage?
 #%{_firefoxdir}/chrome/chatzilla.jar
 #%{_firefoxdir}/chrome/content-packs.jar
-# -dom-inspector subpackage?
-#%{_firefoxdir}/chrome/inspector.jar
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
+
+# -dom-inspector subpackage?
+%dir %{_firefoxdir}/extensions/inspector@mozilla.org
+%{_firefoxdir}/extensions/inspector@mozilla.org/*
 
 %files devel
 %defattr(644,root,root,755)
