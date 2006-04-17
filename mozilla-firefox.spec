@@ -45,7 +45,7 @@ BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
-BuildRequires:	nspr-devel >= 1:4.6.1
+BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
@@ -53,7 +53,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
-Requires:	nspr >= 1:4.6.1
+Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
@@ -77,7 +77,7 @@ Summary:	Headers for developing programs that will use Mozilla Firefox
 Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	nspr-devel >= 1:4.6.1
+Requires:	nspr-devel >= 1:4.6.1-2
 Obsoletes:	mozilla-devel
 
 %description devel
