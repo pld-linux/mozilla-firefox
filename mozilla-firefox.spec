@@ -18,7 +18,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5.0.2
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -276,15 +276,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 %{_sbindir}/firefox-chrome+xpcom-generate
-%banner %{name} -e <<EOF
-###################################################################
-#                                                                 #
-# NOTICE:                                                         #
-# If you have problem with upgrade old mozilla-firefox 1.0.x, you #
-# should remove it first.                                         #
-#                                                                 #
-###################################################################
-EOF
 
 %postun
 if [ "$1" != "0" ]; then
@@ -292,12 +283,19 @@ if [ "$1" != "0" ]; then
 fi
 
 %preun
-if [ "$1" == "0" ]; then
+if [ "$1" = "0" ]; then
 	rm -rf %{_firefoxdir}/chrome/overlayinfo
 	rm -f  %{_firefoxdir}/chrome/*.rdf
 	rm -rf %{_firefoxdir}/components
 	rm -rf %{_firefoxdir}/extensions
 fi
+
+%triggerpostun -- %{name} < 1.5
+%banner %{name} -e <<EOF
+NOTICE:
+If you have problem with upgrade from old mozilla-firefox 1.0.x,
+you should remove it first and reinstall %{name}-%{version}
+EOF
 
 %files
 %defattr(644,root,root,755)
@@ -310,7 +308,8 @@ fi
 %attr(755,root,root) %{_firefoxdir}/components/*.so
 %{_firefoxdir}/components/*.js
 %{_firefoxdir}/components/*.xpt
-%{_firefoxdir}/plugins
+%dir %{_firefoxdir}/plugins
+%attr(755,root,root) %{_firefoxdir}/plugins/*.so
 %{_firefoxdir}/searchplugins
 %{_firefoxdir}/icons
 %{_firefoxdir}/defaults
