@@ -18,7 +18,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5.0.2
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -45,14 +45,14 @@ BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
-BuildRequires:	nspr-devel >= 1:4.6.1
+BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	zip
 Requires:	%{name}-lang-resources = %{version}
-Requires:	nspr >= 1:4.6.1
+Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
@@ -76,7 +76,7 @@ Summary:	Headers for developing programs that will use Mozilla Firefox
 Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	nspr-devel >= 1:4.6.1
+Requires:	nspr-devel >= 1:4.6.1-2
 Obsoletes:	mozilla-devel
 
 %description devel
@@ -274,15 +274,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 %{_sbindir}/firefox-chrome+xpcom-generate
-%banner %{name} -e <<EOF
-###################################################################
-#                                                                 #
-# NOTICE:                                                         #
-# If you have problem with upgrade old mozilla-firefox 1.0.x, you #
-# should remove it first.                                         #
-#                                                                 #
-###################################################################
-EOF
 
 %postun
 if [ "$1" != "0" ]; then
@@ -290,12 +281,19 @@ if [ "$1" != "0" ]; then
 fi
 
 %preun
-if [ "$1" == "0" ]; then
+if [ "$1" = "0" ]; then
 	rm -rf %{_firefoxdir}/chrome/overlayinfo
 	rm -f  %{_firefoxdir}/chrome/*.rdf
 	rm -rf %{_firefoxdir}/components
 	rm -rf %{_firefoxdir}/extensions
 fi
+
+%triggerpostun -- %{name} < 1.5
+%banner %{name} -e <<EOF
+NOTICE:
+If you have problem with upgrade from old mozilla-firefox 1.0.x,
+you should remove it first and reinstall %{name}-%{version}
+EOF
 
 %files
 %defattr(644,root,root,755)
@@ -308,7 +306,8 @@ fi
 %attr(755,root,root) %{_firefoxdir}/components/*.so
 %{_firefoxdir}/components/*.js
 %{_firefoxdir}/components/*.xpt
-%{_firefoxdir}/plugins
+%dir %{_firefoxdir}/plugins
+%attr(755,root,root) %{_firefoxdir}/plugins/*.so
 %{_firefoxdir}/searchplugins
 %{_firefoxdir}/icons
 %{_firefoxdir}/defaults
