@@ -278,11 +278,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/firefox-chrome+xpcom-generate
 
 %postun
-if [ "$1" != "0" ]; then
-	%{_sbindir}/firefox-chrome+xpcom-generate
-fi
-
-%preun
 if [ "$1" = "0" ]; then
 	rm -rf %{_firefoxdir}/chrome/overlayinfo
 	rm -f  %{_firefoxdir}/chrome/*.rdf
