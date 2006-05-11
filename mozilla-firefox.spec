@@ -188,7 +188,7 @@ ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc} -fno-strict-aliasing" \
+	CC="%{__cc}" \
 	CXX="%{__cxx}"
 
 %install
