@@ -62,7 +62,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
-%define		_noautoprovfiles	libplc4.so libplds4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
