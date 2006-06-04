@@ -43,7 +43,7 @@ BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libpng-devel >= 1.2.0
+BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
@@ -52,6 +52,7 @@ BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
+BuildRequires:	zlib-devel >= 1.2.3
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
