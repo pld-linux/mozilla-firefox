@@ -50,6 +50,10 @@ BuildRequires:	nss-devel >= 3.10.2
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	xorg-lib-libXft-devel >= 2.1
+BuildRequires:	xorg-lib-libXinerama-devel
+BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
