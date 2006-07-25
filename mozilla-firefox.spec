@@ -30,6 +30,7 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
+Patch5:		%{name}-fonts.patch
 # UPDATE or DROP?
 #PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -43,20 +44,14 @@ BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libpng-devel >= 1.2.7
+BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
 BuildRequires:	nss-devel >= 3.10.2
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
-BuildRequires:	zlib-devel >= 1.2.3
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 3.10.2
@@ -67,8 +62,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
-
-%define		specflags	-fno-strict-aliasing
+%define		_noautoprovfiles	libplc4.so libplds4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -114,6 +108,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
@@ -190,11 +185,10 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc}" \
+	CC="%{__cc} -fno-strict-aliasing" \
 	CXX="%{__cxx}"
 
 %install
