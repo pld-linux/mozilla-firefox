@@ -18,7 +18,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	1.5.0.6
-Release:	0.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -52,7 +52,6 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	zip
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 1:3.10.2
@@ -72,17 +71,6 @@ compliance, performance and portability.
 %description -l pl
 Mozilla Firefox jest open sourcow± przegl±dark± sieci WWW, stworzon± z
 my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
-
-%package libs
-Summary:        Mozilla Firefox shared libraries
-Summary(pl):    Biblioteki wspó³dzielone Mozilla Firefox
-Group:          Libraries
-
-%description libs
-Mozilla Firefox shared libraries.
-
-%description libs -l pl
-Biblioteki wspó³dzielone Mozilla Firefox.
 
 %package devel
 Summary:	Headers for developing programs that will use Mozilla Firefox
@@ -297,9 +285,6 @@ if [ "$1" = "0" ]; then
 	rm -rf %{_firefoxdir}/extensions
 fi
 
-%post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
-
 %triggerpostun -- %{name} < 1.5
 %banner %{name} -e <<EOF
 NOTICE:
@@ -347,24 +332,6 @@ EOF
 # -dom-inspector subpackage?
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
-
-%files libs
-%defattr(644,root,root,755)
-%dir %{_firefoxdir}
-# libxpcom.so used by mozillaplug-in
-# probably should add more if more packages require
-%attr(755,root,root) %{_firefoxdir}/libxpcom.so
-%attr(755,root,root) %{_firefoxdir}/libxpcom_compat.so
-%attr(755,root,root) %{_firefoxdir}/libxpcom_core.so
-
-# add rest too
-%attr(755,root,root) %{_firefoxdir}/libgfxpsshar.so
-%attr(755,root,root) %{_firefoxdir}/libgkgfx.so
-%attr(755,root,root) %{_firefoxdir}/libgtkembedmoz.so
-%attr(755,root,root) %{_firefoxdir}/libgtkxtbin.so
-%attr(755,root,root) %{_firefoxdir}/libjsj.so
-%attr(755,root,root) %{_firefoxdir}/libmozjs.so
-%attr(755,root,root) %{_firefoxdir}/libxpistub.so
 
 %files devel
 %defattr(644,root,root,755)
