@@ -61,6 +61,7 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 1:3.10.2
+Requires(post):	mktemp
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -109,7 +110,8 @@ English resources for Mozilla Firefox.
 Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 
 %prep
-%setup -q -n mozilla
+%setup -qc
+cd mozilla
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -120,6 +122,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
+cd mozilla
 rm -f .mozconfig
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
@@ -130,8 +133,8 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
 
-cat << EOF > .mozconfig
-. \$topsrcdir/browser/config/mozconfig
+cat << 'EOF' > .mozconfig
+. $topsrcdir/browser/config/mozconfig
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
@@ -201,6 +204,7 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
@@ -275,8 +279,10 @@ LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 unset TMPDIR TMP || :
+export HOME=$(mktemp -d)
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/regxpcom
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/firefox -register
+rm -rf $HOME
 EOF
 
 %clean
