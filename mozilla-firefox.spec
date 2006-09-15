@@ -17,12 +17,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.6
-Release:	3
+Version:	1.5.0.7
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	3a659d384744cab77f90920f6d529c89
+# Source0-md5:	518cbd99a3fe663237070013e5cdb1a4
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -103,7 +103,8 @@ English resources for Mozilla Firefox.
 Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 
 %prep
-%setup -q -n mozilla
+%setup -qc
+cd mozilla
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -114,6 +115,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
+cd mozilla
 rm -f .mozconfig
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
@@ -127,8 +129,8 @@ cp -f other-licenses/branding/firefox/default.xpm browser/app
 
 LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
 
-cat << EOF > .mozconfig
-. \$topsrcdir/browser/config/mozconfig
+cat << 'EOF' > .mozconfig
+. $topsrcdir/browser/config/mozconfig
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
@@ -197,6 +199,7 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
