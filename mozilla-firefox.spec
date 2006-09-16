@@ -17,12 +17,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.6
-Release:	2
+Version:	1.5.0.7
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	3a659d384744cab77f90920f6d529c89
+# Source0-md5:	518cbd99a3fe663237070013e5cdb1a4
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -47,7 +47,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
-BuildRequires:	nss-devel >= 3.10.2
+BuildRequires:	nss-devel >= 1:3.11.3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -60,7 +60,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
-Requires:	nss >= 1:3.10.2
+Requires:	nss >= 1:3.11.3
 Requires(post):	mktemp
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
