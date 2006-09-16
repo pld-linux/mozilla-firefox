@@ -17,12 +17,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.5
-Release:	1
+Version:	1.5.0.7
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	4ef41c8983c47c36efada10a867ffa6f
+# Source0-md5:	518cbd99a3fe663237070013e5cdb1a4
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -44,23 +44,18 @@ BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libpng-devel >= 1.2.7
+BuildRequires:	libpng-devel >= 1.2.0
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
-BuildRequires:	nss-devel >= 3.10.2
+BuildRequires:	nss-devel >= 1:3.11.3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
-BuildRequires:	zlib-devel >= 1.2.3
+Requires(post):	mktemp
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
-Requires:	nss >= 1:3.10.2
+Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -68,8 +63,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
-
-%define		specflags	-fno-strict-aliasing
+%define		_noautoprovfiles	libplc4.so libplds4.so
 
 %description
 Mozilla Firefox is an open-source web browser, designed for standards
@@ -109,7 +103,8 @@ English resources for Mozilla Firefox.
 Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 
 %prep
-%setup -q -n mozilla
+%setup -qc
+cd mozilla
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -120,6 +115,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
+cd mozilla
 rm -f .mozconfig
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
@@ -128,10 +124,13 @@ cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
 cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
+cp -f other-licenses/branding/firefox/content/*.png browser/base/branding
+cp -f other-licenses/branding/firefox/default.xpm browser/app
+
 LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
 
-cat << EOF > .mozconfig
-. \$topsrcdir/browser/config/mozconfig
+cat << 'EOF' > .mozconfig
+. $topsrcdir/browser/config/mozconfig
 
 export BUILD_OFFICIAL=1
 export MOZILLA_OFFICIAL=1
@@ -192,15 +191,15 @@ ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
-	CC="%{__cc}" \
+	CC="%{__cc} -fno-strict-aliasing" \
 	CXX="%{__cxx}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
@@ -275,8 +274,10 @@ LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 unset TMPDIR TMP || :
+export HOME=$(mktemp -d)
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/regxpcom
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/firefox -register
+rm -rf $HOME
 EOF
 
 %clean
