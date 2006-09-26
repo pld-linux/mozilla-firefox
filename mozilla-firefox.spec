@@ -52,7 +52,7 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	zip
-Requires(post):	mktemp
+Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 1:3.11.3
