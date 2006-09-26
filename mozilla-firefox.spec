@@ -61,7 +61,7 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
 Requires:	nss >= 1:3.11.3
-Requires(post):	mktemp
+Requires(post):	mktemp >= 1.5-18
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
