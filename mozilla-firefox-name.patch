@@ -1,6 +1,6 @@
 diff -urN mozilla/browser/locales/en-US/chrome/branding/brand.dtd mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd
 --- mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2006-08-25 02:02:37.000000000 +0200
-+++ mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd	2006-10-01 14:07:21.342120750 +0200
++++ mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd	2006-10-01 23:32:03.979653250 +0200
 @@ -1,3 +1,3 @@
 -<!ENTITY  brandShortName        "Bon Echo">
 -<!ENTITY  brandFullName         "Bon Echo">            
@@ -9,10 +9,34 @@ diff -urN mozilla/browser/locales/en-US/chrome/branding/brand.dtd mozilla.new/br
  <!ENTITY  vendorShortName       "Mozilla">
 diff -urN mozilla/browser/locales/en-US/chrome/branding/brand.properties mozilla.new/browser/locales/en-US/chrome/branding/brand.properties
 --- mozilla/browser/locales/en-US/chrome/branding/brand.properties	2006-03-17 05:17:56.000000000 +0100
-+++ mozilla.new/browser/locales/en-US/chrome/branding/brand.properties	2006-10-01 14:07:28.038539250 +0200
++++ mozilla.new/browser/locales/en-US/chrome/branding/brand.properties	2006-10-01 23:32:18.416555500 +0200
 @@ -1,3 +1,3 @@
 -brandShortName=Bon Echo
 -brandFullName=Bon Echo
 +brandShortName=Mozilla Firefox
 +brandFullName=Mozilla Firefox
  vendorShortName=Mozilla
+diff -urN mozilla/configure mozilla.new/configure
+--- mozilla/configure	2006-09-15 15:21:10.000000000 +0200
++++ mozilla.new/configure	2006-10-01 23:31:08.648195250 +0200
+@@ -12916,7 +12916,7 @@
+ 
+ browser)
+   MOZ_APP_NAME=firefox
+-  MOZ_APP_DISPLAYNAME=BonEcho
++  MOZ_APP_DISPLAYNAME=MozillaFirefox
+   MOZ_XUL_APP=1
+   MOZ_PHOENIX=1
+   MOZ_SAFE_BROWSING=1
+diff -urN mozilla/configure.in mozilla.new/configure.in
+--- mozilla/configure.in	2006-09-15 15:13:01.000000000 +0200
++++ mozilla.new/configure.in	2006-10-01 23:31:14.308549000 +0200
+@@ -4243,7 +4243,7 @@
+ 
+ browser)
+   MOZ_APP_NAME=firefox
+-  MOZ_APP_DISPLAYNAME=BonEcho
++  MOZ_APP_DISPLAYNAME=MozillaFirefox
+   MOZ_XUL_APP=1
+   MOZ_PHOENIX=1
+   MOZ_SAFE_BROWSING=1
