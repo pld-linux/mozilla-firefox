@@ -185,7 +185,7 @@ ac_add_options --disable-mailnews
 ac_add_options --disable-profilesharing
 ac_add_options --disable-xprint
 ac_add_options --enable-canvas
-ac_add_options --enable-coockies
+ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-image-encoder=all
