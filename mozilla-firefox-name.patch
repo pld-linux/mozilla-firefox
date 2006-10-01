@@ -1,20 +1,18 @@
-diff -ur mozilla/browser/locales/en-US/chrome/branding/brand.dtd mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd
---- mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2005-09-06 04:54:21.000000000 +0000
-+++ mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd	2006-01-15 18:53:10.231714500 +0000
-@@ -1,5 +1,5 @@
--<!ENTITY  brandShortName        "Deer Park">
--<!ENTITY  brandFullName         "Deer Park">            
+diff -urN mozilla/browser/locales/en-US/chrome/branding/brand.dtd mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd
+--- mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2006-08-25 02:02:37.000000000 +0200
++++ mozilla.new/browser/locales/en-US/chrome/branding/brand.dtd	2006-10-01 14:07:21.342120750 +0200
+@@ -1,3 +1,3 @@
+-<!ENTITY  brandShortName        "Bon Echo">
+-<!ENTITY  brandFullName         "Bon Echo">            
 +<!ENTITY  brandShortName        "Mozilla Firefox">
 +<!ENTITY  brandFullName         "Mozilla Firefox">            
  <!ENTITY  vendorShortName       "Mozilla">
- 
- <!ENTITY  releaseURL            "http://www.mozilla.org/">
-diff -ur mozilla/browser/locales/en-US/chrome/branding/brand.properties mozilla.new/browser/locales/en-US/chrome/branding/brand.properties
---- mozilla/browser/locales/en-US/chrome/branding/brand.properties	2005-09-06 04:54:21.000000000 +0000
-+++ mozilla.new/browser/locales/en-US/chrome/branding/brand.properties	2006-01-15 18:53:14.511982000 +0000
+diff -urN mozilla/browser/locales/en-US/chrome/branding/brand.properties mozilla.new/browser/locales/en-US/chrome/branding/brand.properties
+--- mozilla/browser/locales/en-US/chrome/branding/brand.properties	2006-03-17 05:17:56.000000000 +0100
++++ mozilla.new/browser/locales/en-US/chrome/branding/brand.properties	2006-10-01 14:07:28.038539250 +0200
 @@ -1,3 +1,3 @@
--brandShortName=Deer Park
--brandFullName=Deer Park
+-brandShortName=Bon Echo
+-brandFullName=Bon Echo
 +brandShortName=Mozilla Firefox
 +brandFullName=Mozilla Firefox
  vendorShortName=Mozilla
