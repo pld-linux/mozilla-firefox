@@ -8,7 +8,12 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 # - rpm upgrade is broken. First you need uninstall Firefox 1.0.x.
-# - check if nss patches realy aren't neaded, as it seems
+# - check if it builds against system nss/nspr
+# - investigate strange nss lib deleted during instalation
+# - check all remaining configure options
+# - add remaining extensions and mabye other files
+# - make it more pld-like (bookmarks, default page etc..)
+# - add dictionaries outside of mozilla
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -165,7 +170,7 @@ ac_add_options --disable-debug-modules
 %endif
 %if %{with gnome}
 ac_add_options --enable-gnomevfs
-ac-add-options --enable-gnomeui
+ac_add_options --enable-gnomeui
 %else
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
@@ -188,15 +193,16 @@ ac_add_options --enable-canvas
 ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --enable-extensions
 ac_add_options --enable-image-encoder=all
 ac_add_options --enable-image-decoder=all
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
-ac_add_options --enable-places
+# This breaks mozilla start - don't know why
+#ac_add_options --enable-places
 ac_add_options --enable-postscript
 ac_add_options --enable-reorder
-# Some init scripts are broken with this
-#ac_add_options --enable-safe-browsing
+ac_add_options --enable-safe-browsing
 ac_add_options --enable-single-profile
 ac_add_options --enable-storage
 ac_add_options --enable-strip
@@ -208,7 +214,7 @@ ac_add_options --enable-view-source
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
-ac_add_options --with-distribution-id="PLD Linux"
+ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-pthreads
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
@@ -264,6 +270,8 @@ ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 
 # CA certificates
+# Why this file is here? Aren't we building accross system libs?
+rm -f $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
 ln -s %{_libdir}/libnssckbi.so $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
 
 # pkgconfig files
