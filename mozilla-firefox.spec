@@ -19,11 +19,12 @@
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
+%define		_rel	0.1
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.rc1
+Release:	0.rc1.%{_rel}
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}rc1/source/firefox-%{version}rc1-source.tar.bz2
@@ -205,8 +206,6 @@ ac_add_options --enable-reorder
 ac_add_options --enable-safe-browsing
 ac_add_options --enable-single-profile
 ac_add_options --enable-storage
-ac_add_options --enable-strip
-ac_add_options --enable-strip-libs
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-url-classifier
