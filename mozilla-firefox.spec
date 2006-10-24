@@ -1,4 +1,3 @@
-#
 # TODO:
 # - with new gcc version (it is possible that)
 #   - -fvisibility=hiddenn and ac_cv_visibility_pragma=no can be removed
@@ -9,6 +8,12 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
 # - rpm upgrade is broken. First you need uninstall Firefox 1.0.x.
+# - check if it builds against system nss/nspr
+# - investigate strange nss lib deleted during instalation
+# - check all remaining configure options
+# - add remaining extensions and mabye other files
+# - make it more pld-like (bookmarks, default page etc..)
+# - add dictionaries outside of mozilla
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -17,12 +22,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.5
-Release:	1
+Version:	2.0
+Release:	0.1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	4ef41c8983c47c36efada10a867ffa6f
+# Source0-md5:	03709c15cba0e0375ff5336d538f77e7
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -47,7 +52,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.1-2
-BuildRequires:	nss-devel >= 3.10.2
+BuildRequires:	nss-devel >= 1:3.11.3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -58,9 +63,10 @@ BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
+Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
-Requires:	nss >= 1:3.10.2
+Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -109,10 +115,11 @@ English resources for Mozilla Firefox.
 Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 
 %prep
-%setup -q -n mozilla
-%patch0 -p1
+%setup -qc
+cd mozilla
+#%patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -120,6 +127,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 %build
+cd mozilla
 rm -f .mozconfig
 export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
 export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
@@ -130,13 +138,14 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
 
-cat << EOF > .mozconfig
-. \$topsrcdir/browser/config/mozconfig
+cat << 'EOF' > .mozconfig
+. $topsrcdir/browser/config/mozconfig
 
-export BUILD_OFFICIAL=1
-export MOZILLA_OFFICIAL=1
-mk_add_options BUILD_OFFICIAL=1
-mk_add_options MOZILLA_OFFICIAL=1
+# We're not allowed to do that!
+#export BUILD_OFFICIAL=1
+#export MOZILLA_OFFICIAL=1
+#mk_add_options BUILD_OFFICIAL=1
+#mk_add_options MOZILLA_OFFICIAL=1
 
 ac_add_options --prefix=%{_prefix}
 ac_add_options --exec-prefix=%{_exec_prefix}
@@ -159,6 +168,13 @@ ac_add_options --enable-debug-modules
 ac_add_options --disable-debug
 ac_add_options --disable-debug-modules
 %endif
+%if %{with gnome}
+ac_add_options --enable-gnomevfs
+ac_add_options --enable-gnomeui
+%else
+ac_add_options --disable-gnomevfs
+ac_add_options --disable-gnomeui
+%endif
 %if %{with tests}
 ac_add_options --enable-tests
 %else
@@ -174,22 +190,33 @@ ac_add_options --disable-mailnews
 ac_add_options --disable-profilesharing
 ac_add_options --disable-xprint
 ac_add_options --enable-canvas
+ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --enable-extensions
+ac_add_options --enable-image-encoder=all
+ac_add_options --enable-image-decoder=all
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
+# This breaks mozilla start - don't know why
+#ac_add_options --enable-places
+ac_add_options --enable-postscript
 ac_add_options --enable-reorder
+ac_add_options --enable-safe-browsing
 ac_add_options --enable-single-profile
-ac_add_options --enable-strip
-ac_add_options --enable-strip-libs
+ac_add_options --enable-storage
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
+ac_add_options --enable-url-classifier
+ac_add_options --enable-view-source
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
+ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-pthreads
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
+ac_add_options --with-system-nss
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
 ac_cv_visibility_pragma=no
@@ -201,6 +228,7 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
@@ -216,7 +244,7 @@ ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 
-tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*linux*.tar.gz
+tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*.tar.gz
 
 install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 #install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
@@ -240,6 +268,8 @@ ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
 	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 
 # CA certificates
+# Why this file is here? Aren't we building accross system libs?
+rm -f $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
 ln -s %{_libdir}/libnssckbi.so $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
 
 # pkgconfig files
@@ -275,8 +305,10 @@ LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 export LD_LIBRARY_PATH
 
 unset TMPDIR TMP || :
+export HOME=$(mktemp -d)
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/regxpcom
 MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/firefox -register
+rm -rf $HOME
 EOF
 
 %clean
