@@ -213,15 +213,16 @@ cd mozilla
 		--with-system-png \
 		--enable-canvas \
 		--enable-freetype2 \
-		--enable-xft \
+		--disable-xft \
 		--enable-pangi \
 		--enable-gnomevfs \
 		--enable-gnomeui \
 		--enable-xinerama \
 		--enable-ctl \
 		--enable-extensions \
-		--enable-svg 
-
+		--enable-system-cairo \
+		--enable-svg \
+		--enable-application=browser
 
 %{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
