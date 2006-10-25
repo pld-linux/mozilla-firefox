@@ -198,8 +198,7 @@ cd mozilla
 #ac_cv_visibility_pragma=no
 #EOF
 #
-%{__autoconf}
-%configure \
+%configure2_13 \
 %if %{?debug:1}0
 		--enable-debug \
 		--enable-debug-modules \
