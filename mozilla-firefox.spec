@@ -15,8 +15,8 @@
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
 # - package *.chk (signed nss libs)?
-#   /usr/lib/mozilla-firefox/libfreebl3.chk
-#   /usr/lib/mozilla-firefox/libsoftokn3.chk
+#   %{_firefoxdir}/libfreebl3.chk
+#   %{_firefoxdir}/libsoftokn3.chk
 # - previous postun cleanup should be handled by ghost files
 # - stop providing mozdir/components/*.so
 #
@@ -28,7 +28,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.7
+Release:	0.8
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -374,6 +374,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/greprefs
 %dir %{_firefoxdir}/extensions
 %dir %{_firefoxdir}/init.d
+%{_firefoxdir}/init.d/README
 %attr(755,root,root) %{_firefoxdir}/*.so
 %attr(755,root,root) %{_firefoxdir}/*.sh
 %attr(755,root,root) %{_firefoxdir}/m*
@@ -392,6 +393,21 @@ rm -rf $RPM_BUILD_ROOT
 # -dom-inspector subpackage?
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
+
+# javaxpcom
+%{_firefoxdir}/javaxpcom-src.jar
+%{_firefoxdir}/javaxpcom.jar
+
+# updater
+%{_firefoxdir}/updater
+%{_firefoxdir}/updater.ini
+
+# browserconfig
+%{_firefoxdir}/browserconfig.properties
+
+# check what these are
+%{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
+%{_firefoxdir}/extensions/{cf2812dc-6a7c-4402-b639-4d277dac4c36}
 
 # files created by regxpcom and firefox -register
 %ghost %{_firefoxdir}/components/compreg.dat
