@@ -28,7 +28,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.8
+Release:	0.10
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -409,6 +409,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 %{_firefoxdir}/extensions/{cf2812dc-6a7c-4402-b639-4d277dac4c36}
 
+%{_firefoxdir}/LICENSE
+%{_firefoxdir}/README.txt
+%{_firefoxdir}/chrome/chromelist.txt
+%{_firefoxdir}/chrome/installed-chrome.txt
+%{_firefoxdir}/dependentlibs.list
+
 # files created by regxpcom and firefox -register
 %ghost %{_firefoxdir}/components/compreg.dat
 %ghost %{_firefoxdir}/components/xpti.dat
@@ -426,3 +432,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_firefoxdir}/chrome/en-US.jar
 %{_firefoxdir}/chrome/en-US.manifest
+# probably should share these with all mozilla apps
+%{_firefoxdir}/dictionaries/en-US.aff
+%{_firefoxdir}/dictionaries/en-US.dic
