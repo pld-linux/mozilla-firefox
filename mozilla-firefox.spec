@@ -7,13 +7,17 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-# - rpm upgrade is broken. First you need uninstall Firefox 1.0.x.
-# - check if it builds against system nss/nspr
-# - investigate strange nss lib deleted during instalation
-# - check all remaining configure options
-# - add remaining extensions and mabye other files
+# - check if it builds against system nss/nspr - nspr=1; nss=0 -- check config/autoconf.mk
+#   - nss fails because nss-config doesn't exist (while nspr-config does!)
+# - investigate strange nss lib deleted during installation. see also previous point
+# - check all remaining configure options... done. test them now!
+# - add remaining extensions and maybe other files... see previous point
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
+# - package *.chk (signed nss libs)?
+#   /usr/lib/mozilla-firefox/libfreebl3.chk
+#   /usr/lib/mozilla-firefox/libsoftokn3.chk
+# - previous postun cleanup should be handled by ghost files
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -23,7 +27,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.2
+Release:	0.5
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -63,6 +67,7 @@ BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
+BuildRequires:	jdk
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.1-2
@@ -126,6 +131,9 @@ cd mozilla
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
+# use system
+rm -rf mozilla/nsprpub mozilla/security/nss
+
 %build
 cd mozilla
 rm -f .mozconfig
@@ -160,13 +168,24 @@ ac_add_options --localstatedir=%{_localstatedir}
 ac_add_options --sharedstatedir=%{_sharedstatedir}
 ac_add_options --mandir=%{_mandir}
 ac_add_options --infodir=%{_infodir}
-ac_add_options --enable-optimize="%{rpmcflags}"
 %if %{?debug:1}0
 ac_add_options --enable-debug
 ac_add_options --enable-debug-modules
+ac_add_options --enable-debugger-info-modules
+ac_add_options --disable-optimize
+ac_add_options --enable-crash-on-assert
 %else
 ac_add_options --disable-debug
-ac_add_options --disable-debug-modules
+ac_add_options --enable-optimize="%{rpmcflags}"
+ac_add_options --disable-logging
+ac_add_options --enable-elf-dynstr-gc
+ac_add_options --enable-cpp-exceptions
+ac_add_options --enable-cpp-rtti
+%endif
+%if %{with tests}
+ac_add_options --enable-tests
+%else
+ac_add_options --disable-tests
 %endif
 %if %{with gnome}
 ac_add_options --enable-gnomevfs
@@ -175,12 +194,6 @@ ac_add_options --enable-gnomeui
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
 %endif
-%if %{with tests}
-ac_add_options --enable-tests
-%else
-ac_add_options --disable-tests
-%endif
-ac_add_options --disable-composer
 ac_add_options --disable-dtd-debug
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
@@ -193,7 +206,7 @@ ac_add_options --enable-canvas
 ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --enable-extensions
+ac_add_options --enable-extensions=all # or use 'default'? see configure.in around line 5107. xmlterm needs gtk1, etc
 ac_add_options --enable-image-encoder=all
 ac_add_options --enable-image-decoder=all
 ac_add_options --enable-mathml
@@ -202,23 +215,28 @@ ac_add_options --enable-pango
 #ac_add_options --enable-places
 ac_add_options --enable-postscript
 ac_add_options --enable-reorder
-ac_add_options --enable-safe-browsing
+ac_add_options --enable-safe-browsing --enable-url-classifier
 ac_add_options --enable-single-profile
 ac_add_options --enable-storage
-ac_add_options --enable-svg
-ac_add_options --enable-system-cairo
-ac_add_options --enable-url-classifier
+ac_add_options --enable-svg --enable-svg-renderer=cairo --enable-system-cairo
 ac_add_options --enable-view-source
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-pthreads
-ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
-ac_add_options --with-system-png
 ac_add_options --with-system-zlib
+ac_add_options --with-system-jpeg
+ac_add_options --with-system-png
+ac_add_options --enable-native-uconv
+ac_add_options --enable-javaxpcom
+ac_add_options --enable-update-channel=default
+ac_add_options --enable-reorder
+ac_add_options --enable-libxul
+ac_add_options --disable-v1-string-abi
+ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
 
@@ -230,52 +248,45 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 cd mozilla
 install -d \
-	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}{,extensions}} \
+	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
-	$RPM_BUILD_ROOT{%{_includedir}/%{name}/idl,%{_pkgconfigdir}}
-# extensions dir is needed (it can be empty)
+	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
 
+%{__make} -C xpinstall/packager stage-package \
+	MOZ_PKG_APPNAME=%{name} \
+	SIGN_NSS= \
+	PKG_SKIP_STRIP=1
+
+cp -a dist/%{name} $RPM_BUILD_ROOT%{_libdir}
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
-%{__make} -C xpinstall/packager \
-	MOZ_PKG_APPNAME="mozilla-firefox" \
-	MOZILLA_BIN="\$(DIST)/bin/firefox-bin" \
-	EXCLUDE_NSPR_LIBS=1
-
-sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-
-tar -xvz -C $RPM_BUILD_ROOT%{_libdir} -f dist/mozilla-firefox-*.tar.gz
-
 install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
-#install -m0644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
+#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
+#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-rm -rf US classic comm embed-sample en-{US,mac,unix,win} modern pipnss pippki
-rm -f en-win.jar en-mac.jar embed-sample.jar modern.jar
-
 # header/developement files
-cp -rfL dist/include/*	$RPM_BUILD_ROOT%{_includedir}/%{name}
-cp -rfL dist/idl/*	$RPM_BUILD_ROOT%{_includedir}/%{name}/idl
+cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
 
 install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 
-ln -sf %{_includedir}/mozilla-firefox/necko/nsIURI.h \
-	$RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
+ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 
-# CA certificates
-# Why this file is here? Aren't we building accross system libs?
-rm -f $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
-ln -s %{_libdir}/libnssckbi.so $RPM_BUILD_ROOT%{_firefoxdir}/libnssckbi.so
+# symlink to system nss
+# TODO: check if it will run if we just remove these nss libs
+for a in libfreebl3.so libnss3.so libnssckbi.so libsmime3.so libsoftokn3.so libssl3.so; do
+	ln -sf %{_libdir}/$a $RPM_BUILD_ROOT%{_firefoxdir}
+done
 
 # pkgconfig files
-for f in build/unix/*.pc ; do
-        sed -e 's/firefox-%{version}/mozilla-firefox/' $f \
-	    > $RPM_BUILD_ROOT%{_pkgconfigdir}/$(basename $f)
+for f in build/unix/*.pc; do
+	sed -e 's/firefox-%{version}/mozilla-firefox/' $f > $RPM_BUILD_ROOT%{_pkgconfigdir}/${f##*/}
 done
 
 # already provided by standalone packages
@@ -288,26 +299,29 @@ sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g
 sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 	$RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-plugin.pc
 
+# files created by regxpcom and firefox -register
+touch $RPM_BUILD_ROOT%{_firefoxdir}/components/compreg.dat
+touch $RPM_BUILD_ROOT%{_firefoxdir}/components/xpti.dat
+
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
 #!/bin/sh
 umask 022
 rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
 rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
-MOZILLA_FIVE_HOME=%{_firefoxdir}
-export MOZILLA_FIVE_HOME
+export MOZILLA_FIVE_HOME=%{_firefoxdir} # perhaps uneccessary after --with-default-mozilla-five-home?
 
 # PATH
-PATH=%{_firefoxdir}:$PATH
-export PATH
+export PATH="%{_firefoxdir}:$PATH"
 
-# added /usr/lib : don't load your local library
-LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-export LD_LIBRARY_PATH
+# added /usr/lib: don't load your local library
+export LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 
 unset TMPDIR TMP || :
+# it attempts to touch files in $HOME/.mozilla
+# beware if you run this with sudo!!!
 export HOME=$(mktemp -d)
-MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/regxpcom
-MOZILLA_FIVE_HOME=%{_firefoxdir} %{_firefoxdir}/firefox -register
+%{_firefoxdir}/regxpcom
+%{_firefoxdir}/firefox -register
 rm -rf $HOME
 EOF
 
@@ -316,21 +330,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 %{_sbindir}/firefox-chrome+xpcom-generate
-
-%postun
-if [ "$1" = "0" ]; then
-	rm -rf %{_firefoxdir}/chrome/overlayinfo
-	rm -f  %{_firefoxdir}/chrome/*.rdf
-	rm -rf %{_firefoxdir}/components
-	rm -rf %{_firefoxdir}/extensions
-fi
-
-%triggerpostun -- %{name} < 1.5
-%banner %{name} -e <<EOF
-NOTICE:
-If you have problem with upgrade from old mozilla-firefox 1.0.x,
-you should remove it first and reinstall %{name}-%{version}
-EOF
 
 %files
 %defattr(644,root,root,755)
@@ -363,15 +362,16 @@ EOF
 %dir %{_firefoxdir}/chrome
 %{_firefoxdir}/chrome/*.jar
 %{_firefoxdir}/chrome/*.manifest
-# -chat subpackage?
-#%{_firefoxdir}/chrome/chatzilla.jar
-#%{_firefoxdir}/chrome/content-packs.jar
 %dir %{_firefoxdir}/chrome/icons
 %{_firefoxdir}/chrome/icons/default
 
 # -dom-inspector subpackage?
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
+
+# files created by regxpcom and firefox -register
+%ghost %{_firefoxdir}/components/compreg.dat
+%ghost %{_firefoxdir}/components/xpti.dat
 
 %files devel
 %defattr(644,root,root,755)
