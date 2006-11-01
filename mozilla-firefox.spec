@@ -18,6 +18,7 @@
 #   /usr/lib/mozilla-firefox/libfreebl3.chk
 #   /usr/lib/mozilla-firefox/libsoftokn3.chk
 # - previous postun cleanup should be handled by ghost files
+# - stop providing mozdir/components/*.so
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -27,7 +28,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.5
+Release:	0.7
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -132,19 +133,18 @@ cd mozilla
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 # use system
-rm -rf mozilla/nsprpub mozilla/security/nss
+#rm -rf mozilla/nsprpub mozilla/security/nss
 
 %build
 cd mozilla
-rm -f .mozconfig
-export CFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
-export CXXFLAGS="%{rpmcflags} `%{_bindir}/pkg-config mozilla-nspr --cflags-only-I`"
+export CFLAGS="%{rpmcflags} $(%{_bindir}/pkg-config mozilla-nspr --cflags-only-I)"
+export CXXFLAGS="%{rpmcflags} $(%{_bindir}/pkg-config mozilla-nspr --cflags-only-I)"
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
 cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
-LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"; export LIBIDL_CONFIG
+#export LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"
 
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
@@ -197,7 +197,6 @@ ac_add_options --disable-gnomeui
 ac_add_options --disable-dtd-debug
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
-ac_add_options --disable-jsd
 ac_add_options --disable-ldap
 ac_add_options --disable-mailnews
 ac_add_options --disable-profilesharing
@@ -231,7 +230,7 @@ ac_add_options --with-system-zlib
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
 ac_add_options --enable-native-uconv
-ac_add_options --enable-javaxpcom
+ac_add_options --enable-jsd --enable-javaxpcom --with-java-include-path=/usr/lib/jvm/java/include
 ac_add_options --enable-update-channel=default
 ac_add_options --enable-reorder
 ac_add_options --enable-libxul
@@ -239,6 +238,31 @@ ac_add_options --disable-v1-string-abi
 ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
+
+%if 0
+# sanity checks
+# TODO: should hook somewhere between configure and real make
+if [ $(grep -c "MOZ_NATIVE_NSPR = 1" config/autoconf.mk) != 1 ]; then
+	: internal nspr used!
+	exit 1
+fi
+if [ $(grep -c "MOZ_NATIVE_NSS = 1" config/autoconf.mk) != 1 ]; then
+	: internal nss used!
+	exit 1
+fi
+if [ $(grep -c "MOZ_NATIVE_ZLIB = 1" config/autoconf.mk) != 1 ]; then
+	: internal zlib used!
+	exit 1
+fi
+if [ $(grep -c "MOZ_NATIVE_JPEG = 1" config/autoconf.mk) != 1 ]; then
+	: internal libjpeg used!
+	exit 1
+fi
+if [ $(grep -c "MOZ_NATIVE_PNG = 1" config/autoconf.mk) != 1 ]; then
+	: internal libpng used!
+	exit 1
+fi
+%endif
 
 %{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
