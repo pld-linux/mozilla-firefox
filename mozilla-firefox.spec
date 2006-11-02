@@ -6,9 +6,8 @@
 #      not to be fixed soon, imho)
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
-#   for hints how to make locales and other stuff like extensions working
+#   for hints how to make locales
 # - check all remaining configure options... done. test them now!
-# - add remaining extensions and maybe other files... see previous point
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
 # - previous postun cleanup should be handled by ghost files
@@ -200,7 +199,6 @@ ac_add_options --enable-canvas
 ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --enable-extensions=all # or use 'default'? see configure.in around line 5107. xmlterm needs gtk1, etc
 ac_add_options --enable-image-encoder=all
 ac_add_options --enable-image-decoder=all
 ac_add_options --enable-mathml
