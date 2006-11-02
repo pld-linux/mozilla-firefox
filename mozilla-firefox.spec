@@ -33,6 +33,8 @@ Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
 Patch5:		%{name}-fonts.patch
+# if ac rebuild is needed...
+#PatchX:		%{name}-ac.patch
 # UPDATE or DROP?
 #PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
