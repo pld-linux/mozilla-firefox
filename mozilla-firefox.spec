@@ -89,6 +89,7 @@ Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	nspr-devel >= 1:4.6.3
+Requires:	nss-devel >= 1:3.11.3-3
 Obsoletes:	mozilla-devel
 
 %description devel
