@@ -7,16 +7,10 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales and other stuff like extensions working
-# - check if it builds against system nss/nspr - nspr=1; nss=0 -- check config/autoconf.mk
-#   - nss fails because nss-config doesn't exist (while nspr-config does!)
-# - investigate strange nss lib deleted during installation. see also previous point
 # - check all remaining configure options... done. test them now!
 # - add remaining extensions and maybe other files... see previous point
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
-# - package *.chk (signed nss libs)?
-#   %{_firefoxdir}/libfreebl3.chk
-#   %{_firefoxdir}/libsoftokn3.chk
 # - previous postun cleanup should be handled by ghost files
 # - stop providing mozdir/components/*.so
 #
@@ -28,16 +22,14 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.10
+Release:	0.13
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	03709c15cba0e0375ff5336d538f77e7
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
-Patch0:		%{name}-nss.patch
 Patch1:		%{name}-lib_path.patch
-Patch2:		%{name}-nss-system-nspr.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch4:		%{name}-name.patch
 Patch5:		%{name}-fonts.patch
@@ -50,6 +42,7 @@ BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7.1
+BuildRequires:	jdk
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -57,7 +50,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.6.3
-BuildRequires:	nss-devel >= 1:3.11.3
+BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -68,7 +61,6 @@ BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
-BuildRequires:	jdk
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	nspr >= 1:4.6.3
@@ -301,12 +293,6 @@ install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
 install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
 
 ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
-
-# symlink to system nss
-# TODO: check if it will run if we just remove these nss libs
-for a in libfreebl3.so libnss3.so libnssckbi.so libsmime3.so libsoftokn3.so libssl3.so; do
-	ln -sf %{_libdir}/$a $RPM_BUILD_ROOT%{_firefoxdir}
-done
 
 # pkgconfig files
 for f in build/unix/*.pc; do
