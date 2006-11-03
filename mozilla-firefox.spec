@@ -16,12 +16,13 @@
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
+%bcond_without	javaxpcom	#
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.15
+Release:	0.17
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -118,9 +119,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %prep
 %setup -qc
 cd mozilla
-#%patch0 -p1
 %patch1 -p1
-#%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
@@ -139,17 +138,10 @@ cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
 cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
-#export LIBIDL_CONFIG="%{_bindir}/libIDL-config-2"
-
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
 
-# We're not allowed to do that!
-#export BUILD_OFFICIAL=1
-#export MOZILLA_OFFICIAL=1
-#mk_add_options BUILD_OFFICIAL=1
-#mk_add_options MOZILLA_OFFICIAL=1
-
+# Options for 'configure' (same as command-line options).
 ac_add_options --prefix=%{_prefix}
 ac_add_options --exec-prefix=%{_exec_prefix}
 ac_add_options --bindir=%{_bindir}
@@ -228,7 +220,7 @@ ac_add_options --enable-jsd --enable-javaxpcom --with-java-include-path=/usr/lib
 ac_add_options --enable-update-channel=default
 ac_add_options --enable-reorder
 ac_add_options --enable-libxul
-ac_add_options --disable-v1-string-abi
+#ac_add_options --disable-v1-string-abi
 ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
@@ -383,8 +375,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
 
 # javaxpcom
+%if %{with javaxpcom}
 %{_firefoxdir}/javaxpcom-src.jar
 %{_firefoxdir}/javaxpcom.jar
+%{_firefoxdir}/extensions/{cf2812dc-6a7c-4402-b639-4d277dac4c36}
+%endif
 
 # updater
 %{_firefoxdir}/updater
@@ -395,13 +390,12 @@ rm -rf $RPM_BUILD_ROOT
 
 # check what these are
 %{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
-%{_firefoxdir}/extensions/{cf2812dc-6a7c-4402-b639-4d277dac4c36}
 
 %{_firefoxdir}/LICENSE
 %{_firefoxdir}/README.txt
 %{_firefoxdir}/chrome/chromelist.txt
-%{_firefoxdir}/chrome/installed-chrome.txt
 %{_firefoxdir}/dependentlibs.list
+#%{_firefoxdir}/chrome/installed-chrome.txt
 
 # files created by regxpcom and firefox -register
 %ghost %{_firefoxdir}/components/compreg.dat
