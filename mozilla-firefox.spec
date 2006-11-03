@@ -16,13 +16,12 @@
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
-%bcond_without	javaxpcom	#
 #
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.19
+Release:	0.20
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -279,13 +278,11 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 # header/developement files
 cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
 cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
-
-install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
-install dist/bin/xpidl $RPM_BUILD_ROOT%{_bindir}
-install dist/bin/xpt_dump $RPM_BUILD_ROOT%{_bindir}
-install dist/bin/xpt_link $RPM_BUILD_ROOT%{_bindir}
-
 ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
+install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
+mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpidl
+mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpt_dump
+mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpt_link
 
 # pkgconfig files
 for f in build/unix/*.pc; do
@@ -293,7 +290,7 @@ for f in build/unix/*.pc; do
 done
 
 # already provided by standalone packages
-rm -f $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
+rm $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
 
 sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g' \
 	$RPM_BUILD_ROOT%{_pkgconfigdir}/*.pc
@@ -355,7 +352,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_firefoxdir}/*.sh
 %attr(755,root,root) %{_firefoxdir}/m*
 %attr(755,root,root) %{_firefoxdir}/f*
-%attr(755,root,root) %{_firefoxdir}/reg*
+%attr(755,root,root) %{_firefoxdir}/regxpcom
 %attr(755,root,root) %{_firefoxdir}/x*
 %{_pixmapsdir}/*
 %{_desktopdir}/*
@@ -371,10 +368,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
 
 # javaxpcom
-%if %{with javaxpcom}
 %{_firefoxdir}/javaxpcom-src.jar
 %{_firefoxdir}/javaxpcom.jar
-%endif
 
 # updater
 %{_firefoxdir}/updater
@@ -390,7 +385,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/README.txt
 %{_firefoxdir}/chrome/chromelist.txt
 %{_firefoxdir}/dependentlibs.list
-#%{_firefoxdir}/chrome/installed-chrome.txt
 
 # files created by regxpcom and firefox -register
 %ghost %{_firefoxdir}/components/compreg.dat
