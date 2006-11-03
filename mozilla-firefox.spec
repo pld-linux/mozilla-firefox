@@ -22,7 +22,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.17
+Release:	0.19
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -220,7 +220,6 @@ ac_add_options --enable-jsd --enable-javaxpcom --with-java-include-path=/usr/lib
 ac_add_options --enable-update-channel=default
 ac_add_options --enable-reorder
 ac_add_options --enable-libxul
-#ac_add_options --disable-v1-string-abi
 ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
@@ -307,25 +306,21 @@ sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 touch $RPM_BUILD_ROOT%{_firefoxdir}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{_firefoxdir}/components/xpti.dat
 
-cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/firefox-chrome+xpcom-generate
+cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
 umask 022
 rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
 rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
-export MOZILLA_FIVE_HOME=%{_firefoxdir} # perhaps uneccessary after --with-default-mozilla-five-home?
 
-# PATH
-export PATH="%{_firefoxdir}:$PATH"
-
-# added /usr/lib: don't load your local library
-export LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
-
-unset TMPDIR TMP || :
 # it attempts to touch files in $HOME/.mozilla
 # beware if you run this with sudo!!!
 export HOME=$(mktemp -d)
-%{_firefoxdir}/regxpcom
+# also TMPDIR could be pointing to sudo user's homedir
+unset TMPDIR TMP || :
+
+LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} %{_firefoxdir}/regxpcom
 %{_firefoxdir}/firefox -register
+
 rm -rf $HOME
 EOF
 
@@ -333,13 +328,13 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
-%{_sbindir}/firefox-chrome+xpcom-generate
+%{_sbindir}/%{name}-chrome+xpcom-generate
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/mozilla*
+%attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_bindir}/firefox
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
 %dir %{_firefoxdir}
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
@@ -353,6 +348,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_firefoxdir}/defaults
 %{_firefoxdir}/greprefs
 %dir %{_firefoxdir}/extensions
+%dir %{_firefoxdir}/dictionaries
 %dir %{_firefoxdir}/init.d
 %{_firefoxdir}/init.d/README
 %attr(755,root,root) %{_firefoxdir}/*.so
@@ -378,7 +374,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with javaxpcom}
 %{_firefoxdir}/javaxpcom-src.jar
 %{_firefoxdir}/javaxpcom.jar
-%{_firefoxdir}/extensions/{cf2812dc-6a7c-4402-b639-4d277dac4c36}
 %endif
 
 # updater
