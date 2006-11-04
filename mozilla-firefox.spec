@@ -21,7 +21,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.20
+Release:	0.22
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -306,7 +306,6 @@ touch $RPM_BUILD_ROOT%{_firefoxdir}/components/xpti.dat
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
 umask 022
-rm -f %{_firefoxdir}/chrome/{chrome.rdf,overlayinfo/*/*/*.rdf}
 rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
 
 # it attempts to touch files in $HOME/.mozilla
