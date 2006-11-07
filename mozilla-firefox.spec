@@ -332,7 +332,7 @@ EOF
 %attr(755,root,root) %{_firefoxdir}/reg*
 %attr(755,root,root) %{_firefoxdir}/x*
 %{_pixmapsdir}/*
-%{_desktopdir}/*
+%{_desktopdir}/*.desktop
 
 %dir %{_firefoxdir}/chrome
 %{_firefoxdir}/chrome/*.jar
