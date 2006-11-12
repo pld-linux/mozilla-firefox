@@ -34,8 +34,6 @@ Patch4:		%{name}-name.patch
 Patch5:		%{name}-fonts.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
-# UPDATE or DROP?
-#PatchX:	%{name}-searchplugins.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
