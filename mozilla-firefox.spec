@@ -10,8 +10,6 @@
 # - check all remaining configure options... done. test them now!
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
-# - previous postun cleanup should be handled by ghost files
-# - stop providing mozdir/components/*.so
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
