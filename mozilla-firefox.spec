@@ -151,15 +151,15 @@ ac_add_options --sharedstatedir=%{_sharedstatedir}
 ac_add_options --mandir=%{_mandir}
 ac_add_options --infodir=%{_infodir}
 %if %{?debug:1}0
+ac_add_options --disable-optimize
 ac_add_options --enable-debug
 ac_add_options --enable-debug-modules
 ac_add_options --enable-debugger-info-modules
-ac_add_options --disable-optimize
 ac_add_options --enable-crash-on-assert
 %else
 ac_add_options --disable-debug
-ac_add_options --enable-optimize="%{rpmcflags}"
 ac_add_options --disable-logging
+ac_add_options --enable-optimize="%{rpmcflags}"
 ac_add_options --enable-elf-dynstr-gc
 ac_add_options --enable-cpp-exceptions
 ac_add_options --enable-cpp-rtti
@@ -176,45 +176,36 @@ ac_add_options --enable-gnomeui
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
 %endif
+ac_add_options --disable-composer
 ac_add_options --disable-dtd-debug
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
+ac_add_options --disable-jsd
 ac_add_options --disable-ldap
 ac_add_options --disable-mailnews
-ac_add_options --disable-profilesharing
-ac_add_options --disable-xprint
 ac_add_options --enable-canvas
 ac_add_options --enable-cookies
 ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --enable-image-encoder=all
-ac_add_options --enable-image-decoder=all
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
 # This breaks mozilla start - don't know why
 #ac_add_options --enable-places
 ac_add_options --enable-postscript
-ac_add_options --enable-reorder
-ac_add_options --enable-safe-browsing --enable-url-classifier
-ac_add_options --enable-single-profile
-ac_add_options --enable-storage
-ac_add_options --enable-svg --enable-svg-renderer=cairo --enable-system-cairo
-ac_add_options --enable-view-source
+ac_add_options --enable-safe-browsing
+ac_add_options --enable-svg
+ac_add_options --enable-system-cairo
+ac_add_options --enable-update-channel=default
+ac_add_options --enable-url-classifier
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
 ac_add_options --enable-xpctools
 ac_add_options --with-distribution-id=org.pld-linux
-ac_add_options --with-pthreads
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
 ac_add_options --with-system-zlib
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
-ac_add_options --enable-native-uconv
-ac_add_options --enable-jsd --enable-javaxpcom --with-java-include-path=/usr/lib/jvm/java/include
-ac_add_options --enable-update-channel=default
-ac_add_options --enable-reorder
-ac_add_options --enable-libxul
 ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
@@ -362,19 +353,12 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
 
-# javaxpcom
-%{_firefoxdir}/javaxpcom-src.jar
-%{_firefoxdir}/javaxpcom.jar
-
 # updater
 %{_firefoxdir}/updater
 %{_firefoxdir}/updater.ini
 
 # browserconfig
 %{_firefoxdir}/browserconfig.properties
-
-# check what these are
-%{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 
 %{_firefoxdir}/LICENSE
 %{_firefoxdir}/README.txt
