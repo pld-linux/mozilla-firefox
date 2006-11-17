@@ -159,7 +159,6 @@ ac_add_options --enable-crash-on-assert
 ac_add_options --disable-debug
 ac_add_options --disable-logging
 ac_add_options --enable-optimize="%{rpmcflags}"
-ac_add_options --enable-elf-dynstr-gc
 ac_add_options --enable-cpp-exceptions
 ac_add_options --enable-cpp-rtti
 %endif
