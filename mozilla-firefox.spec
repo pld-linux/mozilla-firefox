@@ -10,6 +10,8 @@
 # - check all remaining configure options... done. test them now!
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
+# - unpackaged files:
+#   /usr/lib/mozilla-firefox/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
