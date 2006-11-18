@@ -12,8 +12,6 @@
 # - add dictionaries outside of mozilla
 # - unpackaged files:
 #   /usr/lib/mozilla-firefox/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
-# - more noauto needed:
-# error: mozilla-firefox-2.0-0.23: req mozilla-firefox-bin not found
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -23,7 +21,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.23
+Release:	0.24
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -71,7 +69,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
-%define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so
+%define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
 %define		_noautoprovfiles	%{_firefoxdir}/components
 
 %define		specflags	-fno-strict-aliasing
