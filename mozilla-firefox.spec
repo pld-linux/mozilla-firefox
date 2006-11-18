@@ -12,6 +12,8 @@
 # - add dictionaries outside of mozilla
 # - unpackaged files:
 #   /usr/lib/mozilla-firefox/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
+# - more noauto needed:
+# error: mozilla-firefox-2.0-0.23: req mozilla-firefox-bin not found
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
