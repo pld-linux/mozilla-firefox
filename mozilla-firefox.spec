@@ -17,12 +17,12 @@
 Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	1.5.0.7
-Release:	2
+Version:	1.5.0.8
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	518cbd99a3fe663237070013e5cdb1a4
+# Source0-md5:	86f98df1586efb419225a2988a217951
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-nss.patch
@@ -327,7 +327,7 @@ EOF
 %attr(755,root,root) %{_firefoxdir}/reg*
 %attr(755,root,root) %{_firefoxdir}/x*
 %{_pixmapsdir}/*
-%{_desktopdir}/*
+%{_desktopdir}/*.desktop
 
 %dir %{_firefoxdir}/chrome
 %{_firefoxdir}/chrome/*.jar
