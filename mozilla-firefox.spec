@@ -1,5 +1,5 @@
 # TODO:
-# - with new gcc version (it is possible that)
+# - with new gcc version (not yet)
 #   - -fvisibility=hiddenn and ac_cv_visibility_pragma=no can be removed
 # - with new firefox version (it is possible that)
 #   - -fno-strict-aliasing can be removed (needs to be tested carefuly,
@@ -21,7 +21,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.25
+Release:	0.26
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -180,21 +180,9 @@ ac_add_options --disable-installer
 ac_add_options --disable-jsd
 ac_add_options --disable-ldap
 ac_add_options --disable-updater
-ac_add_options --enable-canvas
-ac_add_options --enable-cookies
 ac_add_options --enable-default-toolkit=gtk2
-ac_add_options --enable-mathml
-ac_add_options --enable-pango
-# This breaks mozilla start - don't know why
-#ac_add_options --enable-places
-ac_add_options --enable-postscript
-ac_add_options --enable-safe-browsing
-ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
-ac_add_options --enable-url-classifier
 ac_add_options --enable-xft
-ac_add_options --enable-xinerama
-ac_add_options --enable-xpctools
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
