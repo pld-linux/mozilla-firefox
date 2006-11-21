@@ -21,7 +21,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.24
+Release:	0.25
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -161,8 +161,6 @@ ac_add_options --enable-crash-on-assert
 ac_add_options --disable-debug
 ac_add_options --disable-logging
 ac_add_options --enable-optimize="%{rpmcflags}"
-ac_add_options --enable-cpp-exceptions
-ac_add_options --enable-cpp-rtti
 %endif
 %if %{with tests}
 ac_add_options --enable-tests
@@ -176,16 +174,14 @@ ac_add_options --enable-gnomeui
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
 %endif
-ac_add_options --disable-composer
 ac_add_options --disable-dtd-debug
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-jsd
 ac_add_options --disable-ldap
-ac_add_options --disable-mailnews
+ac_add_options --disable-updater
 ac_add_options --enable-canvas
 ac_add_options --enable-cookies
-ac_add_options --enable-crypto
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
@@ -195,7 +191,6 @@ ac_add_options --enable-postscript
 ac_add_options --enable-safe-browsing
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
-ac_add_options --enable-update-channel=default
 ac_add_options --enable-url-classifier
 ac_add_options --enable-xft
 ac_add_options --enable-xinerama
@@ -352,10 +347,6 @@ rm -rf $RPM_BUILD_ROOT
 # -dom-inspector subpackage?
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
-
-# updater
-%{_firefoxdir}/updater
-%{_firefoxdir}/updater.ini
 
 # browserconfig
 %{_firefoxdir}/browserconfig.properties
