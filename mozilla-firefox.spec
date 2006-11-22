@@ -181,31 +181,6 @@ ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
 ac_cv_visibility_pragma=no
 EOF
 
-%if 0
-# sanity checks
-# TODO: should hook somewhere between configure and real make
-if [ $(grep -c "MOZ_NATIVE_NSPR = 1" config/autoconf.mk) != 1 ]; then
-	: internal nspr used!
-	exit 1
-fi
-if [ $(grep -c "MOZ_NATIVE_NSS = 1" config/autoconf.mk) != 1 ]; then
-	: internal nss used!
-	exit 1
-fi
-if [ $(grep -c "MOZ_NATIVE_ZLIB = 1" config/autoconf.mk) != 1 ]; then
-	: internal zlib used!
-	exit 1
-fi
-if [ $(grep -c "MOZ_NATIVE_JPEG = 1" config/autoconf.mk) != 1 ]; then
-	: internal libjpeg used!
-	exit 1
-fi
-if [ $(grep -c "MOZ_NATIVE_PNG = 1" config/autoconf.mk) != 1 ]; then
-	: internal libpng used!
-	exit 1
-fi
-%endif
-
 %{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
