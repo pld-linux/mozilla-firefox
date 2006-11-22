@@ -4,8 +4,6 @@
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
-# - unpackaged files:
-#   /usr/lib/mozilla-firefox/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
@@ -15,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	1
+Release:	1.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -325,6 +323,10 @@ rm -rf $RPM_BUILD_ROOT
 # -dom-inspector subpackage?
 %dir %{_firefoxdir}/extensions/inspector@mozilla.org
 %{_firefoxdir}/extensions/inspector@mozilla.org/*
+
+# the signature of the default theme
+%dir %{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
+%{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
 
 # browserconfig
 %{_firefoxdir}/browserconfig.properties
