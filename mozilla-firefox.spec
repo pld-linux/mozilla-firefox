@@ -30,7 +30,7 @@ Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
-Patch4:		%{name}-name.patch
+#Patch4:		%{name}-name.patch
 Patch5:		%{name}-fonts.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
@@ -117,7 +117,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 cd mozilla
 %patch1 -p1
 %patch3 -p1
-%patch4 -p1
+#%%patch4 -p1
 %patch5 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
@@ -174,11 +174,9 @@ ac_add_options --enable-gnomeui
 ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
 %endif
-ac_add_options --disable-dtd-debug
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-jsd
-ac_add_options --disable-ldap
 ac_add_options --disable-updater
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-system-cairo
