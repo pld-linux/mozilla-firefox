@@ -202,7 +202,7 @@ cp -a dist/%{name} $RPM_BUILD_ROOT%{_libdir}
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
-install other-licenses/branding/firefox/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
+install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 #install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
 #install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
