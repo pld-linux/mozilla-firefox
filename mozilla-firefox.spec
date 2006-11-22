@@ -1,13 +1,7 @@
 # TODO:
-# - with new gcc version (not yet)
-#   - -fvisibility=hiddenn and ac_cv_visibility_pragma=no can be removed
-# - with new firefox version (it is possible that)
-#   - -fno-strict-aliasing can be removed (needs to be tested carefuly,
-#      not to be fixed soon, imho)
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
-# - check all remaining configure options... done. test them now!
 # - make it more pld-like (bookmarks, default page etc..)
 # - add dictionaries outside of mozilla
 # - unpackaged files:
@@ -21,7 +15,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	0.26
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -30,7 +24,6 @@ Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
-#Patch4:		%{name}-name.patch
 Patch5:		%{name}-fonts.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
@@ -117,7 +110,6 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 cd mozilla
 %patch1 -p1
 %patch3 -p1
-#%%patch4 -p1
 %patch5 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
@@ -176,7 +168,7 @@ ac_add_options --disable-gnomeui
 %endif
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
-ac_add_options --disable-jsd
+ac_add_options --disable-javaxpcom
 ac_add_options --disable-updater
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-system-cairo
