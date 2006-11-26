@@ -13,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0
-Release:	1.2
+Release:	1.4
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -52,6 +52,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	nspr >= 1:4.6.3
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
@@ -73,11 +74,20 @@ compliance, performance and portability.
 Mozilla Firefox jest open sourcow± przegl±dark± sieci WWW, stworzon± z
 my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
+%package libs
+Summary:	Mozilla Firefox shared libraries
+Summary(pl):	Biblioteki wspó³dzielone Mozilla Firefox
+Group:		Libraries
+Conflicts:	%{name} < 2.0-1.4
+
+%description libs
+Mozilla Firefox shared libraries.
+
 %package devel
 Summary:	Headers for developing programs that will use Mozilla Firefox
 Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	nspr-devel >= 1:4.6.3
 Requires:	nss-devel >= 1:3.11.3-3
 Obsoletes:	mozilla-devel
@@ -264,7 +274,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
-%dir %{_firefoxdir}
+
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
 %attr(755,root,root) %{_firefoxdir}/components/*.so
@@ -280,7 +290,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_firefoxdir}/dictionaries
 %dir %{_firefoxdir}/init.d
 %{_firefoxdir}/init.d/README
-%attr(755,root,root) %{_firefoxdir}/*.so
 %attr(755,root,root) %{_firefoxdir}/*.sh
 %attr(755,root,root) %{_firefoxdir}/m*
 %attr(755,root,root) %{_firefoxdir}/f*
@@ -314,6 +323,11 @@ rm -rf $RPM_BUILD_ROOT
 # files created by regxpcom and firefox -register
 %ghost %{_firefoxdir}/components/compreg.dat
 %ghost %{_firefoxdir}/components/xpti.dat
+
+%files libs
+%defattr(644,root,root,755)
+%dir %{_firefoxdir}
+%attr(755,root,root) %{_firefoxdir}/*.so
 
 %files devel
 %defattr(644,root,root,755)
