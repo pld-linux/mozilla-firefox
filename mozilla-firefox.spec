@@ -102,8 +102,6 @@ Pliki nag³ówkowe przegl±darki Mozilla Firefox.
 Summary:	English resources for Mozilla Firefox
 Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox
 Group:		X11/Applications/Networking
-Requires(post,postun):	%{name} = %{version}-%{release}
-Requires(post,postun):	textutils
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
