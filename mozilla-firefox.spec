@@ -76,12 +76,15 @@ my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
 %package libs
 Summary:	Mozilla Firefox shared libraries
-Summary(pl):	Biblioteki wspó³dzielone Mozilla Firefox
+Summary(pl):	Biblioteki wspó³dzielone przegl±darki Mozilla Firefox
 Group:		Libraries
-Conflicts:	%{name} < 2.0-1.4
+Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
 Mozilla Firefox shared libraries.
+
+%description libs -l pl
+Biblioteki wspó³dzielone przegl±darki Mozilla Firefox.
 
 %package devel
 Summary:	Headers for developing programs that will use Mozilla Firefox
@@ -216,7 +219,7 @@ install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-f
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-# header/developement files
+# header/development files
 cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
 cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
 ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
