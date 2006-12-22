@@ -13,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	0.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -72,12 +72,15 @@ my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
 
 %package libs
 Summary:	Mozilla Firefox shared libraries
-Summary(pl):	Biblioteki wspó³dzielone Mozilla Firefox
+Summary(pl):	Biblioteki wspó³dzielone przegl±darki Mozilla Firefox
 Group:		Libraries
-Conflicts:	%{name} < 2.0-1.4
+Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
 Mozilla Firefox shared libraries.
+
+%description libs -l pl
+Biblioteki wspó³dzielone przegl±darki Mozilla Firefox.
 
 %package devel
 Summary:	Headers for developing programs that will use Mozilla Firefox
@@ -98,8 +101,6 @@ Pliki nag³ówkowe przegl±darki Mozilla Firefox.
 Summary:	English resources for Mozilla Firefox
 Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox
 Group:		X11/Applications/Networking
-Requires(post,postun):	%{name} = %{version}-%{release}
-Requires(post,postun):	textutils
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
@@ -214,7 +215,7 @@ install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-f
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
-# header/developement files
+# header/development files
 cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
 cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
 ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
