@@ -13,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	0.2
+Release:	0.9
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -44,6 +44,7 @@ BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.356
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
 BuildRequires:	xorg-lib-libXinerama-devel
@@ -198,6 +199,7 @@ EOF
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
 
+
 %install
 rm -rf $RPM_BUILD_ROOT
 cd mozilla
@@ -205,6 +207,8 @@ install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
+
+%browser_plugins_add_browser %{name} -p %{_firefoxdir}/plugins
 
 %{__make} -C xpinstall/packager stage-package \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -270,12 +274,22 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
+%update_browser_plugins
+
+%postun
+if [ "$1" = 0 ]; then
+	%update_browser_plugins
+fi
 
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
+
+# browser plugins v2
+%{_browserpluginsconfdir}/browsers.d/%{name}.*
+%config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 
 %{_firefoxdir}/res
 %dir %{_firefoxdir}/components
