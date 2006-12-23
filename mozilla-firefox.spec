@@ -13,13 +13,14 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	0.1
+Release:	0.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	7a1fc804ed735c5b7e9b1498bac8b5db
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
+Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
@@ -117,6 +118,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %prep
 %setup -qc
 cd mozilla
+%patch0 -p1
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
@@ -205,11 +207,10 @@ install -d \
 	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
 
 %{__make} -C xpinstall/packager stage-package \
-	MOZ_PKG_APPNAME=%{name} \
-	SIGN_NSS= \
+	DESTDIR=$RPM_BUILD_ROOT \
+	MOZ_PKG_APPDIR=%{_firefoxdir} \
 	PKG_SKIP_STRIP=1
 
-cp -a dist/%{name} $RPM_BUILD_ROOT%{_libdir}
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
@@ -220,8 +221,8 @@ install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-f
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
 # header/development files
-cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
-cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -rfLp dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -rfLp dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
 ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
 install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
 mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpidl
