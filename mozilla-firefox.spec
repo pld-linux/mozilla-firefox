@@ -55,6 +55,7 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Requires:	browser-plugins >= 2.0
 Requires:	nspr >= 1:4.6.3
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
