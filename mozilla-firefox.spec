@@ -13,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	0.9
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -198,13 +198,13 @@ EOF
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
 
-
 %install
 rm -rf $RPM_BUILD_ROOT
 cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
+	$RPM_BUILD_ROOT%{_datadir}/%{name} \
 	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
 
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
@@ -214,12 +214,30 @@ install -d \
 	MOZ_PKG_APPDIR=%{_libdir}/%{name} \
 	PKG_SKIP_STRIP=1
 
+# move arch independant ones to datadir
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome $RPM_BUILD_ROOT%{_datadir}/%{name}/chrome
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}/defaults
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries $RPM_BUILD_ROOT%{_datadir}/%{name}/dictionaries
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d $RPM_BUILD_ROOT%{_datadir}/%{name}/init.d
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
+ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
+ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
+ln -s ../../share/%{name}/dictionaries $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
+ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
+ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
+ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
+ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
+ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
+
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
-#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults/profile/
-#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults/profile/US/
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
@@ -251,6 +269,9 @@ sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
 
+# what's this? it's content is invalid anyway.
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/dependentlibs.list
+
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
 umask 022
@@ -271,6 +292,15 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+for d in chrome defaults dictionaries extensions greprefs icons init.d res searchplugins; do
+	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
+		install -d %{_datadir}/%{name}
+		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
+	fi
+done
+exit 0
+
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
 %update_browser_plugins
@@ -290,50 +320,52 @@ fi
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 
-%{_libdir}/%{name}/res
 %dir %{_libdir}/%{name}/components
 %attr(755,root,root) %{_libdir}/%{name}/components/*.so
 %{_libdir}/%{name}/components/*.js
 %{_libdir}/%{name}/components/*.xpt
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
-%{_libdir}/%{name}/searchplugins
-%{_libdir}/%{name}/icons
-%{_libdir}/%{name}/defaults
-%{_libdir}/%{name}/greprefs
-%dir %{_libdir}/%{name}/extensions
-%dir %{_libdir}/%{name}/dictionaries
-%dir %{_libdir}/%{name}/init.d
-%{_libdir}/%{name}/init.d/README
 %attr(755,root,root) %{_libdir}/%{name}/*.sh
 %attr(755,root,root) %{_libdir}/%{name}/m*
 %attr(755,root,root) %{_libdir}/%{name}/f*
 %attr(755,root,root) %{_libdir}/%{name}/regxpcom
 %attr(755,root,root) %{_libdir}/%{name}/x*
 %{_pixmapsdir}/*
-%{_desktopdir}/*
+%{_desktopdir}/*.desktop
 
-%dir %{_libdir}/%{name}/chrome
-%{_libdir}/%{name}/chrome/*.jar
-%{_libdir}/%{name}/chrome/*.manifest
-%dir %{_libdir}/%{name}/chrome/icons
-%{_libdir}/%{name}/chrome/icons/default
-
-# -dom-inspector subpackage?
-%dir %{_libdir}/%{name}/extensions/inspector@mozilla.org
-%{_libdir}/%{name}/extensions/inspector@mozilla.org/*
-
-# the signature of the default theme
-%dir %{_libdir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
-%{_libdir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
+# symlinks
+%{_libdir}/%{name}/chrome
+%{_libdir}/%{name}/defaults
+%{_libdir}/%{name}/dictionaries
+%{_libdir}/%{name}/extensions
+%{_libdir}/%{name}/greprefs
+%{_libdir}/%{name}/icons
+%{_libdir}/%{name}/init.d
+%{_libdir}/%{name}/res
+%{_libdir}/%{name}/searchplugins
 
 # browserconfig
 %{_libdir}/%{name}/browserconfig.properties
 
 %{_libdir}/%{name}/LICENSE
 %{_libdir}/%{name}/README.txt
-%{_libdir}/%{name}/chrome/chromelist.txt
-%{_libdir}/%{name}/dependentlibs.list
+
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/chrome
+%{_datadir}/%{name}/defaults
+%{_datadir}/%{name}/dictionaries
+%{_datadir}/%{name}/greprefs
+%{_datadir}/%{name}/icons
+%{_datadir}/%{name}/init.d
+%{_datadir}/%{name}/res
+%{_datadir}/%{name}/searchplugins
+
+%dir %{_datadir}/%{name}/extensions
+# -dom-inspector subpackage?
+%{_datadir}/%{name}/extensions/inspector@mozilla.org
+# the signature of the default theme
+%{_datadir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 
 # files created by regxpcom and firefox -register
 %ghost %{_libdir}/%{name}/components/compreg.dat
@@ -355,8 +387,8 @@ fi
 
 %files lang-en
 %defattr(644,root,root,755)
-%{_libdir}/%{name}/chrome/en-US.jar
-%{_libdir}/%{name}/chrome/en-US.manifest
+%{_datadir}/%{name}/chrome/en-US.jar
+%{_datadir}/%{name}/chrome/en-US.manifest
 # probably should share these with all mozilla apps
-%{_libdir}/%{name}/dictionaries/en-US.aff
-%{_libdir}/%{name}/dictionaries/en-US.dic
+%{_datadir}/%{name}/dictionaries/en-US.aff
+%{_datadir}/%{name}/dictionaries/en-US.dic
