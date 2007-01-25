@@ -20,11 +20,12 @@ Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/sourc
 # Source0-md5:	7a1fc804ed735c5b7e9b1498bac8b5db
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
+Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
 # if ac rebuild is needed...
-#PatchX:	%{name}-ac.patch
+#PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	XFree86-devel
@@ -55,10 +56,9 @@ Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_firefoxdir	%{_libdir}/%{name}
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
-%define		_noautoprovfiles	%{_firefoxdir}/components
+%define		_noautoprovfiles	%{_libdir}/%{name}/components
 
 %define		specflags	-fno-strict-aliasing
 
@@ -82,21 +82,6 @@ Mozilla Firefox shared libraries.
 %description libs -l pl
 Biblioteki wspó³dzielone przegl±darki Mozilla Firefox.
 
-%package devel
-Summary:	Headers for developing programs that will use Mozilla Firefox
-Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
-Group:		X11/Development/Libraries
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
-Requires:	nspr-devel >= 1:4.6.3
-Requires:	nss-devel >= 1:3.11.3-3
-Obsoletes:	mozilla-devel
-
-%description devel
-Mozilla Firefox development package.
-
-%description devel -l pl
-Pliki nag³ówkowe przegl±darki Mozilla Firefox.
-
 %package lang-en
 Summary:	English resources for Mozilla Firefox
 Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox
@@ -113,6 +98,7 @@ Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
 %prep
 %setup -qc
 cd mozilla
+%patch0 -p1
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
@@ -185,7 +171,7 @@ ac_add_options --with-system-nss
 ac_add_options --with-system-zlib
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
-ac_add_options --with-default-mozilla-five-home=%{_firefoxdir}
+ac_add_options --with-default-mozilla-five-home=%{_libdir}/%{name}
 ac_cv_visibility_pragma=no
 EOF
 
@@ -199,55 +185,57 @@ cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
-	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
+	$RPM_BUILD_ROOT%{_datadir}/%{name}
 
 %{__make} -C xpinstall/packager stage-package \
-	MOZ_PKG_APPNAME=%{name} \
-	SIGN_NSS= \
+	DESTDIR=$RPM_BUILD_ROOT \
+	MOZ_PKG_APPDIR=%{_libdir}/%{name} \
 	PKG_SKIP_STRIP=1
 
-cp -a dist/%{name} $RPM_BUILD_ROOT%{_libdir}
+# move arch independant ones to datadir
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome $RPM_BUILD_ROOT%{_datadir}/%{name}/chrome
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}/defaults
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries $RPM_BUILD_ROOT%{_datadir}/%{name}/dictionaries
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d $RPM_BUILD_ROOT%{_datadir}/%{name}/init.d
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
+ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
+ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
+ln -s ../../share/%{name}/dictionaries $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
+ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
+ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
+ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
+ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
+ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
+
+
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
-#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/
-#install -m644 bookmarks.html $RPM_BUILD_ROOT%{_firefoxdir}/defaults/profile/US/
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
 # header/development files
-cp -rfL dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
-cp -rfL dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
-ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
-install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
-mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpidl
-mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpt_dump
-mv $RPM_BUILD_ROOT{%{_firefoxdir},%{_bindir}}/xpt_link
-
-# pkgconfig files
-for f in build/unix/*.pc; do
-	sed -e 's/firefox-%{version}/mozilla-firefox/' $f > $RPM_BUILD_ROOT%{_pkgconfigdir}/${f##*/}
-done
-
-# already provided by standalone packages
-rm $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
-
-sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g' \
-	$RPM_BUILD_ROOT%{_pkgconfigdir}/*.pc
-
-# includedir/dom CFLAGS
-sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
-	$RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-plugin.pc
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_dump
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_link
 
 # files created by regxpcom and firefox -register
-touch $RPM_BUILD_ROOT%{_firefoxdir}/components/compreg.dat
-touch $RPM_BUILD_ROOT%{_firefoxdir}/components/xpti.dat
+touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
+touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
+
+# what's this? it's content is invalid anyway.
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/dependentlibs.list
 
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
 umask 022
-rm -f %{_firefoxdir}/components/{compreg,xpti}.dat
+rm -f %{_libdir}/%{name}/components/{compreg,xpti}.dat
 
 # it attempts to touch files in $HOME/.mozilla
 # beware if you run this with sudo!!!
@@ -255,14 +243,23 @@ export HOME=$(mktemp -d)
 # also TMPDIR could be pointing to sudo user's homedir
 unset TMPDIR TMP || :
 
-LD_LIBRARY_PATH=%{_firefoxdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} %{_firefoxdir}/regxpcom
-%{_firefoxdir}/firefox -register
+LD_LIBRARY_PATH=%{_libdir}/%{name}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} %{_libdir}/%{name}/regxpcom
+%{_libdir}/%{name}/firefox -register
 
 rm -rf $HOME
 EOF
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%pre
+for d in chrome defaults dictionaries extensions greprefs icons init.d res searchplugins; do
+	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
+		install -d %{_datadir}/%{name}
+		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
+	fi
+done
+exit 0
 
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
@@ -273,73 +270,67 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
 
-%{_firefoxdir}/res
-%dir %{_firefoxdir}/components
-%attr(755,root,root) %{_firefoxdir}/components/*.so
-%{_firefoxdir}/components/*.js
-%{_firefoxdir}/components/*.xpt
-%dir %{_firefoxdir}/plugins
-%attr(755,root,root) %{_firefoxdir}/plugins/*.so
-%{_firefoxdir}/searchplugins
-%{_firefoxdir}/icons
-%{_firefoxdir}/defaults
-%{_firefoxdir}/greprefs
-%dir %{_firefoxdir}/extensions
-%dir %{_firefoxdir}/dictionaries
-%dir %{_firefoxdir}/init.d
-%{_firefoxdir}/init.d/README
-%attr(755,root,root) %{_firefoxdir}/*.sh
-%attr(755,root,root) %{_firefoxdir}/m*
-%attr(755,root,root) %{_firefoxdir}/f*
-%attr(755,root,root) %{_firefoxdir}/regxpcom
-%attr(755,root,root) %{_firefoxdir}/x*
-%{_pixmapsdir}/*
-%{_desktopdir}/*
+%dir %{_libdir}/%{name}/components
+%attr(755,root,root) %{_libdir}/%{name}/components/*.so
+%{_libdir}/%{name}/components/*.js
+%{_libdir}/%{name}/components/*.xpt
+%dir %{_libdir}/%{name}/plugins
+%attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
+%attr(755,root,root) %{_libdir}/%{name}/*.sh
+%attr(755,root,root) %{_libdir}/%{name}/m*
+%attr(755,root,root) %{_libdir}/%{name}/f*
+%attr(755,root,root) %{_libdir}/%{name}/regxpcom
+%attr(755,root,root) %{_libdir}/%{name}/xpcshell
+%attr(755,root,root) %{_libdir}/%{name}/xpicleanup
+%{_pixmapsdir}/mozilla-firefox.png
+%{_desktopdir}/mozilla-firefox.desktop
 
-%dir %{_firefoxdir}/chrome
-%{_firefoxdir}/chrome/*.jar
-%{_firefoxdir}/chrome/*.manifest
-%dir %{_firefoxdir}/chrome/icons
-%{_firefoxdir}/chrome/icons/default
-
-# -dom-inspector subpackage?
-%dir %{_firefoxdir}/extensions/inspector@mozilla.org
-%{_firefoxdir}/extensions/inspector@mozilla.org/*
-
-# the signature of the default theme
-%dir %{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
-%{_firefoxdir}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}/install.rdf
+# symlinks
+%{_libdir}/%{name}/chrome
+%{_libdir}/%{name}/defaults
+%{_libdir}/%{name}/dictionaries
+%{_libdir}/%{name}/extensions
+%{_libdir}/%{name}/greprefs
+%{_libdir}/%{name}/icons
+%{_libdir}/%{name}/init.d
+%{_libdir}/%{name}/res
+%{_libdir}/%{name}/searchplugins
 
 # browserconfig
-%{_firefoxdir}/browserconfig.properties
+%{_libdir}/%{name}/browserconfig.properties
 
-%{_firefoxdir}/LICENSE
-%{_firefoxdir}/README.txt
-%{_firefoxdir}/chrome/chromelist.txt
-%{_firefoxdir}/dependentlibs.list
+%{_libdir}/%{name}/LICENSE
+%{_libdir}/%{name}/README.txt
+
+%dir %{_datadir}/%{name}
+%{_datadir}/%{name}/chrome
+%{_datadir}/%{name}/defaults
+%{_datadir}/%{name}/dictionaries
+%{_datadir}/%{name}/greprefs
+%{_datadir}/%{name}/icons
+%{_datadir}/%{name}/init.d
+%{_datadir}/%{name}/res
+%{_datadir}/%{name}/searchplugins
+
+%dir %{_datadir}/%{name}/extensions
+# -dom-inspector subpackage?
+%{_datadir}/%{name}/extensions/inspector@mozilla.org
+# the signature of the default theme
+%{_datadir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 
 # files created by regxpcom and firefox -register
-%ghost %{_firefoxdir}/components/compreg.dat
-%ghost %{_firefoxdir}/components/xpti.dat
+%ghost %{_libdir}/%{name}/components/compreg.dat
+%ghost %{_libdir}/%{name}/components/xpti.dat
 
 %files libs
 %defattr(644,root,root,755)
-%dir %{_firefoxdir}
-%attr(755,root,root) %{_firefoxdir}/*.so
-
-%files devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/regxpcom
-%attr(755,root,root) %{_bindir}/xpidl
-%attr(755,root,root) %{_bindir}/xpt_dump
-%attr(755,root,root) %{_bindir}/xpt_link
-%{_includedir}/%{name}
-%{_pkgconfigdir}/*
+%dir %{_libdir}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/*.so
 
 %files lang-en
 %defattr(644,root,root,755)
-%{_firefoxdir}/chrome/en-US.jar
-%{_firefoxdir}/chrome/en-US.manifest
+%{_datadir}/%{name}/chrome/en-US.jar
+%{_datadir}/%{name}/chrome/en-US.manifest
 # probably should share these with all mozilla apps
-%{_firefoxdir}/dictionaries/en-US.aff
-%{_firefoxdir}/dictionaries/en-US.dic
+%{_datadir}/%{name}/dictionaries/en-US.aff
+%{_datadir}/%{name}/dictionaries/en-US.dic
