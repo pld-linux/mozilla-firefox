@@ -13,7 +13,7 @@ Summary:	Mozilla Firefox web browser
 Summary(pl):	Mozilla Firefox - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	2
+Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -87,21 +87,6 @@ Mozilla Firefox shared libraries.
 
 %description libs -l pl
 Biblioteki wspó³dzielone przegl±darki Mozilla Firefox.
-
-%package devel
-Summary:	Headers for developing programs that will use Mozilla Firefox
-Summary(pl):	Mozilla Firefox - pliki nag³ówkowe
-Group:		X11/Development/Libraries
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
-Requires:	nspr-devel >= 1:4.6.3
-Requires:	nss-devel >= 1:3.11.3-3
-Obsoletes:	mozilla-devel
-
-%description devel
-Mozilla Firefox development package.
-
-%description devel -l pl
-Pliki nag³ówkowe przegl±darki Mozilla Firefox.
 
 %package lang-en
 Summary:	English resources for Mozilla Firefox
@@ -205,8 +190,7 @@ cd mozilla
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
-	$RPM_BUILD_ROOT%{_datadir}/%{name} \
-	$RPM_BUILD_ROOT{%{_includedir},%{_pkgconfigdir}}
+	$RPM_BUILD_ROOT%{_datadir}/%{name}
 
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
 
@@ -243,28 +227,9 @@ install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-f
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
 
 # header/development files
-cp -rfLp dist/include	$RPM_BUILD_ROOT%{_includedir}/%{name}
-cp -rfLp dist/idl	$RPM_BUILD_ROOT%{_includedir}/%{name}
-ln -sf necko/nsIURI.h $RPM_BUILD_ROOT%{_includedir}/mozilla-firefox/nsIURI.h
-install dist/bin/regxpcom $RPM_BUILD_ROOT%{_bindir}
-mv $RPM_BUILD_ROOT{%{_libdir}/%{name},%{_bindir}}/xpidl
-mv $RPM_BUILD_ROOT{%{_libdir}/%{name},%{_bindir}}/xpt_dump
-mv $RPM_BUILD_ROOT{%{_libdir}/%{name},%{_bindir}}/xpt_link
-
-# pkgconfig files
-for f in build/unix/*.pc; do
-	sed -e 's/firefox-%{version}/mozilla-firefox/' $f > $RPM_BUILD_ROOT%{_pkgconfigdir}/${f##*/}
-done
-
-# already provided by standalone packages
-rm $RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-{nss,nspr}.pc
-
-sed -i -e 's#firefox-nspr =.*#mozilla-nspr#g' -e 's#irefox-nss =.*#mozilla-nss#g' \
-	$RPM_BUILD_ROOT%{_pkgconfigdir}/*.pc
-
-# includedir/dom CFLAGS
-sed -i -e '/Cflags:/{/{includedir}\/dom/!s,$, -I${includedir}/dom,}' \
-	$RPM_BUILD_ROOT%{_pkgconfigdir}/firefox-plugin.pc
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_dump
+rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_link
 
 # files created by regxpcom and firefox -register
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
@@ -331,9 +296,10 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/m*
 %attr(755,root,root) %{_libdir}/%{name}/f*
 %attr(755,root,root) %{_libdir}/%{name}/regxpcom
-%attr(755,root,root) %{_libdir}/%{name}/x*
-%{_pixmapsdir}/*
-%{_desktopdir}/*.desktop
+%attr(755,root,root) %{_libdir}/%{name}/xpcshell
+%attr(755,root,root) %{_libdir}/%{name}/xpicleanup
+%{_pixmapsdir}/mozilla-firefox.png
+%{_desktopdir}/mozilla-firefox.desktop
 
 # symlinks
 %{_libdir}/%{name}/chrome
@@ -376,15 +342,6 @@ fi
 %defattr(644,root,root,755)
 %dir %{_libdir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}/*.so
-
-%files devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/regxpcom
-%attr(755,root,root) %{_bindir}/xpidl
-%attr(755,root,root) %{_bindir}/xpt_dump
-%attr(755,root,root) %{_bindir}/xpt_link
-%{_includedir}/%{name}
-%{_pkgconfigdir}/*
 
 %files lang-en
 %defattr(644,root,root,755)
