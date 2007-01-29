@@ -13,7 +13,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	2
+Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -25,7 +25,7 @@ Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
 # if ac rebuild is needed...
-#PatchX: %{name}-ac.patch
+#PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	XFree86-devel
@@ -45,11 +45,13 @@ BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.356
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
 Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
+Requires:	browser-plugins >= 2.0
 Requires:	nspr >= 1:4.6.3
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
@@ -188,6 +190,8 @@ install -d \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}
 
+%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
+
 %{__make} -C xpinstall/packager stage-package \
 	DESTDIR=$RPM_BUILD_ROOT \
 	MOZ_PKG_APPDIR=%{_libdir}/%{name} \
@@ -212,7 +216,6 @@ ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
 ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
-
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
@@ -264,12 +267,22 @@ exit 0
 
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
+%update_browser_plugins
+
+%postun
+if [ "$1" = 0 ]; then
+	%update_browser_plugins
+fi
 
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
+
+# browser plugins v2
+%{_browserpluginsconfdir}/browsers.d/%{name}.*
+%config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 
 %dir %{_libdir}/%{name}/components
 %attr(755,root,root) %{_libdir}/%{name}/components/*.so
