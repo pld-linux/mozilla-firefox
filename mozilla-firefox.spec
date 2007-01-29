@@ -28,6 +28,7 @@ Patch5:		%{name}-fonts.patch
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
+BuildRequires:	XFree86-devel
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
@@ -45,11 +46,6 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.356
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
