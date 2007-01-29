@@ -9,8 +9,8 @@
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
-Summary:	Mozilla Firefox web browser
-Summary(pl):	Mozilla Firefox - przegl±darka WWW
+Summary:	Firefox Community Edition web browser
+Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
 Release:	3
@@ -69,37 +69,38 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		specflags	-fno-strict-aliasing
 
 %description
-Mozilla Firefox is an open-source web browser, designed for standards
-compliance, performance and portability.
+Firefox Community Edition is an open-source web browser, designed for
+standards compliance, performance and portability.
 
 %description -l pl
-Mozilla Firefox jest open sourcow± przegl±dark± sieci WWW, stworzon± z
-my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i przeno¶no¶ci±.
+Firefox Community Edition jest open sourcow± przegl±dark± sieci WWW,
+stworzon± z my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i
+przeno¶no¶ci±.
 
 %package libs
-Summary:	Mozilla Firefox shared libraries
-Summary(pl):	Biblioteki wspó³dzielone przegl±darki Mozilla Firefox
+Summary:	Firefox Community Edition shared libraries
+Summary(pl):	Biblioteki wspó³dzielone przegl±darki Firefox Community Edition
 Group:		Libraries
 Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
-Mozilla Firefox shared libraries.
+Firefox Community Edition shared libraries.
 
 %description libs -l pl
-Biblioteki wspó³dzielone przegl±darki Mozilla Firefox.
+Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
 
 %package lang-en
-Summary:	English resources for Mozilla Firefox
-Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox
+Summary:	English resources for Firefox Community Edition
+Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
 Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
 
 %description lang-en
-English resources for Mozilla Firefox.
+English resources for Firefox Community Edition.
 
 %description lang-en -l pl
-Anglojêzyczne zasoby dla przegl±darki Mozilla Firefox.
+Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
 
 %prep
 %setup -qc
