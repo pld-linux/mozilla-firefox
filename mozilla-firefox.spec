@@ -10,7 +10,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl.UTF-8):   Firefox Community Edition - przeglądarka WWW
+Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
 Release:	3.1
@@ -79,7 +79,7 @@ przenośnością.
 
 %package libs
 Summary:	Firefox Community Edition shared libraries
-Summary(pl.UTF-8):   Biblioteki współdzielone przeglądarki Firefox Community Edition
+Summary(pl.UTF-8):	Biblioteki współdzielone przeglądarki Firefox Community Edition
 Group:		Libraries
 Conflicts:	mozilla-firefox < 2.0-1.4
 
@@ -91,7 +91,7 @@ Biblioteki współdzielone przeglądarki Firefox Community Edition.
 
 %package lang-en
 Summary:	English resources for Firefox Community Edition
-Summary(pl.UTF-8):   Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
+Summary(pl.UTF-8):	Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
 Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
