@@ -10,7 +10,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl):	Firefox Community Edition - przegl±darka WWW
+Summary(pl.UTF-8):   Firefox Community Edition - przeglÄ…darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
 Release:	3.1
@@ -72,26 +72,26 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Firefox Community Edition is an open-source web browser, designed for
 standards compliance, performance and portability.
 
-%description -l pl
-Firefox Community Edition jest open sourcow± przegl±dark± sieci WWW,
-stworzon± z my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i
-przeno¶no¶ci±.
+%description -l pl.UTF-8
+Firefox Community Edition jest open sourcowÄ… przeglÄ…darkÄ… sieci WWW,
+stworzonÄ… z myÅ›lÄ… o zgodnoÅ›ci ze standardami, wydajnoÅ›ciÄ… i
+przenoÅ›noÅ›ciÄ….
 
 %package libs
 Summary:	Firefox Community Edition shared libraries
-Summary(pl):	Biblioteki wspó³dzielone przegl±darki Firefox Community Edition
+Summary(pl.UTF-8):   Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition
 Group:		Libraries
 Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
 Firefox Community Edition shared libraries.
 
-%description libs -l pl
-Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
+%description libs -l pl.UTF-8
+Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition.
 
 %package lang-en
 Summary:	English resources for Firefox Community Edition
-Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
+Summary(pl.UTF-8):   AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition
 Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
@@ -99,8 +99,8 @@ Provides:	%{name}-lang-resources = %{version}-%{release}
 %description lang-en
 English resources for Firefox Community Edition.
 
-%description lang-en -l pl
-Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
+%description lang-en -l pl.UTF-8
+AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition.
 
 %prep
 %setup -qc
