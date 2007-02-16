@@ -13,7 +13,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.1
-Release:	3.1
+Release:	3.2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -66,7 +66,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
 %define		_noautoprovfiles	%{_libdir}/%{name}/components
 
-%define		specflags	-fno-strict-aliasing -fno-tree-vrp
+%define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
 
 %description
 Firefox Community Edition is an open-source web browser, designed for
