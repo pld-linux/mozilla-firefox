@@ -10,7 +10,7 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl.UTF-8):	Firefox Community Edition - przeglÄ…darka WWW
+Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.2
 Release:	1
