@@ -10,14 +10,14 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl):	Firefox Community Edition - przegl±darka WWW
+Summary(pl.UTF-8):	Firefox Community Edition - przeglÄ…darka WWW
 Name:		mozilla-firefox
-Version:	2.0.0.1
-Release:	4
+Version:	2.0.0.2
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	7a1fc804ed735c5b7e9b1498bac8b5db
+# Source0-md5:	d7db87b76c1e78a229b662d7dd642265
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
