@@ -13,7 +13,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.2
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -24,6 +24,10 @@ Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
+# drop as soon as bug is fixed since it's so ugly hack
+# fixing symptoms only
+# https://bugzilla.mozilla.org/show_bug.cgi?id=362462
+Patch6:		mozilla-hack-gcc_4_2.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -109,6 +113,7 @@ cd mozilla
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
+%patch6 -p2
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
