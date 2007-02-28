@@ -1,0 +1,11 @@
+--- mozilla/configure	2007-02-28 11:40:54.022623000 +0100
++++ mozilla/configure	2007-02-28 14:17:39.062623000 +0100
+@@ -12916,7 +12916,7 @@
+ 
+ browser)
+   MOZ_APP_NAME=firefox
+-  MOZ_APP_DISPLAYNAME=BonEcho
++  MOZ_APP_DISPLAYNAME=PLD-Linux
+   MOZ_XUL_APP=1
+   MOZ_PHOENIX=1
+   MOZ_SAFE_BROWSING=1
