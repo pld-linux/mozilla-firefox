@@ -24,6 +24,7 @@ Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
+Patch69:	%{name}-agent.patch
 # drop as soon as bug is fixed since it's so ugly hack
 # fixing symptoms only
 # https://bugzilla.mozilla.org/show_bug.cgi?id=362462
@@ -114,6 +115,7 @@ cd mozilla
 %patch3 -p1
 %patch5 -p1
 %patch6 -p2
+%patch69 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
