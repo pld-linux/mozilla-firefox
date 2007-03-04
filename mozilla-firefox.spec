@@ -219,7 +219,7 @@ ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
 
-#rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
@@ -262,6 +262,9 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %pre
+if [ -d %{_libdir}/%{name}/dictionaries ] && [ ! -L %{_libdir}/%{name}/dictionaries ]; then
+	mv -v %{_libdir}/%{name}/dictionaries{,.rpmsave}
+fi
 for d in chrome defaults extensions greprefs icons init.d res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
