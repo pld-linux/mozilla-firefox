@@ -3,7 +3,6 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
-# - add dictionaries outside of mozilla
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
