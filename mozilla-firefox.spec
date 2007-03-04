@@ -13,7 +13,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.2
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -24,8 +24,9 @@ Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
+Patch6:		%{name}-myspell.patch
 # if ac rebuild is needed...
-#PatchX:		%{name}-ac.patch
+#PatchX:	%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	XFree86-devel
@@ -40,6 +41,7 @@ BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
+BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.3
 BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
@@ -105,6 +107,7 @@ cd mozilla
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
+%patch6 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
@@ -167,6 +170,7 @@ ac_add_options --disable-updater
 ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
+ac_add_options --enable-system-myspell
 ac_add_options --enable-xft
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-system-nspr
@@ -200,7 +204,6 @@ install -d \
 # move arch independant ones to datadir
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome $RPM_BUILD_ROOT%{_datadir}/%{name}/chrome
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}/defaults
-mv $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries $RPM_BUILD_ROOT%{_datadir}/%{name}/dictionaries
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
@@ -209,7 +212,6 @@ mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
 ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
 ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
-ln -s ../../share/%{name}/dictionaries $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
 ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
 ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
@@ -217,12 +219,15 @@ ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
 
+#rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}
+install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 
 # header/development files
 rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
@@ -257,7 +262,7 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-for d in chrome defaults dictionaries extensions greprefs icons init.d res searchplugins; do
+for d in chrome defaults extensions greprefs icons init.d res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
 		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
@@ -319,7 +324,6 @@ fi
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/chrome
 %{_datadir}/%{name}/defaults
-%{_datadir}/%{name}/dictionaries
 %{_datadir}/%{name}/greprefs
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/init.d
@@ -345,6 +349,3 @@ fi
 %defattr(644,root,root,755)
 %{_datadir}/%{name}/chrome/en-US.jar
 %{_datadir}/%{name}/chrome/en-US.manifest
-# probably should share these with all mozilla apps
-%{_datadir}/%{name}/dictionaries/en-US.aff
-%{_datadir}/%{name}/dictionaries/en-US.dic
