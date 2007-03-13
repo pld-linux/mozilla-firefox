@@ -24,6 +24,7 @@ Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
 Patch6:		%{name}-myspell.patch
+Patch7:		%{name}-agent.patch
 # if ac rebuild is needed...
 #PatchX:	%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -107,6 +108,7 @@ cd mozilla
 %patch3 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
