@@ -11,12 +11,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	2.0.0.2
-Release:	2
+Version:	2.0.0.3
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	d7db87b76c1e78a229b662d7dd642265
+# Source0-md5:	24398e3d98673a2a92a01a8f771ca12a
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
