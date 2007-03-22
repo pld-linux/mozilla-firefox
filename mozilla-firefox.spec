@@ -83,9 +83,9 @@ Firefox Community Edition is an open-source web browser, designed for
 standards compliance, performance and portability.
 
 %description -l pl.UTF-8
-Firefox Community Edition jest open sourcową przeglądarką sieci WWW,
-stworzoną z myślą o zgodności ze standardami, wydajnością i
-przenośnością.
+Firefox Community Edition jest przeglądarką sieci WWW rozpowszechnianą
+zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
+o zgodności ze standardami, wydajnością i przenośnością.
 
 %package libs
 Summary:	Firefox Community Edition shared libraries
