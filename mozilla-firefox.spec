@@ -12,7 +12,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.3
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -37,7 +37,7 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	heimdal-devel >= 0.7.1
+BuildRequires:	krb5-devel
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -122,8 +122,6 @@ cd mozilla
 %patch6 -p2
 %patch7 -p1
 %patch69 -p1
-
-sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 # use system
 #rm -rf mozilla/nsprpub mozilla/security/nss
