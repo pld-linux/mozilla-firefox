@@ -3,37 +3,33 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
-# - add dictionaries outside of mozilla
 #
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl.UTF-8):	Firefox Community Edition - przeglÄ…darka WWW
+Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	2.0.0.2
+Version:	2.0.0.3
 Release:	3
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	d7db87b76c1e78a229b662d7dd642265
+# Source0-md5:	24398e3d98673a2a92a01a8f771ca12a
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
-Patch69:	%{name}-agent.patch
-# drop as soon as bug is fixed since it's so ugly hack
-# fixing symptoms only
-# https://bugzilla.mozilla.org/show_bug.cgi?id=362462
-Patch6:		mozilla-hack-gcc_4_2.patch
-Patch7:		%{name}-myspell.patch
+Patch6:		%{name}-myspell.patch
+Patch7:		%{name}-agent.patch
 # if ac rebuild is needed...
-#PatchX:		%{name}-ac.patch
+#PatchX:	%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
+BuildRequires:	XFree86-devel
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
@@ -52,11 +48,6 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.356
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
@@ -72,33 +63,37 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # mozilla and firefox provide their own versions
 %define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
 %define		_noautoprovfiles	%{_libdir}/%{name}/components
+# we don't want these to satisfy xulrunner-devel
+%define		_noautoprov			libmozjs.so libxpcom.so libxul.so
+# and as we don't provide them, don't require either
+%define		_noautoreq			libmozjs.so libxpcom.so libxul.so
 
-%define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
+%define		specflags	-fno-strict-aliasing
 
 %description
 Firefox Community Edition is an open-source web browser, designed for
 standards compliance, performance and portability.
 
-%description -l pl.UTF-8
-Firefox Community Edition jest open sourcowÄ… przeglÄ…darkÄ… sieci WWW,
-stworzonÄ… z myÅ›lÄ… o zgodnoÅ›ci ze standardami, wydajnoÅ›ciÄ… i
-przenoÅ›noÅ›ciÄ….
+%description -l pl
+Firefox Community Edition jest open sourcow± przegl±dark± sieci WWW,
+stworzon± z my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i
+przeno¶no¶ci±.
 
 %package libs
 Summary:	Firefox Community Edition shared libraries
-Summary(pl.UTF-8):	Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition
+Summary(pl):	Biblioteki wspó³dzielone przegl±darki Firefox Community Edition
 Group:		Libraries
 Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
 Firefox Community Edition shared libraries.
 
-%description libs -l pl.UTF-8
-Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition.
+%description libs -l pl
+Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
 
 %package lang-en
 Summary:	English resources for Firefox Community Edition
-Summary(pl.UTF-8):	AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition
+Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
 Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-lang-resources = %{version}-%{release}
@@ -106,8 +101,8 @@ Provides:	%{name}-lang-resources = %{version}-%{release}
 %description lang-en
 English resources for Firefox Community Edition.
 
-%description lang-en -l pl.UTF-8
-AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition.
+%description lang-en -l pl
+Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
 
 %prep
 %setup -qc
@@ -116,9 +111,8 @@ cd mozilla
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
-%patch6 -p2
+%patch6 -p1
 %patch7 -p1
-%patch69 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
@@ -230,6 +224,7 @@ ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
 
+rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
@@ -271,7 +266,10 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
+%pretrans
+if [ -d %{_libdir}/%{name}/dictionaries ] && [ ! -L %{_libdir}/%{name}/dictionaries ]; then
+	mv -v %{_libdir}/%{name}/dictionaries{,.rpmsave}
+fi
 for d in chrome defaults extensions greprefs icons init.d res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
