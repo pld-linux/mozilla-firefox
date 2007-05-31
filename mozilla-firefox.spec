@@ -24,10 +24,6 @@ Patch1:		%{name}-lib_path.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
 Patch69:	%{name}-agent.patch
-# drop as soon as bug is fixed since it's so ugly hack
-# fixing symptoms only
-# https://bugzilla.mozilla.org/show_bug.cgi?id=362462
-Patch6:		mozilla-hack-gcc_4_2.patch
 Patch7:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
@@ -119,7 +115,6 @@ cd mozilla
 %patch1 -p1
 %patch3 -p1
 %patch5 -p1
-%patch6 -p2
 %patch7 -p1
 %patch69 -p1
 
