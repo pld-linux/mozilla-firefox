@@ -64,8 +64,8 @@ Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# mozilla and firefox provide their own versions
-%define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
+# firefox/thunderbird/seamonkey provide their own versions
+%define		_noautoreqdep		libgkgfx.so libgtkxtbin.so libjsj.so libxpcom_compat.so libxpcom_core.so
 %define		_noautoprovfiles	%{_libdir}/%{name}/components
 # we don't want these to satisfy xulrunner-devel
 %define		_noautoprov		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
