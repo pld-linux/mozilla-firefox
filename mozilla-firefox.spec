@@ -117,6 +117,7 @@ Summary:	Html Validator for Mozilla Firefox
 Version:	%{_tidy_ver}
 License:	GPL
 Group:		X11/Applications/Networking
+Requires:	%{name} = %{version}-%{release}
 
 %description addon-tidy
 Html Validator for Mozilla Firefox
