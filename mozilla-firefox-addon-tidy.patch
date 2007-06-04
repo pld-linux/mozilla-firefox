@@ -37,8 +37,8 @@
    AC_DEFINE(MOZ_PHOENIX)
    ;;
  
---- mozilla/extensions/tidy/spvalid/Makefile.in~	2007-06-04 18:14:32.143983411 +0300
-+++ mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 18:14:33.784020668 +0300
+--- mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 18:14:33.784020668 +0300
++++ mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 19:23:03.277335685 +0300
 @@ -49,7 +49,7 @@
  EXTRA_DSO_LDOPTS = \
                  $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
@@ -48,6 +48,10 @@
                  $(NULL)
  
  LIBS            = \
+@@ -64 +64 @@
+-INCLUDES += -I$(srcdir)/../opensp/include 
+\ No newline at end of file
++INCLUDES += -I/usr/include/OpenSP
 --- mozilla/extensions/tidy/spvalid/SpValid.cpp~	2007-06-04 18:16:53.647197763 +0300
 +++ mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 18:16:55.107230927 +0300
 @@ -9,7 +9,7 @@
