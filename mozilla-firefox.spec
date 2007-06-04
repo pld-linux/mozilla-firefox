@@ -7,7 +7,7 @@
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
-%bcond_with	tidy	# disable htmlvalidator extension (tidy)
+%bcond_with	tidy	# enable htmlvalidator extension (tidy)
 #
 %define		_tidy_ver		0.839
 %define		_firefox_ver	2.0.0.4
