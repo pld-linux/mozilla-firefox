@@ -1,5 +1,5 @@
---- mozilla_tidy_source/mozilla/allmakefiles.sh~	2007-04-03 22:04:34.000000000 +0300
-+++ mozilla_tidy_source/mozilla/allmakefiles.sh	2007-06-04 14:02:26.641218344 +0300
+--- mozilla/allmakefiles.sh~	2007-04-03 22:04:34.000000000 +0300
++++ mozilla/allmakefiles.sh	2007-06-04 14:02:26.641218344 +0300
 @@ -1561,6 +1561,14 @@
          sql ) MAKEFILES_extensions="$MAKEFILES_extensions
              $MAKEFILES_sql"
