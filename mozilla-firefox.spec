@@ -314,9 +314,238 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
 
 %dir %{_libdir}/%{name}/components
+%attr(755,root,root) %{_libdir}/%{name}/components/libaccessibility.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libappcomps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libauth.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libautoconfig.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libbrowsercomps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libbrowserdirprovider.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libcaps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libchrome.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libcommandlines.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libcomposer.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libcookie.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libdocshell.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libeditor.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libembedcomponents.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libfileview.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libgfx_gtk.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libgfxps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libgklayout.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libgkplugin.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libhtmlpars.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libi18n.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libimglib2.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libjar50.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libjsd.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libmork.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libmozfind.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libmyspell.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libnecko2.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libnecko.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libnsappshell.so
+%attr(755,root,root) %{_libdir}/%{name}/components/liboji.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libpermissions.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libpipboot.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libpipnss.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libpippki.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libpref.so
+%attr(755,root,root) %{_libdir}/%{name}/components/librdf.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libremoteservice.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libsearchservice.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libspellchecker.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libstoragecomps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libsystem-pref.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libtoolkitcomps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libtransformiix.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libtxmgr.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libuconv.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libucvmath.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libuniversalchardet.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libwebbrwsr.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libwebsrvcs.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libwidget_gtk2.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libxmlextras.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libxpcom_compat_c.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libxpconnect.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libxpinstall.so
 %attr(755,root,root) %{_libdir}/%{name}/components/*.so
-%{_libdir}/%{name}/components/*.js
-%{_libdir}/%{name}/components/*.xpt
+%{_libdir}/%{name}/components/accessibility-atk.xpt
+%{_libdir}/%{name}/components/accessibility.xpt
+%{_libdir}/%{name}/components/alerts.xpt
+%{_libdir}/%{name}/components/appshell.xpt
+%{_libdir}/%{name}/components/appstartup.xpt
+%{_libdir}/%{name}/components/autocomplete.xpt
+%{_libdir}/%{name}/components/autoconfig.xpt
+%{_libdir}/%{name}/components/bookmarks.xpt
+%{_libdir}/%{name}/components/browsercompsbase.xpt
+%{_libdir}/%{name}/components/browser-feeds.xpt
+%{_libdir}/%{name}/components/browsersearch.xpt
+%{_libdir}/%{name}/components/caps.xpt
+%{_libdir}/%{name}/components/chardet.xpt
+%{_libdir}/%{name}/components/chrome.xpt
+%{_libdir}/%{name}/components/commandhandler.xpt
+%{_libdir}/%{name}/components/commandlines.xpt
+%{_libdir}/%{name}/components/composer.xpt
+%{_libdir}/%{name}/components/content_base.xpt
+%{_libdir}/%{name}/components/content_htmldoc.xpt
+%{_libdir}/%{name}/components/content_html.xpt
+%{_libdir}/%{name}/components/content_xmldoc.xpt
+%{_libdir}/%{name}/components/content_xslt.xpt
+%{_libdir}/%{name}/components/content_xtf.xpt
+%{_libdir}/%{name}/components/cookie.xpt
+%{_libdir}/%{name}/components/directory.xpt
+%{_libdir}/%{name}/components/docshell.xpt
+%{_libdir}/%{name}/components/dom_base.xpt
+%{_libdir}/%{name}/components/dom_canvas.xpt
+%{_libdir}/%{name}/components/dom_core.xpt
+%{_libdir}/%{name}/components/dom_css.xpt
+%{_libdir}/%{name}/components/dom_events.xpt
+%{_libdir}/%{name}/components/dom_html.xpt
+%{_libdir}/%{name}/components/dom_loadsave.xpt
+%{_libdir}/%{name}/components/dom_range.xpt
+%{_libdir}/%{name}/components/dom_sidebar.xpt
+%{_libdir}/%{name}/components/dom_storage.xpt
+%{_libdir}/%{name}/components/dom_stylesheets.xpt
+%{_libdir}/%{name}/components/dom_svg.xpt
+%{_libdir}/%{name}/components/dom_traversal.xpt
+%{_libdir}/%{name}/components/dom_views.xpt
+%{_libdir}/%{name}/components/dom_xbl.xpt
+%{_libdir}/%{name}/components/dom_xpath.xpt
+%{_libdir}/%{name}/components/dom.xpt
+%{_libdir}/%{name}/components/dom_xul.xpt
+%{_libdir}/%{name}/components/downloads.xpt
+%{_libdir}/%{name}/components/editor.xpt
+%{_libdir}/%{name}/components/embed_base.xpt
+%{_libdir}/%{name}/components/extensions.xpt
+%{_libdir}/%{name}/components/exthandler.xpt
+%{_libdir}/%{name}/components/fastfind.xpt
+%{_libdir}/%{name}/components/FeedConverter.js
+%{_libdir}/%{name}/components/FeedProcessor.js
+%{_libdir}/%{name}/components/feeds.xpt
+%{_libdir}/%{name}/components/FeedWriter.js
+%{_libdir}/%{name}/components/filepicker.xpt
+%{_libdir}/%{name}/components/find.xpt
+%{_libdir}/%{name}/components/gfx.xpt
+%{_libdir}/%{name}/components/gksvgrenderer.xpt
+%{_libdir}/%{name}/components/history.xpt
+%{_libdir}/%{name}/components/htmlparser.xpt
+%{_libdir}/%{name}/components/imgicon.xpt
+%{_libdir}/%{name}/components/imglib2.xpt
+%{_libdir}/%{name}/components/inspector.xpt
+%{_libdir}/%{name}/components/intl.xpt
+%{_libdir}/%{name}/components/jar.xpt
+%{_libdir}/%{name}/components/jsconsole-clhandler.js
+%{_libdir}/%{name}/components/jsconsole.xpt
+%{_libdir}/%{name}/components/jsdservice.xpt
+%{_libdir}/%{name}/components/layout_base.xpt
+%{_libdir}/%{name}/components/layout_printing.xpt
+%{_libdir}/%{name}/components/layout_xul_tree.xpt
+%{_libdir}/%{name}/components/layout_xul.xpt
+%{_libdir}/%{name}/components/locale.xpt
+%{_libdir}/%{name}/components/lwbrk.xpt
+%{_libdir}/%{name}/components/microsummaries.xpt
+%{_libdir}/%{name}/components/migration.xpt
+%{_libdir}/%{name}/components/mimetype.xpt
+%{_libdir}/%{name}/components/mozbrwsr.xpt
+%{_libdir}/%{name}/components/mozfind.xpt
+%{_libdir}/%{name}/components/mozgnome.xpt
+%{_libdir}/%{name}/components/necko_about.xpt
+%{_libdir}/%{name}/components/necko_cache.xpt
+%{_libdir}/%{name}/components/necko_cookie.xpt
+%{_libdir}/%{name}/components/necko_data.xpt
+%{_libdir}/%{name}/components/necko_dns.xpt
+%{_libdir}/%{name}/components/necko_file.xpt
+%{_libdir}/%{name}/components/necko_ftp.xpt
+%{_libdir}/%{name}/components/necko_http.xpt
+%{_libdir}/%{name}/components/necko_res.xpt
+%{_libdir}/%{name}/components/necko_socket.xpt
+%{_libdir}/%{name}/components/necko_strconv.xpt
+%{_libdir}/%{name}/components/necko_viewsource.xpt
+%{_libdir}/%{name}/components/necko.xpt
+%{_libdir}/%{name}/components/nsBookmarkTransactionManager.js
+%{_libdir}/%{name}/components/nsBrowserContentHandler.js
+%{_libdir}/%{name}/components/nsBrowserGlue.js
+%{_libdir}/%{name}/components/nsCloseAllWindows.js
+%{_libdir}/%{name}/components/nsDefaultCLH.js
+%{_libdir}/%{name}/components/nsDictionary.js
+%{_libdir}/%{name}/components/nsExtensionManager.js
+%{_libdir}/%{name}/components/nsFilePicker.js
+%{_libdir}/%{name}/components/nsHelperAppDlg.js
+%{_libdir}/%{name}/components/nsInterfaceInfoToIDL.js
+%{_libdir}/%{name}/components/nsKillAll.js
+%{_libdir}/%{name}/components/nsMicrosummaryService.js
+%{_libdir}/%{name}/components/nsProgressDialog.js
+%{_libdir}/%{name}/components/nsProxyAutoConfig.js
+%{_libdir}/%{name}/components/nsResetPref.js
+%{_libdir}/%{name}/components/nsSafebrowsingApplication.js
+%{_libdir}/%{name}/components/nsSearchService.js
+%{_libdir}/%{name}/components/nsSearchSuggestions.js
+%{_libdir}/%{name}/components/nsSessionStartup.js
+%{_libdir}/%{name}/components/nsSessionStore.js
+%{_libdir}/%{name}/components/nsSetDefaultBrowser.js
+%{_libdir}/%{name}/components/nsSidebar.js
+%{_libdir}/%{name}/components/nsUpdateService.js
+%{_libdir}/%{name}/components/nsUrlClassifierLib.js
+%{_libdir}/%{name}/components/nsUrlClassifierListManager.js
+%{_libdir}/%{name}/components/nsUrlClassifierTable.js
+%{_libdir}/%{name}/components/nsURLFormatter.js
+%{_libdir}/%{name}/components/nsXmlRpcClient.js
+%{_libdir}/%{name}/components/oji.xpt
+%{_libdir}/%{name}/components/passwordmgr.xpt
+%{_libdir}/%{name}/components/pipboot.xpt
+%{_libdir}/%{name}/components/pipnss.xpt
+%{_libdir}/%{name}/components/pippki.xpt
+%{_libdir}/%{name}/components/plugin.xpt
+%{_libdir}/%{name}/components/prefetch.xpt
+%{_libdir}/%{name}/components/pref.xpt
+%{_libdir}/%{name}/components/profile.xpt
+%{_libdir}/%{name}/components/progressDlg.xpt
+%{_libdir}/%{name}/components/proxyObjInst.xpt
+%{_libdir}/%{name}/components/rdf.xpt
+%{_libdir}/%{name}/components/safebrowsing.xpt
+%{_libdir}/%{name}/components/satchel.xpt
+%{_libdir}/%{name}/components/saxparser.xpt
+%{_libdir}/%{name}/components/search.xpt
+%{_libdir}/%{name}/components/sessionstore.xpt
+%{_libdir}/%{name}/components/shellservice.xpt
+%{_libdir}/%{name}/components/shistory.xpt
+%{_libdir}/%{name}/components/spellchecker.xpt
+%{_libdir}/%{name}/components/storage.xpt
+%{_libdir}/%{name}/components/toolkitprofile.xpt
+%{_libdir}/%{name}/components/toolkitremote.xpt
+%{_libdir}/%{name}/components/txmgr.xpt
+%{_libdir}/%{name}/components/txtsvc.xpt
+%{_libdir}/%{name}/components/uconv.xpt
+%{_libdir}/%{name}/components/unicharutil.xpt
+%{_libdir}/%{name}/components/update.xpt
+%{_libdir}/%{name}/components/uriloader.xpt
+%{_libdir}/%{name}/components/url-classifier.xpt
+%{_libdir}/%{name}/components/urlformatter.xpt
+%{_libdir}/%{name}/components/webBrowser_core.xpt
+%{_libdir}/%{name}/components/webbrowserpersist.xpt
+%{_libdir}/%{name}/components/WebContentConverter.js
+%{_libdir}/%{name}/components/webshell_idls.xpt
+%{_libdir}/%{name}/components/websrvcs.xpt
+%{_libdir}/%{name}/components/widget.xpt
+%{_libdir}/%{name}/components/windowds.xpt
+%{_libdir}/%{name}/components/windowwatcher.xpt
+%{_libdir}/%{name}/components/xml-rpc.xpt
+%{_libdir}/%{name}/components/xpcom_base.xpt
+%{_libdir}/%{name}/components/xpcom_components.xpt
+%{_libdir}/%{name}/components/xpcom_ds.xpt
+%{_libdir}/%{name}/components/xpcom_io.xpt
+%{_libdir}/%{name}/components/xpcom_obsolete.xpt
+%{_libdir}/%{name}/components/xpcom_threads.xpt
+%{_libdir}/%{name}/components/xpcom_xpti.xpt
+%{_libdir}/%{name}/components/xpconnect.xpt
+%{_libdir}/%{name}/components/xpinstall.xpt
+%{_libdir}/%{name}/components/xulapp.xpt
+%{_libdir}/%{name}/components/xuldoc.xpt
+%{_libdir}/%{name}/components/xultmpl.xpt
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %attr(755,root,root) %{_libdir}/%{name}/*.sh
