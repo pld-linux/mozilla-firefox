@@ -52,8 +52,8 @@
 -INCLUDES += -I$(srcdir)/../opensp/include 
 \ No newline at end of file
 +INCLUDES += -I/usr/include/OpenSP
---- mozilla/extensions/tidy/spvalid/SpValid.cpp~	2007-06-04 18:16:53.647197763 +0300
-+++ mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 18:16:55.107230927 +0300
+--- mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 18:16:55.107230927 +0300
++++ mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 19:30:11.547080063 +0300
 @@ -9,7 +9,7 @@
  #ifdef WIN32
  #include "../opensp/include/config.h"
@@ -63,6 +63,24 @@
  #endif
  
  #include "nsMemory.h"
+@@ -19,13 +19,13 @@
+ 
+ #include <stdlib.h>
+ 
+-#include "MessageEventHandler.h"
+-#include "NsgmlsMessages.h"
+-#include "sptchar.h"
++#include <OpenSP/MessageEventHandler.h>
++#include <OpenSP/nsgmls/NsgmlsMessages.h>
++#include <OpenSP/sptchar.h>
+ #include "SpValid.h"
+ #include "InternalInputSource.h"
+ 
+-#include "../lib/Parser.h"
++#include <OpenSP/lib/Parser.h>
+ ;
+ #ifdef SP_NAMESPACE
+ using namespace SP_NAMESPACE;
 --- mozilla/extensions/tidy/src/Makefile.in~	2007-06-04 17:18:56.188246299 +0300
 +++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
 @@ -83,7 +83,7 @@
@@ -74,3 +92,16 @@
                  $(NULL)
  
  LIBS            = \
+--- mozilla/extensions/tidy/spvalid/SpValid.h~	2007-06-04 19:30:14.137138981 +0300
++++ mozilla/extensions/tidy/spvalid/SpValid.h	2007-06-04 19:30:15.877178562 +0300
+@@ -5,8 +5,8 @@
+ #define Nsgmls_INCLUDED 1
+ 
+ #include "SpResult.h"
+-#include "ParserApp.h"
+-#include "Boolean.h"
++#include <OpenSP/ParserApp.h>
++#include <OpenSP/Boolean.h>
+ 
+ #ifdef SP_NAMESPACE
+ using namespace SP_NAMESPACE;
