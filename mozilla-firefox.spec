@@ -7,6 +7,10 @@
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
+%bcond_with	tidy	# disable htmlvalidator extension (tidy)
+#
+%define		_tidy_ver		0.839
+%define		_firefox_ver	2.0.0.4
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -17,10 +21,13 @@ License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	99c14794976b2532addfcd2d836c6bb2
-Source1:	%{name}.desktop
-Source2:	%{name}.sh
+Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
+# Source1-md5:	ad63736e9d57de3e6c69696319b34b3b
+Source2:	%{name}.desktop
+Source3:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
+Patch2:		%{name}-addon-tidy.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
 Patch69:	%{name}-agent.patch
@@ -43,6 +50,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.3
 BuildRequires:	nss-devel >= 1:3.11.3-3
+%{?with_tidy:BuildRequires:	opensp-devel}
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -109,10 +117,16 @@ English resources for Firefox Community Edition.
 Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition.
 
 %prep
-%setup -qc
+%setup -qc %{?with_tidy:-a1}
+%if %{with tidy}
+mv mozilla_tidy_source/mozilla/extensions/tidy mozilla/extensions/tidy
+mv mozilla_tidy_source/tidy_extension .
+rm -rf mozilla/extensions/tidy/opensp
+%endif
 cd mozilla
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch5 -p1
 %patch7 -p1
@@ -229,12 +243,12 @@ ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/search
 rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
-sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE3} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
+install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 
 # header/development files
 rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
