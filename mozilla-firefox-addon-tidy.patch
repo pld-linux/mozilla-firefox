@@ -81,11 +81,13 @@
  ;
  #ifdef SP_NAMESPACE
  using namespace SP_NAMESPACE;
---- mozilla/extensions/tidy/src/Makefile.in~	2007-06-04 17:18:56.188246299 +0300
-+++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
-@@ -83,7 +83,7 @@
+--- mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
++++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 23:29:29.111109183 +0300
+@@ -82,8 +82,9 @@
+ # separate libraries linked in.
  EXTRA_DSO_LDOPTS = \
                  $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
++                $(DIST)/lib/libxpcom_core.so \
                  $(NSPR_LIBS) \
 -                ../spvalid/$(LIB_PREFIX)osp.$(LIB_SUFFIX) \
 +                -losp \
