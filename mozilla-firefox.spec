@@ -372,7 +372,6 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libxpcom_compat_c.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libxpconnect.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libxpinstall.so
-%attr(755,root,root) %{_libdir}/%{name}/components/*.so
 %{_libdir}/%{name}/components/accessibility-atk.xpt
 %{_libdir}/%{name}/components/accessibility.xpt
 %{_libdir}/%{name}/components/alerts.xpt
