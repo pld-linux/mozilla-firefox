@@ -15,3 +15,25 @@
          schema-validation ) MAKEFILES_extensions="$MAKEFILES_extensions
              extensions/schema-validation/Makefile
              extensions/schema-validation/public/Makefile
+--- mozilla/configure~	2007-06-04 14:32:43.192411445 +0300
++++ mozilla/configure	2007-06-04 17:01:47.504921162 +0300
+@@ -13168,7 +13168,7 @@
+   MOZ_PHOENIX=1
+   MOZ_SAFE_BROWSING=1
+   MOZ_APP_VERSION=$FIREFOX_VERSION
+-  MOZ_EXTENSIONS_DEFAULT=" cookie xml-rpc xmlextras pref transformiix universalchardet webservices inspector gnomevfs auth permissions reporter spellcheck"
++  MOZ_EXTENSIONS_DEFAULT=" tidy cookie xml-rpc xmlextras pref transformiix universalchardet webservices inspector gnomevfs auth permissions reporter spellcheck"
+   cat >> confdefs.h <<\EOF
+ #define MOZ_PHOENIX 1
+ EOF
+--- mozilla/configure.in~	2007-06-04 14:32:42.892404643 +0300
++++ mozilla/configure.in	2007-06-04 17:02:06.255346400 +0300
+@@ -4329,7 +4329,7 @@
+   MOZ_PHOENIX=1
+   MOZ_SAFE_BROWSING=1
+   MOZ_APP_VERSION=$FIREFOX_VERSION
+-  MOZ_EXTENSIONS_DEFAULT=" cookie xml-rpc xmlextras pref transformiix universalchardet webservices inspector gnomevfs auth permissions reporter spellcheck"
++  MOZ_EXTENSIONS_DEFAULT=" tidy cookie xml-rpc xmlextras pref transformiix universalchardet webservices inspector gnomevfs auth permissions reporter spellcheck"
+   AC_DEFINE(MOZ_PHOENIX)
+   ;;
+ 
