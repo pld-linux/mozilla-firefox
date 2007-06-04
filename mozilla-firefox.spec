@@ -120,7 +120,9 @@ Group:		X11/Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description addon-tidy
-Html Validator for Mozilla Firefox
+HTML Validator is a Mozilla extension that adds HTML validation inside
+Firefox and Mozilla. The number of errors of a HTML page is seen on
+the form of an icon in the status bar when browsing.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
