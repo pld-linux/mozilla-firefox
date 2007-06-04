@@ -37,3 +37,36 @@
    AC_DEFINE(MOZ_PHOENIX)
    ;;
  
+--- mozilla/extensions/tidy/spvalid/Makefile.in~	2007-06-04 18:14:32.143983411 +0300
++++ mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 18:14:33.784020668 +0300
+@@ -49,7 +49,7 @@
+ EXTRA_DSO_LDOPTS = \
+                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
+                 $(NSPR_LIBS) \
+-                $(LIB_PREFIX)osp.$(LIB_SUFFIX) \
++                -losp \
+                 $(NULL)
+ 
+ LIBS            = \
+--- mozilla/extensions/tidy/spvalid/SpValid.cpp~	2007-06-04 18:16:53.647197763 +0300
++++ mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 18:16:55.107230927 +0300
+@@ -9,7 +9,7 @@
+ #ifdef WIN32
+ #include "../opensp/include/config.h"
+ #else
+-#include "../opensp/config.h"
++#include <OpenSP/config.h>
+ #endif
+ 
+ #include "nsMemory.h"
+--- mozilla/extensions/tidy/src/Makefile.in~	2007-06-04 17:18:56.188246299 +0300
++++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
+@@ -83,7 +83,7 @@
+ EXTRA_DSO_LDOPTS = \
+                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
+                 $(NSPR_LIBS) \
+-                ../spvalid/$(LIB_PREFIX)osp.$(LIB_SUFFIX) \
++                -losp \
+                 $(NULL)
+ 
+ LIBS            = \
