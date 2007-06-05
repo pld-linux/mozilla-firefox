@@ -7,10 +7,10 @@
 # Conditional build:
 %bcond_with	tests	# enable tests (whatever they check)
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
-%bcond_with	tidy	# enable htmlvalidator extension (tidy)
+%bcond_without	tidy	# disable htmlvalidator extension (tidy)
 #
-%define		_tidy_ver		0.839
-%define		_firefox_ver	2.0.0.4
+%define		tidy_ver	0.8.3.9
+%define		firefox_ver	2.0.0.4
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -115,6 +115,24 @@ English resources for Firefox Community Edition.
 
 %description lang-en -l pl.UTF-8
 Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition.
+
+%package addon-tidy
+Summary:	HTML Validator for Firefox
+Summary(pl.UTF-8):	Narzędzie do sprawdzania poprawności HTML-a dla Firefoksa
+Version:	%{tidy_ver}
+License:	GPL
+Group:		X11/Applications/Networking
+Requires:	%{name} = %{firefox_ver}-%{release}
+
+%description addon-tidy
+HTML Validator is a Mozilla extension that adds HTML validation inside
+Firefox. The number of errors of a HTML page is seen on the form of an
+icon in the status bar when browsing.
+
+%description addon-tidy -l pl.UTF-8
+HTML Validator to rozszerzenie Mozilli dodające sprawdzanie
+poprawności HTML-a w Firefoksie. Liczbę błędów na przeglądanej stronie
+HTML można zobaczyć w postaci ikony na pasku stanu.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
@@ -261,6 +279,7 @@ touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
 
 # what's this? it's content is invalid anyway.
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/dependentlibs.list
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/old-homepage-default.properties
 
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
@@ -601,3 +620,11 @@ fi
 %defattr(644,root,root,755)
 %{_datadir}/%{name}/chrome/en-US.jar
 %{_datadir}/%{name}/chrome/en-US.manifest
+
+%if %{with tidy}
+%files addon-tidy
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}/components/libnstidy.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libtodel.so
+%{_libdir}/%{name}/components/nstidy.xpt
+%endif
