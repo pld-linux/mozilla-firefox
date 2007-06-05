@@ -113,16 +113,22 @@ English resources for Firefox Community Edition.
 Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
 
 %package addon-tidy
-Summary:	Html Validator for Firefox
+Summary:	HTML Validator for Firefox
+Summary(pl):	Narzêdzie do sprawdzania poprawno¶ci HTML-a dla Firefoksa
 Version:	%{_tidy_ver}
 License:	GPL
 Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{_firefox_ver}-%{release}
 
 %description addon-tidy
 HTML Validator is a Mozilla extension that adds HTML validation inside
 Firefox. The number of errors of a HTML page is seen on the form of an
 icon in the status bar when browsing.
+
+%description addon-tidy -l pl
+HTML Validator to rozszerzenie Mozilli dodaj±ce sprawdzanie
+poprawno¶ci HTML-a w Firefoksie. Liczbê b³êdów na przegl±danej stronie
+HTML mo¿na zobaczyæ w postaci ikony na pasku stanu.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
