@@ -50,7 +50,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.3
 BuildRequires:	nss-devel >= 1:3.11.3-3
-%{?with_tidy:BuildRequires:	opensp-devel}
+%{?with_tidy:BuildRequires:	opensp-devel >= 2:1.5.2-4}
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
