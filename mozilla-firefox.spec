@@ -16,7 +16,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	2.0.0.4
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -30,7 +30,7 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-addon-tidy.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
-Patch69:	%{name}-agent.patch
+Patch6:		%{name}-agent.patch
 Patch7:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
@@ -147,8 +147,8 @@ cd mozilla
 %{?with_tidy:%patch2 -p1}
 %patch3 -p1
 %patch5 -p1
+%patch6 -p1
 %patch7 -p1
-%patch69 -p1
 
 # use system
 #rm -rf mozilla/nsprpub mozilla/security/nss
