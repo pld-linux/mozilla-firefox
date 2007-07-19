@@ -9,20 +9,20 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 %bcond_without	tidy	# disable htmlvalidator extension (tidy)
 #
-%define		_tidy_ver		0.8.3.9
+%define		_tidy_ver		0.8.4.0
 %define		_firefox_ver	2.0.0.5
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	%{_firefox_ver}
-Release:	1.1
+Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	5a6ca3e4ac3ebc335d473cd3f682a916
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
-# Source1-md5:	ad63736e9d57de3e6c69696319b34b3b
+# Source1-md5:	cd5d54c47f08286605eaaa308536d4ab
 Source2:	%{name}.desktop
 Source3:	%{name}.sh
 Patch0:		mozilla-install.patch
