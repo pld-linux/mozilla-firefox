@@ -103,19 +103,6 @@ Firefox Community Edition shared libraries.
 %description libs -l pl.UTF-8
 Biblioteki współdzielone przeglądarki Firefox Community Edition.
 
-%package lang-en
-Summary:	English resources for Firefox Community Edition
-Summary(pl.UTF-8):	Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
-Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}-lang-resources = %{version}-%{release}
-
-%description lang-en
-English resources for Firefox Community Edition.
-
-%description lang-en -l pl.UTF-8
-Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition.
-
 %package addon-tidy
 Summary:	HTML Validator for Firefox
 Summary(pl.UTF-8):	Narzędzie do sprawdzania poprawności HTML-a dla Firefoksa
@@ -133,6 +120,19 @@ icon in the status bar when browsing.
 HTML Validator to rozszerzenie Mozilli dodające sprawdzanie
 poprawności HTML-a w Firefoksie. Liczbę błędów na przeglądanej stronie
 HTML można zobaczyć w postaci ikony na pasku stanu.
+
+%package lang-en
+Summary:	English resources for Firefox Community Edition
+Summary(pl.UTF-8):	Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
+Group:		X11/Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-lang-resources = %{version}-%{release}
+
+%description lang-en
+English resources for Firefox Community Edition.
+
+%description lang-en -l pl.UTF-8
+Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
