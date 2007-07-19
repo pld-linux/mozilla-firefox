@@ -126,7 +126,7 @@ Summary:	English resources for Firefox Community Edition
 Summary(pl.UTF-8):	Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
 Version:	%{firefox_ver}
 Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{firefox_ver}-%{release}
 Provides:	%{name}-lang-resources = %{firefox_ver}-%{release}
 
 %description lang-en
