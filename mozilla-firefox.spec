@@ -9,14 +9,14 @@
 %bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
 %bcond_without	tidy	# disable htmlvalidator extension (tidy)
 #
-%define		_tidy_ver		0.8.4.0
+%define		_tidy_ver	0.8.4.0
 %define		_firefox_ver	2.0.0.5
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	%{_firefox_ver}
-Release:	1
+Release:	2
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -99,19 +99,6 @@ Firefox Community Edition shared libraries.
 %description libs -l pl
 Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
 
-%package lang-en
-Summary:	English resources for Firefox Community Edition
-Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
-Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}-lang-resources = %{version}-%{release}
-
-%description lang-en
-English resources for Firefox Community Edition.
-
-%description lang-en -l pl
-Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
-
 %package addon-tidy
 Summary:	HTML Validator for Firefox
 Summary(pl):	Narzêdzie do sprawdzania poprawno¶ci HTML-a dla Firefoksa
@@ -129,6 +116,20 @@ icon in the status bar when browsing.
 HTML Validator to rozszerzenie Mozilli dodaj±ce sprawdzanie
 poprawno¶ci HTML-a w Firefoksie. Liczbê b³êdów na przegl±danej stronie
 HTML mo¿na zobaczyæ w postaci ikony na pasku stanu.
+
+%package lang-en
+Summary:	English resources for Firefox Community Edition
+Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
+Version:	%{_firefox_ver}
+Group:		X11/Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-lang-resources = %{version}-%{release}
+
+%description lang-en
+English resources for Firefox Community Edition.
+
+%description lang-en -l pl
+Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
