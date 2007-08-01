@@ -10,7 +10,7 @@
 %bcond_with	tidy	# enable htmlvalidator extension (tidy)
 #
 %define		tidy_ver	0.8.4.0
-%define		firefox_ver	2.0.0.5
+%define		firefox_ver	2.0.0.6
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -20,7 +20,7 @@ Release:	1
 License:	MPL/LGPL
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	5a6ca3e4ac3ebc335d473cd3f682a916
+# Source0-md5:	16fb252fb7b0371894f7101b88fd9076
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
 # Source1-md5:	cd5d54c47f08286605eaaa308536d4ab
 Source2:	%{name}.desktop
