@@ -5,10 +5,16 @@
 # - make it more pld-like (bookmarks, default page etc..)
 #
 # Conditional build:
-%bcond_with	tests	# enable tests (whatever they check)
-%bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
-%bcond_with	tidy	# enable htmlvalidator extension (tidy)
+%bcond_with	tests		# enable tests (whatever they check)
+%bcond_without	gnomeui		# disable gnomeui support
+%bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
+%bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
+%bcond_with	tidy		# enable htmlvalidator extension (tidy)
 #
+%if %{without gnome}
+%undefine	with_gnomeui
+%undefine	with_gnomevfs
+%endif
 %define		tidy_ver	0.8.4.0
 %define		firefox_ver	2.0.0.6
 #
@@ -17,7 +23,7 @@ Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
 Release:	1
-License:	MPL/LGPL
+License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	16fb252fb7b0371894f7101b88fd9076
@@ -35,15 +41,15 @@ Patch7:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
-%{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
+%{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
-%{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
+%{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	krb5-devel
 BuildRequires:	libIDL-devel >= 0.8.0
-%{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
-%{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
+%{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
+%{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
@@ -355,17 +361,17 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libgkplugin.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libhtmlpars.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libi18n.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
+%{?with_gnomeui:%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libimglib2.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libjar50.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libjsd.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libmork.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozfind.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
+%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libmyspell.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libnecko2.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libnecko.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
+%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libnsappshell.so
 %attr(755,root,root) %{_libdir}/%{name}/components/liboji.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libpermissions.so
@@ -452,7 +458,7 @@ fi
 %{_libdir}/%{name}/components/gksvgrenderer.xpt
 %{_libdir}/%{name}/components/history.xpt
 %{_libdir}/%{name}/components/htmlparser.xpt
-%{_libdir}/%{name}/components/imgicon.xpt
+%{?with_gnomeui:%{_libdir}/%{name}/components/imgicon.xpt}
 %{_libdir}/%{name}/components/imglib2.xpt
 %{_libdir}/%{name}/components/inspector.xpt
 %{_libdir}/%{name}/components/intl.xpt
