@@ -202,12 +202,15 @@ ac_add_options --enable-tests
 %else
 ac_add_options --disable-tests
 %endif
-%if %{with gnome}
-ac_add_options --enable-gnomevfs
+%if %{with gnomeui}
 ac_add_options --enable-gnomeui
 %else
-ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
+%endif
+%if %{with gnomevfs}
+ac_add_options --enable-gnomevfs
+%else
+ac_add_options --disable-gnomevfs
 %endif
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
