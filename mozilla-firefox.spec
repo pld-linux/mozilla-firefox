@@ -5,19 +5,25 @@
 # - make it more pld-like (bookmarks, default page etc..)
 #
 # Conditional build:
-%bcond_with	tests	# enable tests (whatever they check)
-%bcond_without	gnome	# disable all GNOME components (gnomevfs, gnome, gnomeui)
-%bcond_without	tidy	# disable htmlvalidator extension (tidy)
+%bcond_with	tests		# enable tests (whatever they check)
+%bcond_without	gnomeui		# disable gnomeui support
+%bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
+%bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
+%bcond_without	tidy		# disable htmlvalidator extension (tidy)
 #
-%define		_tidy_ver	0.8.4.0
-%define		_firefox_ver	2.0.0.6
+%if %{without gnome}
+%undefine	with_gnomeui
+%undefine	with_gnomevfs
+%endif
+%define		tidy_ver	0.8.4.0
+%define		firefox_ver	2.0.0.6
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
-Version:	%{_firefox_ver}
-Release:	1
-License:	MPL/LGPL
+Version:	%{firefox_ver}
+Release:	2
+License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	16fb252fb7b0371894f7101b88fd9076
@@ -30,21 +36,21 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-addon-tidy.patch
 Patch3:		%{name}-nopangoxft.patch
 Patch5:		%{name}-fonts.patch
-Patch6:		%{name}-myspell.patch
-Patch7:		%{name}-agent.patch
+Patch6:		%{name}-agent.patch
+Patch7:		%{name}-myspell.patch
 # if ac rebuild is needed...
-#PatchX: %{name}-ac.patch
+#PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
-%{?with_gnome:BuildRequires:	GConf2-devel >= 1.2.1}
+%{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	XFree86-devel
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
-%{?with_gnome:BuildRequires:	gnome-vfs2-devel >= 2.0}
+%{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
 BuildRequires:	heimdal-devel >= 0.7.1
 BuildRequires:	libIDL-devel >= 0.8.0
-%{?with_gnome:BuildRequires:	libgnome-devel >= 2.0}
-%{?with_gnome:BuildRequires:	libgnomeui-devel >= 2.2.0}
+%{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
+%{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
@@ -68,13 +74,13 @@ Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# mozilla and firefox provide their own versions
-%define		_noautoreqdep		libgkgfx.so libgtkembedmoz.so libgtkxtbin.so libjsj.so libmozjs.so libxpcom.so libxpcom_compat.so libxpcom_core.so
+# firefox/thunderbird/seamonkey provide their own versions
+%define		_noautoreqdep		libgkgfx.so libgtkxtbin.so libjsj.so libxpcom_compat.so libxpcom_core.so
 %define		_noautoprovfiles	%{_libdir}/%{name}/components
 # we don't want these to satisfy xulrunner-devel
-%define		_noautoprov			libmozjs.so libxpcom.so libxul.so
+%define		_noautoprov		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 # and as we don't provide them, don't require either
-%define		_noautoreq			libmozjs.so libxpcom.so libxul.so
+%define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 
 %define		specflags	-fno-strict-aliasing
 
@@ -102,10 +108,10 @@ Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
 %package addon-tidy
 Summary:	HTML Validator for Firefox
 Summary(pl):	Narzêdzie do sprawdzania poprawno¶ci HTML-a dla Firefoksa
-Version:	%{_tidy_ver}
+Version:	%{tidy_ver}
 License:	GPL
 Group:		X11/Applications/Networking
-Requires:	%{name} = %{_firefox_ver}-%{release}
+Requires:	%{name} = %{firefox_ver}-%{release}
 
 %description addon-tidy
 HTML Validator is a Mozilla extension that adds HTML validation inside
@@ -120,10 +126,10 @@ HTML mo¿na zobaczyæ w postaci ikony na pasku stanu.
 %package lang-en
 Summary:	English resources for Firefox Community Edition
 Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
-Version:	%{_firefox_ver}
+Version:	%{firefox_ver}
 Group:		X11/Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}-lang-resources = %{version}-%{release}
+Requires:	%{name} = %{firefox_ver}-%{release}
+Provides:	%{name}-lang-resources = %{firefox_ver}-%{release}
 
 %description lang-en
 English resources for Firefox Community Edition.
@@ -194,12 +200,15 @@ ac_add_options --enable-tests
 %else
 ac_add_options --disable-tests
 %endif
-%if %{with gnome}
-ac_add_options --enable-gnomevfs
+%if %{with gnomeui}
 ac_add_options --enable-gnomeui
 %else
-ac_add_options --disable-gnomevfs
 ac_add_options --disable-gnomeui
+%endif
+%if %{with gnomevfs}
+ac_add_options --enable-gnomevfs
+%else
+ac_add_options --disable-gnomevfs
 %endif
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
@@ -353,17 +362,17 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libgkplugin.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libhtmlpars.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libi18n.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
+%{?with_gnomeui:%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libimglib2.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libjar50.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libjsd.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libmork.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozfind.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
+%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libmyspell.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libnecko2.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libnecko.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
+%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so}
 %attr(755,root,root) %{_libdir}/%{name}/components/libnsappshell.so
 %attr(755,root,root) %{_libdir}/%{name}/components/liboji.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libpermissions.so
@@ -450,7 +459,7 @@ fi
 %{_libdir}/%{name}/components/gksvgrenderer.xpt
 %{_libdir}/%{name}/components/history.xpt
 %{_libdir}/%{name}/components/htmlparser.xpt
-%{_libdir}/%{name}/components/imgicon.xpt
+%{?with_gnomeui:%{_libdir}/%{name}/components/imgicon.xpt}
 %{_libdir}/%{name}/components/imglib2.xpt
 %{_libdir}/%{name}/components/inspector.xpt
 %{_libdir}/%{name}/components/intl.xpt
