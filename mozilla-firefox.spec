@@ -9,7 +9,7 @@
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
-%bcond_without	tidy		# disable htmlvalidator extension (tidy)
+%bcond_with	tidy		# enable htmlvalidator extension (tidy) NB: enablling this causes builders info file being screwed.
 #
 %if %{without gnome}
 %undefine	with_gnomeui
@@ -22,7 +22,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	2
+Release:	3
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
