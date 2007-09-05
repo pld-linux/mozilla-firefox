@@ -58,19 +58,16 @@
 +INCLUDES += -I/usr/include/OpenSP
  INCLUDES += -I$(srcdir)/.
  
-#--- mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
-#+++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 23:29:29.111109183 +0300
-#@@ -82,8 +82,9 @@
-# # separate libraries linked in.
-# EXTRA_DSO_LDOPTS = \
-#                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
-#+                $(DIST)/lib/libxpcom_core.so \
-#                 $(NSPR_LIBS) \
-#-                ../spvalid/$(LIB_PREFIX)osp.$(LIB_SUFFIX) \
-#+                -losp \
-#                 $(NULL)
-# 
-# LIBS            = \
+--- mozilla-firefox-2.0.0.6/mozilla/extensions/tidy/src/Makefile.in~	2007-09-05 01:41:08.000000000 +0300
++++ mozilla-firefox-2.0.0.6/mozilla/extensions/tidy/src/Makefile.in	2007-09-05 12:21:13.420348101 +0300
+@@ -103,6 +103,7 @@
+ endif
+ 
+ EXTRA_DSO_LDOPTS += \
++                $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
+                 $(NSPR_LIBS) \
+                 -losp \
+                 $(NULL)
 --- mozilla/extensions/tidy/src/SpValid.cpp~	2007-08-27 10:38:12.000000000 +0300
 +++ mozilla/extensions/tidy/src/SpValid.cpp	2007-09-04 23:53:25.049666582 +0300
 @@ -9,7 +9,7 @@
