@@ -58,8 +58,8 @@
 +INCLUDES += -I/usr/include/OpenSP
  INCLUDES += -I$(srcdir)/.
  
---- mozilla-firefox-2.0.0.6/mozilla/extensions/tidy/src/Makefile.in~	2007-09-05 01:41:08.000000000 +0300
-+++ mozilla-firefox-2.0.0.6/mozilla/extensions/tidy/src/Makefile.in	2007-09-05 12:21:13.420348101 +0300
+--- mozilla/extensions/tidy/src/Makefile.in~	2007-09-05 01:41:08.000000000 +0300
++++ mozilla/extensions/tidy/src/Makefile.in	2007-09-05 12:21:13.420348101 +0300
 @@ -103,6 +103,7 @@
  endif
  
