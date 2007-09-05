@@ -37,23 +37,42 @@
    AC_DEFINE(MOZ_PHOENIX)
    ;;
  
---- mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 18:14:33.784020668 +0300
-+++ mozilla/extensions/tidy/spvalid/Makefile.in	2007-06-04 19:23:03.277335685 +0300
-@@ -49,7 +49,7 @@
- EXTRA_DSO_LDOPTS = \
-                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
+--- mozilla/extensions/tidy/src/Makefile.in~	2007-09-04 23:38:53.000000000 +0300
++++ mozilla/extensions/tidy/src/Makefile.in	2007-09-04 23:49:39.434545403 +0300
+@@ -104,7 +104,7 @@
+ 
+ EXTRA_DSO_LDOPTS += \
                  $(NSPR_LIBS) \
 -                $(LIB_PREFIX)osp.$(LIB_SUFFIX) \
 +                -losp \
                  $(NULL)
  
- LIBS            = \
-@@ -64 +64 @@
+ include $(topsrcdir)/config/rules.mk
+--- mozilla/extensions/tidy/src/Makefile.in~	2007-09-04 23:49:39.000000000 +0300
++++ mozilla/extensions/tidy/src/Makefile.in	2007-09-04 23:50:13.205311926 +0300
+@@ -111,6 +111,6 @@
+ 
+ INCLUDES += -I$(srcdir)/../tidy/include 
+ INCLUDES += -I$(srcdir)/../tidy/src 
 -INCLUDES += -I$(srcdir)/../opensp/include 
-\ No newline at end of file
 +INCLUDES += -I/usr/include/OpenSP
---- mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 18:16:55.107230927 +0300
-+++ mozilla/extensions/tidy/spvalid/SpValid.cpp	2007-06-04 19:30:11.547080063 +0300
+ INCLUDES += -I$(srcdir)/.
+ 
+#--- mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
+#+++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 23:29:29.111109183 +0300
+#@@ -82,8 +82,9 @@
+# # separate libraries linked in.
+# EXTRA_DSO_LDOPTS = \
+#                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
+#+                $(DIST)/lib/libxpcom_core.so \
+#                 $(NSPR_LIBS) \
+#-                ../spvalid/$(LIB_PREFIX)osp.$(LIB_SUFFIX) \
+#+                -losp \
+#                 $(NULL)
+# 
+# LIBS            = \
+--- mozilla/extensions/tidy/src/SpValid.cpp~	2007-08-27 10:38:12.000000000 +0300
++++ mozilla/extensions/tidy/src/SpValid.cpp	2007-09-04 23:53:25.049666582 +0300
 @@ -9,7 +9,7 @@
  #ifdef WIN32
  #include "../opensp/include/config.h"
@@ -67,43 +86,18 @@
  
  #include <stdlib.h>
  
--#include "MessageEventHandler.h"
+-#include "../opensp/include/MessageEventHandler.h"
 -#include "NsgmlsMessages.h"
--#include "sptchar.h"
+-#include "../opensp/include/sptchar.h"
 +#include <OpenSP/MessageEventHandler.h>
 +#include <OpenSP/nsgmls/NsgmlsMessages.h>
 +#include <OpenSP/sptchar.h>
  #include "SpValid.h"
- #include "InternalInputSource.h"
+-#include "../opensp/include/InternalInputSource.h"
++#include <OpenSP/InternalInputSource.h>
  
--#include "../lib/Parser.h"
+-#include "../opensp/include/Parser.h"
 +#include <OpenSP/lib/Parser.h>
- ;
- #ifdef SP_NAMESPACE
- using namespace SP_NAMESPACE;
---- mozilla/extensions/tidy/src/Makefile.in	2007-06-04 18:19:42.941042959 +0300
-+++ mozilla/extensions/tidy/src/Makefile.in	2007-06-04 23:29:29.111109183 +0300
-@@ -82,8 +82,9 @@
- # separate libraries linked in.
- EXTRA_DSO_LDOPTS = \
-                 $(DIST)/lib/$(LIB_PREFIX)xpcomglue.$(LIB_SUFFIX) \
-+                $(DIST)/lib/libxpcom_core.so \
-                 $(NSPR_LIBS) \
--                ../spvalid/$(LIB_PREFIX)osp.$(LIB_SUFFIX) \
-+                -losp \
-                 $(NULL)
- 
- LIBS            = \
---- mozilla/extensions/tidy/spvalid/SpValid.h~	2007-06-04 19:30:14.137138981 +0300
-+++ mozilla/extensions/tidy/spvalid/SpValid.h	2007-06-04 19:30:15.877178562 +0300
-@@ -5,8 +5,8 @@
- #define Nsgmls_INCLUDED 1
- 
- #include "SpResult.h"
--#include "ParserApp.h"
--#include "Boolean.h"
-+#include <OpenSP/ParserApp.h>
-+#include <OpenSP/Boolean.h>
  
  #ifdef SP_NAMESPACE
  using namespace SP_NAMESPACE;
