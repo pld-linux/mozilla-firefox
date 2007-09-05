@@ -64,7 +64,7 @@
  endif
  
  EXTRA_DSO_LDOPTS += \
-+                $(DIST)/lib/$(LIB_PREFIX)xpcomglue.so \
++                -lxpcomglue \
                  $(NSPR_LIBS) \
                  -losp \
                  $(NULL)
