@@ -9,26 +9,26 @@
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
-%bcond_with	tidy		# enable htmlvalidator extension (tidy) NB: enablling this causes builders info file being screwed.
+%bcond_without	tidy		# htmlvalidator extension
 #
 %if %{without gnome}
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		tidy_ver	0.8.4.0
+%define		tidy_ver	0.8.4.1
 %define		firefox_ver	2.0.0.6
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	3
+Release:	4
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	16fb252fb7b0371894f7101b88fd9076
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
-# Source1-md5:	cd5d54c47f08286605eaaa308536d4ab
+# Source1-md5:	2cab81118267fc87c9ebbfa6fb44b113
 Source2:	%{name}.desktop
 Source3:	%{name}.sh
 Patch0:		mozilla-install.patch
@@ -111,6 +111,7 @@ Summary(pl):	Narzêdzie do sprawdzania poprawno¶ci HTML-a dla Firefoksa
 Version:	%{tidy_ver}
 License:	GPL
 Group:		X11/Applications/Networking
+URL:		http://users.skynet.be/mgueury/mozilla/
 Requires:	%{name} = %{firefox_ver}-%{release}
 
 %description addon-tidy
@@ -633,6 +634,5 @@ fi
 %files addon-tidy
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}/components/libnstidy.so
-%attr(755,root,root) %{_libdir}/%{name}/components/libtodel.so
 %{_libdir}/%{name}/components/nstidy.xpt
 %endif
