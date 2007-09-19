@@ -9,24 +9,24 @@
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
-%bcond_without	tidy		# htmlvalidator extension (tidy)
+%bcond_with	tidy		# htmlvalidator extension (tidy)
 #
 %if %{without gnome}
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
 %define		tidy_ver	0.8.4.1
-%define		firefox_ver	2.0.0.6
+%define		firefox_ver	2.0.0.7
 #
 Summary:	Firefox Community Edition web browser
-Summary(pl.UTF-8):	Firefox Community Edition - przeglÄ…darka WWW
+Summary(pl):	Firefox Community Edition - przegl±darka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	5
+Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	16fb252fb7b0371894f7101b88fd9076
+# Source0-md5:	ec14cf833d75d07190c4095345d688bd
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
 # Source1-md5:	2cab81118267fc87c9ebbfa6fb44b113
 Source2:	%{name}.desktop
@@ -42,11 +42,12 @@ Patch7:		%{name}-myspell.patch
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
+BuildRequires:	XFree86-devel
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	krb5-devel
+BuildRequires:	heimdal-devel >= 0.7.1
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -61,11 +62,6 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.356
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
@@ -86,32 +82,32 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # and as we don't provide them, don't require either
 %define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 
-%define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
+%define		specflags	-fno-strict-aliasing
 
 %description
 Firefox Community Edition is an open-source web browser, designed for
 standards compliance, performance and portability.
 
-%description -l pl.UTF-8
-Firefox Community Edition jest przeglÄ…darkÄ… WWW rozpowszechnianÄ…
-zgodnie z ideami ruchu otwartego oprogramowania oraz tworzonÄ… z myÅ›lÄ…
-o zgodnoÅ›ci ze standardami, wydajnoÅ›ciÄ… i przenoÅ›noÅ›ciÄ….
+%description -l pl
+Firefox Community Edition jest open sourcow± przegl±dark± sieci WWW,
+stworzon± z my¶l± o zgodno¶ci ze standardami, wydajno¶ci± i
+przeno¶no¶ci±.
 
 %package libs
 Summary:	Firefox Community Edition shared libraries
-Summary(pl.UTF-8):	Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition
+Summary(pl):	Biblioteki wspó³dzielone przegl±darki Firefox Community Edition
 Group:		Libraries
 Conflicts:	mozilla-firefox < 2.0-1.4
 
 %description libs
 Firefox Community Edition shared libraries.
 
-%description libs -l pl.UTF-8
-Biblioteki wspÃ³Å‚dzielone przeglÄ…darki Firefox Community Edition.
+%description libs -l pl
+Biblioteki wspó³dzielone przegl±darki Firefox Community Edition.
 
 %package addon-tidy
 Summary:	HTML Validator for Firefox
-Summary(pl.UTF-8):	NarzÄ™dzie do sprawdzania poprawnoÅ›ci HTML-a dla Firefoksa
+Summary(pl):	Narzêdzie do sprawdzania poprawno¶ci HTML-a dla Firefoksa
 Version:	%{tidy_ver}
 License:	GPL
 Group:		X11/Applications/Networking
@@ -123,14 +119,14 @@ HTML Validator is a Mozilla extension that adds HTML validation inside
 Firefox. The number of errors of a HTML page is seen on the form of an
 icon in the status bar when browsing.
 
-%description addon-tidy -l pl.UTF-8
-HTML Validator to rozszerzenie Mozilli dodajÄ…ce sprawdzanie
-poprawnoÅ›ci HTML-a w Firefoksie. LiczbÄ™ bÅ‚Ä™dÃ³w na przeglÄ…danej stronie
-HTML moÅ¼na zobaczyÄ‡ w postaci ikony na pasku stanu.
+%description addon-tidy -l pl
+HTML Validator to rozszerzenie Mozilli dodaj±ce sprawdzanie
+poprawno¶ci HTML-a w Firefoksie. Liczbê b³êdów na przegl±danej stronie
+HTML mo¿na zobaczyæ w postaci ikony na pasku stanu.
 
 %package lang-en
 Summary:	English resources for Firefox Community Edition
-Summary(pl.UTF-8):	AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition
+Summary(pl):	Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition
 Version:	%{firefox_ver}
 Group:		X11/Applications/Networking
 Requires:	%{name} = %{firefox_ver}-%{release}
@@ -139,8 +135,8 @@ Provides:	%{name}-lang-resources = %{firefox_ver}-%{release}
 %description lang-en
 English resources for Firefox Community Edition.
 
-%description lang-en -l pl.UTF-8
-AnglojÄ™zyczne zasoby dla przeglÄ…darki Firefox Community Edition.
+%description lang-en -l pl
+Anglojêzyczne zasoby dla przegl±darki Firefox Community Edition.
 
 %prep
 %setup -qc %{?with_tidy:-a1}
@@ -157,6 +153,8 @@ cd mozilla
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+
+sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 # use system
 #rm -rf mozilla/nsprpub mozilla/security/nss

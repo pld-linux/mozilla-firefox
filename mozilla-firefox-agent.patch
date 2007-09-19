@@ -5,8 +5,8 @@
  pref("general.skins.selectedSkin", "classic/1.0");
  pref("general.useragent.extra.firefox", "@APP_UA_NAME@/@APP_VERSION@");
 +pref("general.useragent.vendor", "PLD");
-+pref("general.useragent.vendorSub", "3.0");
-+pref("general.useragent.vendorComment", "Th");
++pref("general.useragent.vendorSub", "2.0");
++pref("general.useragent.vendorComment", "Ac");
  
  pref("general.smoothScroll", false);
  #ifdef UNIX_BUT_NOT_MAC
