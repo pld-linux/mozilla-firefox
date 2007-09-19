@@ -16,17 +16,17 @@
 %undefine	with_gnomevfs
 %endif
 %define		tidy_ver	0.8.4.1
-%define		firefox_ver	2.0.0.6
+%define		firefox_ver	2.0.0.7
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	6
+Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	16fb252fb7b0371894f7101b88fd9076
+# Source0-md5:	ec14cf833d75d07190c4095345d688bd
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
 # Source1-md5:	2cab81118267fc87c9ebbfa6fb44b113
 Source2:	%{name}.desktop
