@@ -16,7 +16,7 @@
 %undefine	with_gnomevfs
 %endif
 %define		tidy_ver	0.8.4.1
-%define		firefox_ver	2.0.0.7
+%define		firefox_ver	2.0.0.8
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl):	Firefox Community Edition - przegl±darka WWW
@@ -26,7 +26,7 @@ Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	ec14cf833d75d07190c4095345d688bd
+# Source0-md5:	f4ffac67751bc3e556c4926da2e0b65a
 Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
 # Source1-md5:	2cab81118267fc87c9ebbfa6fb44b113
 Source2:	%{name}.desktop
@@ -34,10 +34,9 @@ Source3:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-addon-tidy.patch
-Patch3:		%{name}-nopangoxft.patch
-Patch5:		%{name}-fonts.patch
-Patch6:		%{name}-agent.patch
-Patch7:		%{name}-myspell.patch
+Patch3:		%{name}-fonts.patch
+Patch4:		%{name}-agent.patch
+Patch5:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -150,9 +149,8 @@ cd mozilla
 %patch1 -p1
 %{?with_tidy:%patch2 -p1}
 %patch3 -p1
+%patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
