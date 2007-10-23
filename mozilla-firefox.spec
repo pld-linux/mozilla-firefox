@@ -22,7 +22,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	1
+Release:	2
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -69,12 +69,12 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	%{name}-lang-resources = %{version}
-Requires:	%{name}-libs = %{epoch}:%{version}-%{release}
 Requires:	browser-plugins >= 2.0
 Requires:	nspr >= 1:4.6.3
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
+Obsoletes:	mozilla-firefox-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # firefox/thunderbird/seamonkey provide their own versions
@@ -95,18 +95,6 @@ standards compliance, performance and portability.
 Firefox Community Edition jest przeglądarką WWW rozpowszechnianą
 zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
 o zgodności ze standardami, wydajnością i przenośnością.
-
-%package libs
-Summary:	Firefox Community Edition shared libraries
-Summary(pl.UTF-8):	Biblioteki współdzielone przeglądarki Firefox Community Edition
-Group:		Libraries
-Conflicts:	mozilla-firefox < 2.0-1.4
-
-%description libs
-Firefox Community Edition shared libraries.
-
-%description libs -l pl.UTF-8
-Biblioteki współdzielone przeglądarki Firefox Community Edition.
 
 %package addon-tidy
 Summary:	HTML Validator for Firefox
@@ -340,6 +328,9 @@ fi
 # browser plugins v2
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
+
+%dir %{_libdir}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/*.so
 
 %dir %{_libdir}/%{name}/components
 %attr(755,root,root) %{_libdir}/%{name}/components/libaccessibility.so
@@ -619,11 +610,6 @@ fi
 # files created by regxpcom and firefox -register
 %ghost %{_libdir}/%{name}/components/compreg.dat
 %ghost %{_libdir}/%{name}/components/xpti.dat
-
-%files libs
-%defattr(644,root,root,755)
-%dir %{_libdir}/%{name}
-%attr(755,root,root) %{_libdir}/%{name}/*.so
 
 %files lang-en
 %defattr(644,root,root,755)
