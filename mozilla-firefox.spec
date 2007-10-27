@@ -41,11 +41,12 @@ Patch5:		%{name}-myspell.patch
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
+BuildRequires:	XFree86-devel
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	krb5-devel
+BuildRequires:	heimdal-devel >= 0.7.1
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -60,11 +61,6 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.356
-BuildRequires:	xorg-lib-libXext-devel
-BuildRequires:	xorg-lib-libXft-devel >= 2.1
-BuildRequires:	xorg-lib-libXinerama-devel
-BuildRequires:	xorg-lib-libXp-devel
-BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
@@ -85,7 +81,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # and as we don't provide them, don't require either
 %define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 
-%define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
+%define		specflags	-fno-strict-aliasing
 
 %description
 Firefox Community Edition is an open-source web browser, designed for
@@ -143,6 +139,8 @@ cd mozilla
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+
+sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
 # use system
 #rm -rf mozilla/nsprpub mozilla/security/nss
