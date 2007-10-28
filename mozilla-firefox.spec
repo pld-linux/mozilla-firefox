@@ -9,13 +9,11 @@
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
-%bcond_with	tidy		# htmlvalidator extension (tidy)
 #
 %if %{without gnome}
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		tidy_ver	0.8.4.1
 %define		firefox_ver	2.0.0.8
 #
 Summary:	Firefox Community Edition web browser
@@ -27,16 +25,13 @@ License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	f4ffac67751bc3e556c4926da2e0b65a
-Source1:	http://users.skynet.be/mgueury/mozilla/tidy_08x_source.zip
-# Source1-md5:	2cab81118267fc87c9ebbfa6fb44b113
-Source2:	%{name}.desktop
-Source3:	%{name}.sh
+Source1:	%{name}.desktop
+Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
-Patch2:		%{name}-addon-tidy.patch
-Patch3:		%{name}-fonts.patch
-Patch4:		%{name}-agent.patch
-Patch5:		%{name}-myspell.patch
+Patch2:		%{name}-fonts.patch
+Patch3:		%{name}-agent.patch
+Patch4:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -55,7 +50,6 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.3
 BuildRequires:	nss-devel >= 1:3.11.3-3
-%{?with_tidy:BuildRequires:	opensp-devel >= 2:1.5.2-4}
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -96,39 +90,14 @@ Firefox Community Edition jest przeglądarką WWW rozpowszechnianą
 zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
 o zgodności ze standardami, wydajnością i przenośnością.
 
-%package addon-tidy
-Summary:	HTML Validator for Firefox
-Summary(pl.UTF-8):	Narzędzie do sprawdzania poprawności HTML-a dla Firefoksa
-Version:	%{tidy_ver}
-License:	GPL
-Group:		X11/Applications/Networking
-URL:		http://users.skynet.be/mgueury/mozilla/
-Requires:	%{name} = %{firefox_ver}-%{release}
-
-%description addon-tidy
-HTML Validator is a Mozilla extension that adds HTML validation inside
-Firefox. The number of errors of a HTML page is seen on the form of an
-icon in the status bar when browsing.
-
-%description addon-tidy -l pl.UTF-8
-HTML Validator to rozszerzenie Mozilli dodające sprawdzanie
-poprawności HTML-a w Firefoksie. Liczbę błędów na przeglądanej stronie
-HTML można zobaczyć w postaci ikony na pasku stanu.
-
 %prep
-%setup -qc %{?with_tidy:-a1}
-%if %{with tidy}
-mv mozilla_tidy_source/mozilla/extensions/tidy mozilla/extensions/tidy
-mv mozilla_tidy_source/tidy_extension .
-rm -rf mozilla/extensions/tidy/opensp
-%endif
+%setup -qc
 cd mozilla
 %patch0 -p1
 %patch1 -p1
-%{?with_tidy:%patch2 -p1}
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 %build
 cd mozilla
@@ -242,12 +211,12 @@ ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/search
 rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
-sed 's,@LIBDIR@,%{_libdir},' %{SOURCE3} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 
-install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
+install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 
 # header/development files
 rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
@@ -594,10 +563,3 @@ fi
 # files created by regxpcom and firefox -register
 %ghost %{_libdir}/%{name}/components/compreg.dat
 %ghost %{_libdir}/%{name}/components/xpti.dat
-
-%if %{with tidy}
-%files addon-tidy
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}/components/libnstidy.so
-%{_libdir}/%{name}/components/nstidy.xpt
-%endif
