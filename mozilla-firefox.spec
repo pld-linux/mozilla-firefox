@@ -25,8 +25,8 @@ License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
 # Source0-md5:	f4ffac67751bc3e556c4926da2e0b65a
-Source2:	%{name}.desktop
-Source3:	%{name}.sh
+Source1:	%{name}.desktop
+Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-fonts.patch
@@ -209,12 +209,12 @@ ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/search
 rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
-sed 's,@LIBDIR@,%{_libdir},' %{SOURCE3} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 
-install %{SOURCE2} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
+install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 
 # header/development files
 rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
