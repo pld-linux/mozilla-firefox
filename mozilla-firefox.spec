@@ -22,7 +22,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	2
+Release:	3
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -68,12 +68,12 @@ BuildRequires:	xorg-lib-libXt-devel
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
-Requires:	%{name}-lang-resources = %{version}
 Requires:	browser-plugins >= 2.0
 Requires:	nspr >= 1:4.6.3
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
+Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
 Obsoletes:	mozilla-firefox-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -115,20 +115,6 @@ HTML Validator to rozszerzenie Mozilli dodające sprawdzanie
 poprawności HTML-a w Firefoksie. Liczbę błędów na przeglądanej stronie
 HTML można zobaczyć w postaci ikony na pasku stanu.
 
-%package lang-en
-Summary:	English resources for Firefox Community Edition
-Summary(pl.UTF-8):	Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition
-Version:	%{firefox_ver}
-Group:		X11/Applications/Networking
-Requires:	%{name} = %{firefox_ver}-%{release}
-Provides:	%{name}-lang-resources = %{firefox_ver}-%{release}
-
-%description lang-en
-English resources for Firefox Community Edition.
-
-%description lang-en -l pl.UTF-8
-Anglojęzyczne zasoby dla przeglądarki Firefox Community Edition.
-
 %prep
 %setup -qc %{?with_tidy:-a1}
 %if %{with tidy}
@@ -144,13 +130,8 @@ cd mozilla
 %patch4 -p1
 %patch5 -p1
 
-# use system
-#rm -rf mozilla/nsprpub mozilla/security/nss
-
 %build
 cd mozilla
-export CFLAGS="%{rpmcflags} $(%{_bindir}/pkg-config mozilla-nspr --cflags-only-I)"
-export CXXFLAGS="%{rpmcflags} $(%{_bindir}/pkg-config mozilla-nspr --cflags-only-I)"
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
@@ -158,6 +139,9 @@ cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
+
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-%{_target_cpu}
+ac_cv_visibility_pragma=no
 
 # Options for 'configure' (same as command-line options).
 ac_add_options --prefix=%{_prefix}
@@ -181,6 +165,7 @@ ac_add_options --enable-debugger-info-modules
 ac_add_options --enable-crash-on-assert
 %else
 ac_add_options --disable-debug
+ac_add_options --disable-debug-modules
 ac_add_options --disable-logging
 ac_add_options --enable-optimize="%{rpmcflags}"
 %endif
@@ -209,13 +194,12 @@ ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
 ac_add_options --enable-xft
 ac_add_options --with-distribution-id=org.pld-linux
+ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
-ac_add_options --with-system-zlib
-ac_add_options --with-system-jpeg
 ac_add_options --with-system-png
+ac_add_options --with-system-zlib
 ac_add_options --with-default-mozilla-five-home=%{_libdir}/%{name}
-ac_cv_visibility_pragma=no
 EOF
 
 %{__make} -j1 -f client.mk build \
@@ -232,7 +216,7 @@ install -d \
 
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
 
-%{__make} -C xpinstall/packager stage-package \
+%{__make} -C obj-%{_target_cpu}/xpinstall/packager stage-package \
 	DESTDIR=$RPM_BUILD_ROOT \
 	MOZ_PKG_APPDIR=%{_libdir}/%{name} \
 	PKG_SKIP_STRIP=1
@@ -610,11 +594,6 @@ fi
 # files created by regxpcom and firefox -register
 %ghost %{_libdir}/%{name}/components/compreg.dat
 %ghost %{_libdir}/%{name}/components/xpti.dat
-
-%files lang-en
-%defattr(644,root,root,755)
-%{_datadir}/%{name}/chrome/en-US.jar
-%{_datadir}/%{name}/chrome/en-US.manifest
 
 %if %{with tidy}
 %files addon-tidy
