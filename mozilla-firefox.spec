@@ -29,9 +29,9 @@ Source2:	%{name}.desktop
 Source3:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
-Patch3:		%{name}-fonts.patch
-Patch4:		%{name}-agent.patch
-Patch5:		%{name}-myspell.patch
+Patch2:		%{name}-fonts.patch
+Patch3:		%{name}-agent.patch
+Patch4:		%{name}-myspell.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -91,9 +91,9 @@ o zgodności ze standardami, wydajnością i przenośnością.
 cd mozilla
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p1
 
 sed -i 's/\(-lgss\)\(\W\)/\1disable\2/' configure
 
