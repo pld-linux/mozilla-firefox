@@ -14,17 +14,17 @@
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		firefox_ver	2.0.0.8
+%define		firefox_ver	2.0.0.9
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	4
+Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	f4ffac67751bc3e556c4926da2e0b65a
+# Source0-md5:	6a977456dc7da2934a12ba397c404fb9
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
