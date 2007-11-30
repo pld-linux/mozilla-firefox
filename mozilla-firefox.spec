@@ -20,7 +20,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	1
+Release:	2
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -32,6 +32,13 @@ Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-fonts.patch
 Patch3:		%{name}-agent.patch
 Patch4:		%{name}-myspell.patch
+Patch5:		%{name}-pango-cursor-position.patch
+Patch6:		%{name}-pango-ligatures.patch
+Patch7:		%{name}-pango-cursor-position-more.patch
+Patch8:		%{name}-pango-justified-range.patch
+Patch9:		%{name}-pango-printing.patch
+Patch10:	%{name}-pango-underline.patch
+Patch11:	%{name}-xft-randewidth.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -98,6 +105,13 @@ cd mozilla
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p0
+%patch10 -p1
+%patch11 -p1
 
 %build
 cd mozilla
