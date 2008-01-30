@@ -14,17 +14,17 @@
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		firefox_ver	2.0.0.11
+%define		firefox_ver	3.0b2
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	2
+Release:	0.1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	b2f982f9f3085195d4797957537ca75d
+# Source0-md5:	77f0455cc0dcfaaf020f9ce54c065fb0
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
@@ -101,24 +101,24 @@ o zgodności ze standardami, wydajnością i przenośnością.
 %setup -qc
 cd mozilla
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
+#%patch1 -p1
+#%patch2 -p1 # applied in sources
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p0
-%patch10 -p1
-%patch11 -p1
+#%patch4 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
+#%patch8 -p1
+#%patch9 -p0
+#%patch10 -p1
+#%patch11 -p1
 
 %build
 cd mozilla
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
-cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
+#cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
