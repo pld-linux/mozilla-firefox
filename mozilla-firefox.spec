@@ -9,6 +9,7 @@
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
+%bcond_without	kerberos	# disable krb5 support
 
 %if %{without gnome}
 %undefine	with_gnomeui
@@ -50,7 +51,7 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.0.0
-BuildRequires:	krb5-devel
+%{?with_kerberos:BuildRequires:	krb5-devel}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -58,7 +59,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
-BuildRequires:	nspr-devel >= 1:4.6.3
+BuildRequires:	nspr-devel >= 1:4.7
 BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
@@ -73,7 +74,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
-Requires:	nspr >= 1:4.6.3
+Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
