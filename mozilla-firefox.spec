@@ -58,6 +58,7 @@ BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
+BuildRequires:	libpng(APNG)-devel >= 1.10
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.7
@@ -177,7 +178,7 @@ ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-javaxpcom
 ac_add_options --disable-updater
-ac_add_options --enable-default-toolkit=gtk2
+ac_add_options --enable-default-toolkit=cairo-gtk2
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
