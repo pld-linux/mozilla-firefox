@@ -58,7 +58,7 @@ BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
-BuildRequires:	libpng(APNG)-devel >= 1.10
+BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.6.7
