@@ -17,7 +17,7 @@
 %endif
 
 %define		ver		3.0
-%define		subver	b2
+%define		subver	b3
 %define		rel		0.1
 
 Summary:	Firefox Community Edition web browser
@@ -28,21 +28,22 @@ Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{ver}%{subver}-source.tar.bz2
-# Source0-md5:	77f0455cc0dcfaaf020f9ce54c065fb0
+# Source0-md5:	949cfbb596b786ba5a9f9ad6604e2849
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
-Patch1:		%{name}-lib_path.patch
-Patch2:		%{name}-fonts.patch
+#Patch1:		%{name}-lib_path.patch
+#Patch2:		%{name}-fonts.patch
 Patch3:		%{name}-agent.patch
-Patch4:		%{name}-myspell.patch
-Patch5:		%{name}-pango-cursor-position.patch
-Patch6:		%{name}-pango-ligatures.patch
-Patch7:		%{name}-pango-cursor-position-more.patch
-Patch8:		%{name}-pango-justified-range.patch
-Patch9:		%{name}-pango-printing.patch
-Patch10:	%{name}-pango-underline.patch
-Patch11:	%{name}-xft-randewidth.patch
+#Patch4:		%{name}-myspell.patch
+#Patch5:		%{name}-pango-cursor-position.patch
+#Patch6:		%{name}-pango-ligatures.patch
+#Patch7:		%{name}-pango-cursor-position-more.patch
+#Patch8:		%{name}-pango-justified-range.patch
+#Patch9:		%{name}-pango-printing.patch
+#Patch10:	%{name}-pango-underline.patch
+#Patch11:	%{name}-xft-randewidth.patch
+Patch12:	mozilla-firefox-414239.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -116,6 +117,7 @@ cd mozilla
 #%patch9 -p0
 #%patch10 -p1
 #%patch11 -p1
+%patch12 -p0
 
 %build
 cd mozilla
