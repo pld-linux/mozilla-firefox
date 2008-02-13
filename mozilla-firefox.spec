@@ -27,7 +27,7 @@ Version:	%{ver}
 Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{ver}%{subver}-source.tar.bz2
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
 # Source0-md5:	949cfbb596b786ba5a9f9ad6604e2849
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
@@ -43,7 +43,7 @@ Patch3:		%{name}-agent.patch
 #Patch9:		%{name}-pango-printing.patch
 #Patch10:	%{name}-pango-underline.patch
 #Patch11:	%{name}-xft-randewidth.patch
-Patch12:	mozilla-firefox-414239.patch
+Patch12:	%{name}-414239.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -108,7 +108,7 @@ cd mozilla
 %patch0 -p1
 #%patch1 -p1
 #%patch2 -p1 # applied in sources
-%patch3 -p1
+#%patch3 -p1 # XXX do not apply when on DEVEL branch
 #%patch4 -p1
 #%patch5 -p1
 #%patch6 -p1
