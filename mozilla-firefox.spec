@@ -51,7 +51,8 @@ URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0.0
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
-BuildRequires:	gtk+2-devel >= 1:2.0.0
+BuildRequires:	gtk+2-devel >= 1:2.10
+BuildRequires:	glib2-devel
 %{?with_kerberos:BuildRequires:	krb5-devel}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
@@ -109,7 +110,7 @@ cd mozilla
 %patch0 -p1
 #%patch1 -p1
 #%patch2 -p1 # applied in sources
-#%patch3 -p1 # XXX do not apply when on DEVEL branch
+%patch3 -p1
 #%patch4 -p1
 #%patch5 -p1
 #%patch6 -p1
