@@ -59,7 +59,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
-BuildRequires:	nspr-devel >= 1:4.7
+BuildRequires:	nspr-devel >= 1:4.6.7
 BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
@@ -74,7 +74,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
-Requires:	nspr >= 1:4.7
+Requires:	nspr >= 1:4.6.7
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
