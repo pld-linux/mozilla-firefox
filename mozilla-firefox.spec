@@ -62,7 +62,7 @@ BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
-BuildRequires:	nspr-devel >= 1:4.6.7
+BuildRequires:	nspr-devel >= 1:4.7
 BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
