@@ -6,6 +6,7 @@
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
+%bcond_without	crashreporter	# disable crash reporter
 %bcond_without	gnomeui		# disable gnomeui support
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
@@ -50,6 +51,7 @@ URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.5.2
+%{?with_crashreporter:BuildRequires:	curl-devel}
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 1:2.10
 BuildRequires:	glib2-devel
@@ -175,6 +177,7 @@ ac_add_options --enable-gnomevfs
 %else
 ac_add_options --disable-gnomevfs
 %endif
+%{!?with_crashreporter:ac_add_options --disable-crashreporter}
 ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-javaxpcom
