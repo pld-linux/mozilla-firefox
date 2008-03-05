@@ -53,7 +53,7 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.5.2
 %{?with_crashreporter:BuildRequires:	curl-devel}
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
-BuildRequires:	gtk+2-devel >= 1:2.10
+BuildRequires:	gtk+2-devel >= 2:2.10
 BuildRequires:	glib2-devel
 %{?with_kerberos:BuildRequires:	krb5-devel}
 BuildRequires:	libIDL-devel >= 0.8.0
