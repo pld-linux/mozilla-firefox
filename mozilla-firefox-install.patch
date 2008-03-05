@@ -1,28 +1,10 @@
 --- mozilla/toolkit/mozapps/installer/packager.mk	2006-12-23 03:38:32.302235167 +0200
-+++ mozilla/toolkit/mozapps/installer/packager.mk	2008-03-05 22:33:38.554155518 +0000
-@@ -301,7 +301,7 @@
- # NOTE: this must be a tar now that dist links into the tree so that we
- # do not strip the binaries actually in the tree.
- 	@echo "Creating package directory..."
--	@mkdir $(DIST)/$(MOZ_PKG_APPNAME)
-+	@mkdir $(DESTDIR)$(MOZ_PKG_APPDIR)
- ifdef MOZ_PKG_MANIFEST
- 	$(RM) -rf $(DIST)/xpt
- 	$(PERL) -I$(topsrcdir)/xpinstall/packager -e 'use Packager; \
-@@ -316,7 +316,7 @@
- 	@cd $(DIST) && rsync -auv --copy-unsafe-links $(_APPNAME) $(MOZ_PKG_APPNAME)
- endif
- else
--	@cd $(DIST)/bin && tar $(TAR_CREATE_FLAGS) - * | (cd ../$(MOZ_PKG_APPNAME); tar -xf -)
-+	cp -rfLp $(DIST)/bin/* $(DESTDIR)$(MOZ_PKG_APPDIR)
- endif # DMG
- endif # MOZ_PKG_MANIFEST
- ifndef PKG_SKIP_STRIP
++++ mozilla/toolkit/mozapps/installer/packager.mk	2008-03-05 22:59:55.020447000 +0000
 @@ -328,13 +328,13 @@
  # NOTE: this must be a tar now that dist links into the tree so that we
  # do not strip the binaries actually in the tree.
  	@echo "Creating package directory..."
--	@mkdir $(DESTDIR)$(MOZ_PKG_APPDIR)
+-	@mkdir $(DIST)/$(MOZ_PKG_APPNAME)
 +	@mkdir -p $(DESTDIR)$(MOZ_PKG_APPDIR)
  ifdef MOZ_PKG_MANIFEST
  	$(RM) -rf $(DIST)/xpt
@@ -35,7 +17,16 @@
  else # !MOZ_PKG_MANIFEST
  ifeq ($(MOZ_PKG_FORMAT),DMG)
  # If UNIVERSAL_BINARY, the package will be made from an already-prepared
-@@ -348,7 +348,7 @@
+@@ -343,7 +343,7 @@
+ 	@cd $(DIST) && rsync -auv --copy-unsafe-links $(_APPNAME) $(MOZ_PKG_APPNAME)
+ endif
+ else
+-	@cd $(DIST)/bin && tar $(TAR_CREATE_FLAGS) - * | (cd ../$(MOZ_PKG_APPNAME); tar -xf -)
++	cp -rfLp $(DIST)/bin/* $(DESTDIR)$(MOZ_PKG_APPDIR)
+ endif # DMG
+ endif # MOZ_PKG_MANIFEST
+ ifndef PKG_SKIP_STRIP
+@@ -375,7 +375,7 @@
  endif
  	@echo "Removing unpackaged files..."
  ifdef NO_PKG_FILES
