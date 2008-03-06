@@ -281,7 +281,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ -d %{_libdir}/%{name}/dictionaries ] && [ ! -L %{_libdir}/%{name}/dictionaries ]; then
 	mv -v %{_libdir}/%{name}/dictionaries{,.rpmsave}
 fi
-for d in chrome defaults extensions greprefs modules icons res searchplugins; do
+for d in chrome defaults extensions greprefs icons res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
 		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
