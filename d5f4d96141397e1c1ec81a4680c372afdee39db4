@@ -1,0 +1,1 @@
+- R: cairo >= 1.5 as soname is same, but some syms are missing
