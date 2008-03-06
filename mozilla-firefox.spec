@@ -19,7 +19,7 @@
 
 %define		ver		3.0
 %define		subver	b3
-%define		rel		0.2
+%define		rel		0.3
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -33,35 +33,35 @@ Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subv
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
-#Patch1:		%{name}-lib_path.patch
-#Patch2:		%{name}-fonts.patch
+#Patch1:	%{name}-lib_path.patch
+#Patch2:	%{name}-fonts.patch
 Patch3:		%{name}-agent.patch
-#Patch4:		%{name}-myspell.patch
-#Patch5:		%{name}-pango-cursor-position.patch
-#Patch6:		%{name}-pango-ligatures.patch
-#Patch7:		%{name}-pango-cursor-position-more.patch
-#Patch8:		%{name}-pango-justified-range.patch
-#Patch9:		%{name}-pango-printing.patch
+#Patch4:	%{name}-myspell.patch
+#Patch5:	%{name}-pango-cursor-position.patch
+#Patch6:	%{name}-pango-ligatures.patch
+#Patch7:	%{name}-pango-cursor-position-more.patch
+#Patch8:	%{name}-pango-justified-range.patch
+#Patch9:	%{name}-pango-printing.patch
 #Patch10:	%{name}-pango-underline.patch
 #Patch11:	%{name}-xft-randewidth.patch
 Patch12:	%{name}-414239.patch
 # if ac rebuild is needed...
-#PatchX:		%{name}-ac.patch
+#PatchX: %{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.5.2
 %{?with_crashreporter:BuildRequires:	curl-devel}
+BuildRequires:	glib2-devel
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 2:2.10
-BuildRequires:	glib2-devel
 %{?with_kerberos:BuildRequires:	krb5-devel}
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libjpeg-devel >= 6b
-BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libpng(APNG)-devel >= 0.10
+BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.7
@@ -79,6 +79,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
+Requires:	cairo >= 1.5.2
 Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.11.3
 Provides:	wwwbrowser
@@ -95,7 +96,11 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # and as we don't provide them, don't require either
 %define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 
+%if "%(rpm -q --qf %{V} gcc)" >= "3.4"
 %define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
+%else
+%define		specflags	-fno-strict-aliasing
+%endif
 
 %description
 Firefox Community Edition is an open-source web browser, designed for
