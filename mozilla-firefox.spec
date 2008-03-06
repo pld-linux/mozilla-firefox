@@ -20,7 +20,7 @@
 
 %define		ver		3.0
 %define		subver	b3
-%define		rel		0.5
+%define		rel		0.8
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -132,10 +132,8 @@ cd mozilla
 
 %build
 cd mozilla
-
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
-#cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
@@ -194,6 +192,7 @@ ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
 ac_add_options --enable-xft
+ac_add_options --enable-libxul
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
@@ -228,12 +227,14 @@ mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/modules $RPM_BUILD_ROOT%{_datadir}/%{name}/modules
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
 ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
 ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
 ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
 ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
+ln -s ../../share/%{name}/modules $RPM_BUILD_ROOT%{_libdir}/%{name}/modules
 ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
@@ -267,7 +268,7 @@ export HOME=$(mktemp -d)
 # also TMPDIR could be pointing to sudo user's homedir
 unset TMPDIR TMP || :
 
-LD_LIBRARY_PATH=%{_libdir}/%{name}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} %{_libdir}/%{name}/regxpcom
+#LD_LIBRARY_PATH=%{_libdir}/%{name}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH} %{_libdir}/%{name}/regxpcom
 %{_libdir}/%{name}/firefox -register
 
 rm -rf $HOME
@@ -280,7 +281,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ -d %{_libdir}/%{name}/dictionaries ] && [ ! -L %{_libdir}/%{name}/dictionaries ]; then
 	mv -v %{_libdir}/%{name}/dictionaries{,.rpmsave}
 fi
-for d in chrome defaults extensions greprefs icons res searchplugins; do
+for d in chrome defaults extensions greprefs modules icons res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
 		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
@@ -379,8 +380,9 @@ fi
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %attr(755,root,root) %{_libdir}/%{name}/*.sh
-%attr(755,root,root) %{_libdir}/%{name}/m*
-%attr(755,root,root) %{_libdir}/%{name}/f*
+%attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
+%attr(755,root,root) %{_libdir}/%{name}/firefox
+%attr(755,root,root) %{_libdir}/%{name}/firefox-bin
 #%attr(755,root,root) %{_libdir}/%{name}/regxpcom
 #%attr(755,root,root) %{_libdir}/%{name}/xpcshell
 #%attr(755,root,root) %{_libdir}/%{name}/xpicleanup
@@ -394,6 +396,7 @@ fi
 %{_libdir}/%{name}/extensions
 %{_libdir}/%{name}/greprefs
 %{_libdir}/%{name}/icons
+%{_libdir}/%{name}/modules
 %{_libdir}/%{name}/res
 %{_libdir}/%{name}/searchplugins
 
@@ -408,6 +411,7 @@ fi
 %{_datadir}/%{name}/defaults
 %{_datadir}/%{name}/greprefs
 %{_datadir}/%{name}/icons
+%{_datadir}/%{name}/modules
 %{_datadir}/%{name}/res
 %{_datadir}/%{name}/searchplugins
 
