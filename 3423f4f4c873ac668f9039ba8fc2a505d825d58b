@@ -1,0 +1,2 @@
+- up to beta3, disable patch sources that are not used
+- add patch for pango crash from #414239 (by Raul Raat)
