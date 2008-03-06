@@ -3,6 +3,7 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
+# - system nss, xulrunner
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
@@ -19,7 +20,7 @@
 
 %define		ver		3.0
 %define		subver	b3
-%define		rel		0.3
+%define		rel		0.5
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -80,8 +81,9 @@ BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
 Requires:	cairo >= 1.5.2
+Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
-Requires:	nss >= 1:3.11.3
+Requires:	nss >= 1:3.11.3-3
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
