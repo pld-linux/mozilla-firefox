@@ -19,8 +19,8 @@
 %endif
 
 %define		ver		3.0
-%define		subver	b3
-%define		rel		0.8
+%define		subver	b4
+%define		rel		0.1
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -29,8 +29,9 @@ Version:	%{ver}
 Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
-# Source0-md5:	949cfbb596b786ba5a9f9ad6604e2849
+#Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
+Source0:	firefox-%{version}%{subver}-20080310-source.tar.bz2
+# Source0-md5:	016763e9b4f6a14c119d0be050d6198b
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -45,7 +46,6 @@ Patch3:		%{name}-agent.patch
 #Patch9:	%{name}-pango-printing.patch
 #Patch10:	%{name}-pango-underline.patch
 #Patch11:	%{name}-xft-randewidth.patch
-Patch12:	%{name}-414239.patch
 # if ac rebuild is needed...
 #PatchX: %{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -114,7 +114,7 @@ zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
 o zgodności ze standardami, wydajnością i przenośnością.
 
 %prep
-%setup -qc
+%setup -qc -n %{name}-%{version}%{?subver}
 cd mozilla
 %patch0 -p1
 #%patch1 -p1
@@ -128,7 +128,24 @@ cd mozilla
 #%patch9 -p0
 #%patch10 -p1
 #%patch11 -p1
-%patch12 -p0
+
+#gmake[1]: Entering directory `/home/glen/rpm/pld/BUILD/mozilla-firefox-3.0/mozilla/obj-amd64/memory/jemalloc'
+#rm -f libjemalloc.so
+#ccache amd64-pld-linux-g++ -I/usr/X11R6/include -fno-rtti -fno-exceptions -Wall -Wconversion -Wpointer-arith -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor -Wcast-align -Wno-long-long -pedantic -fno-strict-aliasing -fshort-wchar -pthread -pipe  -DNDEBUG -DTRIMMED -O2 -fno-strict-aliasing -fPIC -shared -Wl,-z,defs -Wl,-h,libjemalloc.so -o libjemalloc.so  jemalloc.o     -lpthread   -Wl,-rpath-link,../../dist/bin   -ldl -lm
+#jemalloc.o(.text+0x1b5c): In function `choose_arena_hard':
+#jemalloc.c: undefined reference to `__tls_get_addr'
+#jemalloc.o(.text+0x3cf1): In function `arena_ralloc':
+#jemalloc.c: undefined reference to `__tls_get_addr'
+#jemalloc.o(.text+0x4921): In function `malloc_init_hard':
+#jemalloc.c: undefined reference to `__tls_get_addr'
+#jemalloc.o(.text+0x4ce1): In function `malloc':
+#jemalloc.c: undefined reference to `__tls_get_addr'
+#jemalloc.o(.text+0x4eb7): In function `calloc':
+#jemalloc.c: undefined reference to `__tls_get_addr'
+#jemalloc.o(.text+0x5051):jemalloc.c: more undefined references to `__tls_get_addr' follow
+#collect2: ld returned 1 exit status
+#gmake[1]: *** [libjemalloc.so] Error 1
+%{__sed} -i -e '/Wl,-z,defs/s,^,: #,' configure{,.in}
 
 %build
 cd mozilla
@@ -417,7 +434,7 @@ fi
 
 %dir %{_datadir}/%{name}/extensions
 # -dom-inspector subpackage?
-%{_datadir}/%{name}/extensions/inspector@mozilla.org
+#%{_datadir}/%{name}/extensions/inspector@mozilla.org
 # the signature of the default theme
 %{_datadir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 
