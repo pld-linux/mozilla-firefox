@@ -29,9 +29,9 @@ Version:	%{ver}
 Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-#Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
-Source0:	firefox-%{version}%{subver}-20080310-source.tar.bz2
-# Source0-md5:	016763e9b4f6a14c119d0be050d6198b
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
+# Source0-md5:	4114b6dcd685b356c09ed990d8201d88
+#Source0:	firefox-%{version}%{subver}-20080310-source.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
