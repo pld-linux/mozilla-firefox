@@ -20,7 +20,7 @@
 
 %define		ver		3.0
 %define		subver	b4
-%define		rel		0.1
+%define		rel		0.2
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -35,19 +35,7 @@ Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subv
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
-#Patch1:	%{name}-lib_path.patch
-#Patch2:	%{name}-fonts.patch
-Patch3:		%{name}-agent.patch
-#Patch4:	%{name}-myspell.patch
-#Patch5:	%{name}-pango-cursor-position.patch
-#Patch6:	%{name}-pango-ligatures.patch
-#Patch7:	%{name}-pango-cursor-position-more.patch
-#Patch8:	%{name}-pango-justified-range.patch
-#Patch9:	%{name}-pango-printing.patch
-#Patch10:	%{name}-pango-underline.patch
-#Patch11:	%{name}-xft-randewidth.patch
-# if ac rebuild is needed...
-#PatchX: %{name}-ac.patch
+Patch1:		%{name}-agent.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
@@ -71,6 +59,7 @@ BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.356
+BuildRequires:	startup-notification-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
 BuildRequires:	xorg-lib-libXinerama-devel
@@ -117,35 +106,7 @@ o zgodności ze standardami, wydajnością i przenośnością.
 %setup -qc -n %{name}-%{version}%{?subver}
 cd mozilla
 %patch0 -p1
-#%patch1 -p1
-#%patch2 -p1 # applied in sources
-%patch3 -p1
-#%patch4 -p1
-#%patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
-#%patch8 -p1
-#%patch9 -p0
-#%patch10 -p1
-#%patch11 -p1
-
-#gmake[1]: Entering directory `/home/glen/rpm/pld/BUILD/mozilla-firefox-3.0/mozilla/obj-amd64/memory/jemalloc'
-#rm -f libjemalloc.so
-#ccache amd64-pld-linux-g++ -I/usr/X11R6/include -fno-rtti -fno-exceptions -Wall -Wconversion -Wpointer-arith -Woverloaded-virtual -Wsynth -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor -Wcast-align -Wno-long-long -pedantic -fno-strict-aliasing -fshort-wchar -pthread -pipe  -DNDEBUG -DTRIMMED -O2 -fno-strict-aliasing -fPIC -shared -Wl,-z,defs -Wl,-h,libjemalloc.so -o libjemalloc.so  jemalloc.o     -lpthread   -Wl,-rpath-link,../../dist/bin   -ldl -lm
-#jemalloc.o(.text+0x1b5c): In function `choose_arena_hard':
-#jemalloc.c: undefined reference to `__tls_get_addr'
-#jemalloc.o(.text+0x3cf1): In function `arena_ralloc':
-#jemalloc.c: undefined reference to `__tls_get_addr'
-#jemalloc.o(.text+0x4921): In function `malloc_init_hard':
-#jemalloc.c: undefined reference to `__tls_get_addr'
-#jemalloc.o(.text+0x4ce1): In function `malloc':
-#jemalloc.c: undefined reference to `__tls_get_addr'
-#jemalloc.o(.text+0x4eb7): In function `calloc':
-#jemalloc.c: undefined reference to `__tls_get_addr'
-#jemalloc.o(.text+0x5051):jemalloc.c: more undefined references to `__tls_get_addr' follow
-#collect2: ld returned 1 exit status
-#gmake[1]: *** [libjemalloc.so] Error 1
-%{__sed} -i -e '/Wl,-z,defs/s,^,: #,' configure{,.in}
+%patch1 -p1
 
 %build
 cd mozilla
@@ -156,7 +117,6 @@ cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-%{_target_cpu}
-ac_cv_visibility_pragma=no
 
 # Options for 'configure' (same as command-line options).
 ac_add_options --prefix=%{_prefix}
@@ -182,7 +142,7 @@ ac_add_options --enable-crash-on-assert
 ac_add_options --disable-debug
 ac_add_options --disable-debug-modules
 ac_add_options --disable-logging
-ac_add_options --enable-optimize="%{rpmcflags}"
+ac_add_options --enable-optimize="%{rpmcflags} -Os"
 %endif
 %if %{with tests}
 ac_add_options --enable-tests
@@ -204,13 +164,18 @@ ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-javaxpcom
 ac_add_options --disable-updater
+ac_add_options --disable-strip
+ac_add_options --disable-xprint
 ac_add_options --enable-default-toolkit=cairo-gtk2
+ac_add_options --enable-startup-notification
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
 ac_add_options --enable-xft
 ac_add_options --enable-libxul
+ac_add_options --enable-xinerama
 ac_add_options --with-distribution-id=org.pld-linux
+ac_add_options --with-pthreads
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
 ac_add_options --with-system-nss
@@ -220,6 +185,7 @@ ac_add_options --with-default-mozilla-five-home=%{_libdir}/%{name}
 EOF
 
 %{__make} -j1 -f client.mk build \
+	STRIP="/bin/true" \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
 
