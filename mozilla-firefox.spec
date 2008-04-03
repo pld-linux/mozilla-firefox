@@ -19,8 +19,8 @@
 %endif
 
 %define		ver		3.0
-%define		subver	b4
-%define		rel		0.2
+%define		subver	b5
+%define		rel		0.1
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -30,7 +30,7 @@ Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
-# Source0-md5:	4114b6dcd685b356c09ed990d8201d88
+# Source0-md5:	6a97a0933f8cd71b34436daa41530c29
 #Source0:	firefox-%{version}%{subver}-20080310-source.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
