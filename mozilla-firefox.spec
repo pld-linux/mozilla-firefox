@@ -319,8 +319,8 @@ fi
 %{_libdir}/%{name}/components/libbrowserdirprovider.so
 %{_libdir}/%{name}/components/libdbusservice.so
 %{_libdir}/%{name}/components/libimgicon.so
-%{_libdir}/%{name}/components/libmozgnome.so
-%{_libdir}/%{name}/components/libnkgnomevfs.so
+%{?with_gnomevfs:%{_libdir}/%{name}/components/libmozgnome.so}
+%{?with_gnomevfs:%{_libdir}/%{name}/components/libnkgnomevfs.so}
 %{_libdir}/%{name}/components/nsAddonRepository.js
 %{_libdir}/%{name}/components/nsBlocklistService.js
 %{_libdir}/%{name}/components/nsBrowserGlue.js
