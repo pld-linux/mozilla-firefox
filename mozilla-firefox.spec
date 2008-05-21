@@ -293,6 +293,7 @@ fi
 
 %dir %{_libdir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}/*.so
+%{_libdir}/%{name}/blocklist.xml
 
 # config?
 %{_libdir}/%{name}/.autoreg
@@ -308,6 +309,7 @@ fi
 %{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so}
 %{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so}
 %endif
+%{_libdir}/%{name}/components/aboutRobots.js
 %{_libdir}/%{name}/components/FeedConverter.js
 %{_libdir}/%{name}/components/FeedProcessor.js
 %{_libdir}/%{name}/components/FeedWriter.js
