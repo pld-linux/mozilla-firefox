@@ -295,6 +295,10 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/*.so
 %{_libdir}/%{name}/blocklist.xml
 
+%{?with_crashreporter:%{_libdir}/%{name}/crashreporter}
+%{?with_crashreporter:%{_libdir}/%{name}/crashreporter-override.ini}
+%{?with_crashreporter:%{_libdir}/%{name}/crashreporter.ini}
+
 # config?
 %{_libdir}/%{name}/.autoreg
 %{_libdir}/%{name}/application.ini
@@ -373,6 +377,7 @@ fi
 #%attr(755,root,root) %{_libdir}/%{name}/xpicleanup
 %{_pixmapsdir}/mozilla-firefox.png
 %{_desktopdir}/mozilla-firefox.desktop
+%{_libdir}/%{name}/Throbber-small.gif
 
 # symlinks
 %{_libdir}/%{name}/chrome
