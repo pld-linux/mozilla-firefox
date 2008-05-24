@@ -30,15 +30,16 @@ Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
 Patch2:		%{name}-fonts.patch
-Patch3:		%{name}-agent.patch
-Patch4:		%{name}-myspell.patch
-Patch5:		%{name}-pango-cursor-position.patch
-Patch6:		%{name}-pango-ligatures.patch
-Patch7:		%{name}-pango-cursor-position-more.patch
-Patch8:		%{name}-pango-justified-range.patch
-Patch9:		%{name}-pango-printing.patch
-Patch10:	%{name}-pango-underline.patch
-Patch11:	%{name}-xft-randewidth.patch
+Patch3:		%{name}-myspell.patch
+Patch4:		%{name}-pango-cursor-position.patch
+Patch5:		%{name}-pango-ligatures.patch
+Patch6:		%{name}-pango-cursor-position-more.patch
+Patch7:		%{name}-pango-justified-range.patch
+Patch8:		%{name}-pango-printing.patch
+Patch9:		%{name}-pango-underline.patch
+Patch10:	%{name}-xft-randewidth.patch
+Patch11:	%{name}-ti-agent.patch
+Patch12:	%{name}-agent.patch
 # if ac rebuild is needed...
 #PatchX:		%{name}-ac.patch
 URL:		http://www.mozilla.org/projects/firefox/
@@ -60,6 +61,7 @@ BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.356
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
@@ -108,10 +110,14 @@ cd mozilla
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch9 -p0
+%patch8 -p0
+%patch9 -p1
 %patch10 -p1
+%if "%{pld_release}" == "ti"
 %patch11 -p1
+%else
+%patch12 -p1
+%endif
 
 %build
 cd mozilla
