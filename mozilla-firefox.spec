@@ -40,7 +40,7 @@ Patch3:		%{name}-gcc3.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
-BuildRequires:	cairo-devel >= 1.5.2
+BuildRequires:	cairo-devel >= 1.6.0
 %{?with_crashreporter:BuildRequires:	curl-devel}
 BuildRequires:	glib2-devel
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
@@ -71,7 +71,7 @@ BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
-Requires:	cairo >= 1.5.2
+Requires:	cairo >= 1.6.0
 Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.11.3-3
