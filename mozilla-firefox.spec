@@ -31,11 +31,12 @@ License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
 # Source0-md5:	0a918cb4686aff937c052d1a72297092
-#Source0:	firefox-%{version}%{subver}-20080310-source.tar.bz2
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-agent.patch
+Patch2:		%{name}-agent-ac.patch
+Patch3:		%{name}-gcc3.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
@@ -58,7 +59,8 @@ BuildRequires:	nss-devel >= 1:3.11.3-3
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.356
+BuildRequires:	rpm >= 4.4.9-56
+BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	startup-notification-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
@@ -87,7 +89,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # and as we don't provide them, don't require either
 %define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
 
-%if "%(rpm -q --qf %{V} gcc)" >= "3.4"
+%if "%{cc_version}" >= "3.4"
 %define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
 %else
 %define		specflags	-fno-strict-aliasing
@@ -106,7 +108,14 @@ o zgodności ze standardami, wydajnością i przenośnością.
 %setup -qc -n %{name}-%{version}%{?subver}
 cd mozilla
 %patch0 -p1
+%if "%{pld_release}" == "ac"
+%patch2 -p1
+%else
 %patch1 -p1
+%endif
+%if "%{cc_version}" < "3.4"
+%patch3 -p2
+%endif
 
 %build
 cd mozilla
