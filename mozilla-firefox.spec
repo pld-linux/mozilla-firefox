@@ -1,4 +1,5 @@
 # TODO:
+# - crashreporter does not seem to be built on ac
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
@@ -45,7 +46,11 @@ BuildRequires:	cairo-devel >= 1.6.0
 BuildRequires:	glib2-devel
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 2:2.10
+%if "%{pld_release}" == "ac"
+%{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
+%else
 %{?with_kerberos:BuildRequires:	krb5-devel}
+%endif
 BuildRequires:	libIDL-devel >= 0.8.0
 %{?with_gnomevfs:BuildRequires:	libgnome-devel >= 2.0}
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
@@ -320,11 +325,7 @@ fi
 %{_libdir}/%{name}/libsoftokn3.chk
 
 %dir %{_libdir}/%{name}/components
-%if 0
-%{?with_gnomeui:%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so}
-%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so}
-%{?with_gnomevfs:%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so}
-%endif
+
 %{_libdir}/%{name}/components/aboutRobots.js
 %{_libdir}/%{name}/components/FeedConverter.js
 %{_libdir}/%{name}/components/FeedProcessor.js
@@ -333,12 +334,6 @@ fi
 %{_libdir}/%{name}/components/browser.xpt
 %{_libdir}/%{name}/components/fuelApplication.js
 %{_libdir}/%{name}/components/jsconsole-clhandler.js
-%{_libdir}/%{name}/components/libbrowsercomps.so
-%{_libdir}/%{name}/components/libbrowserdirprovider.so
-%{_libdir}/%{name}/components/libdbusservice.so
-%{_libdir}/%{name}/components/libimgicon.so
-%{?with_gnomevfs:%{_libdir}/%{name}/components/libmozgnome.so}
-%{?with_gnomevfs:%{_libdir}/%{name}/components/libnkgnomevfs.so}
 %{_libdir}/%{name}/components/nsAddonRepository.js
 %{_libdir}/%{name}/components/nsBlocklistService.js
 %{_libdir}/%{name}/components/nsBrowserGlue.js
@@ -374,19 +369,24 @@ fi
 %{_libdir}/%{name}/components/pluginGlue.js
 %{_libdir}/%{name}/components/storage-Legacy.js
 %{_libdir}/%{name}/components/txEXSLTRegExFunctions.js
-%if 0
-%{?with_gnomeui:%{_libdir}/%{name}/components/imgicon.xpt}
-%endif
 %{_libdir}/%{name}/components/nsBrowserContentHandler.js
+
+%attr(755,root,root) %{_libdir}/%{name}/components/libbrowsercomps.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libbrowserdirprovider.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libdbusservice.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
+
+%if %{with gnomevfs}
+%attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
+%attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
+%endif
+
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %attr(755,root,root) %{_libdir}/%{name}/*.sh
 %attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
 %attr(755,root,root) %{_libdir}/%{name}/firefox
 %attr(755,root,root) %{_libdir}/%{name}/firefox-bin
-#%attr(755,root,root) %{_libdir}/%{name}/regxpcom
-#%attr(755,root,root) %{_libdir}/%{name}/xpcshell
-#%attr(755,root,root) %{_libdir}/%{name}/xpicleanup
 %{_pixmapsdir}/mozilla-firefox.png
 %{_desktopdir}/mozilla-firefox.desktop
 
@@ -404,7 +404,6 @@ fi
 # browserconfig
 %{_libdir}/%{name}/browserconfig.properties
 
-#%{_libdir}/%{name}/LICENSE
 %{_libdir}/%{name}/README.txt
 
 %dir %{_datadir}/%{name}
