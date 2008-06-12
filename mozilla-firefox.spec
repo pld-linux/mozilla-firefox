@@ -20,7 +20,7 @@
 %endif
 
 %define		ver		3.0
-%define		subver	rc2
+%define		subver	rc3
 %define		rel		0.1
 
 Summary:	Firefox Community Edition web browser
@@ -31,7 +31,7 @@ Release:	0.%{subver}.%{rel}
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
-# Source0-md5:	17fc2acfffa0da2df2457d39747a17b0
+# Source0-md5:	4e48a259762d3873c8096ef4f45a47c3
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
