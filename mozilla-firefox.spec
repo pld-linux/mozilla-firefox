@@ -14,30 +14,29 @@
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		firefox_ver	2.0.0.14
+%define		firefox_ver	3.0
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{firefox_ver}
-Release:	2
+Release:	0.1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	9e9c13ba7b81f93f2fa10c6f256ee31e
+# Source0-md5:	4210ae0801df2eb498408533010d97c1
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
 Patch1:		%{name}-lib_path.patch
-Patch2:		%{name}-fonts.patch
-Patch3:		%{name}-myspell.patch
-Patch4:		%{name}-pango-cursor-position.patch
-Patch5:		%{name}-pango-ligatures.patch
-Patch6:		%{name}-pango-cursor-position-more.patch
-Patch7:		%{name}-pango-justified-range.patch
-Patch8:		%{name}-pango-printing.patch
-Patch9:		%{name}-pango-underline.patch
-Patch10:	%{name}-xft-randewidth.patch
+#Patch3:		%{name}-myspell.patch
+#Patch4:		%{name}-pango-cursor-position.patch
+#Patch5:		%{name}-pango-ligatures.patch
+#Patch6:		%{name}-pango-cursor-position-more.patch
+#Patch7:		%{name}-pango-justified-range.patch
+#Patch8:		%{name}-pango-printing.patch
+#Patch9:		%{name}-pango-underline.patch
+#Patch10:	%{name}-xft-randewidth.patch
 Patch11:	%{name}-ti-agent.patch
 Patch12:	%{name}-agent.patch
 # if ac rebuild is needed...
@@ -104,15 +103,14 @@ o zgodności ze standardami, wydajnością i przenośnością.
 cd mozilla
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p0
-%patch9 -p1
-%patch10 -p1
+#%patch3 -p1
+#%patch4 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
+#%patch8 -p0
+#%patch9 -p1
+#%patch10 -p1
 %if "%{pld_release}" == "ti"
 %patch11 -p1
 %else
@@ -124,7 +122,7 @@ cd mozilla
 
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
-cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
+#cp -f %{_datadir}/automake/config.* directory/c-sdk/config/autoconf
 
 cat << 'EOF' > .mozconfig
 . $topsrcdir/browser/config/mozconfig
@@ -173,15 +171,12 @@ ac_add_options --enable-gnomevfs
 %else
 ac_add_options --disable-gnomevfs
 %endif
-ac_add_options --disable-freetype2
 ac_add_options --disable-installer
 ac_add_options --disable-javaxpcom
 ac_add_options --disable-updater
-ac_add_options --enable-default-toolkit=gtk2
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
-ac_add_options --enable-xft
 ac_add_options --with-distribution-id=org.pld-linux
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
@@ -198,17 +193,21 @@ EOF
 %install
 rm -rf $RPM_BUILD_ROOT
 cd mozilla
+
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}
 
-%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
-
-%{__make} -C obj-%{_target_cpu}/xpinstall/packager stage-package \
+cd obj-%{_target_cpu}
+[ -d dist/firefox ] || mkdir dist/firefox
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	MOZ_PKG_APPDIR=%{_libdir}/%{name} \
 	PKG_SKIP_STRIP=1
+cd ..
+
+%browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
 
 # move arch independant ones to datadir
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome $RPM_BUILD_ROOT%{_datadir}/%{name}/chrome
@@ -216,7 +215,6 @@ mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
-mv $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d $RPM_BUILD_ROOT%{_datadir}/%{name}/init.d
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
 ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
@@ -224,7 +222,6 @@ ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
 ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
 ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
 ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
-ln -s ../../share/%{name}/init.d $RPM_BUILD_ROOT%{_libdir}/%{name}/init.d
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
 
@@ -232,16 +229,11 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
-ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
+#ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 install browser/base/branding/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
-
-# header/development files
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpidl
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_dump
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/xpt_link
 
 # files created by regxpcom and firefox -register
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
@@ -275,7 +267,7 @@ rm -rf $RPM_BUILD_ROOT
 if [ -d %{_libdir}/%{name}/dictionaries ] && [ ! -L %{_libdir}/%{name}/dictionaries ]; then
 	mv -v %{_libdir}/%{name}/dictionaries{,.rpmsave}
 fi
-for d in chrome defaults extensions greprefs icons init.d res searchplugins; do
+for d in chrome defaults extensions greprefs icons res searchplugins; do
 	if [ -d %{_libdir}/%{name}/$d ] && [ ! -L %{_libdir}/%{name}/$d ]; then
 		install -d %{_datadir}/%{name}
 		mv %{_libdir}/%{name}/$d %{_datadir}/%{name}/$d
@@ -555,7 +547,6 @@ fi
 %{_libdir}/%{name}/extensions
 %{_libdir}/%{name}/greprefs
 %{_libdir}/%{name}/icons
-%{_libdir}/%{name}/init.d
 %{_libdir}/%{name}/res
 %{_libdir}/%{name}/searchplugins
 
@@ -570,7 +561,6 @@ fi
 %{_datadir}/%{name}/defaults
 %{_datadir}/%{name}/greprefs
 %{_datadir}/%{name}/icons
-%{_datadir}/%{name}/init.d
 %{_datadir}/%{name}/res
 %{_datadir}/%{name}/searchplugins
 
