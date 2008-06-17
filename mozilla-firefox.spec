@@ -1,5 +1,4 @@
 # TODO:
-# - crashreporter does not seem to be built on ac nor th
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
@@ -18,12 +17,10 @@
 %undefine	with_gnomevfs
 %endif
 
-%define		ver		3.0
-
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	%{ver}
+Version:	3.0
 Release:	2
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
