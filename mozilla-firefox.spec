@@ -1,5 +1,5 @@
 # TODO:
-# - crashreporter does not seem to be built on ac
+# - crashreporter does not seem to be built on ac nor th
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
@@ -20,18 +20,16 @@
 %endif
 
 %define		ver		3.0
-%define		subver	rc3
-%define		rel		0.1
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	%{ver}
-Release:	0.%{subver}.%{rel}
+Release:	0.1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}%{subver}/source/firefox-%{version}%{subver}-source.tar.bz2
-# Source0-md5:	4e48a259762d3873c8096ef4f45a47c3
+Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
+# Source0-md5:	4210ae0801df2eb498408533010d97c1
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -110,7 +108,7 @@ zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
 o zgodności ze standardami, wydajnością i przenośnością.
 
 %prep
-%setup -qc -n %{name}-%{version}%{?subver}
+%setup -qc -n %{name}-%{version}
 cd mozilla
 %patch0 -p1
 %if "%{pld_release}" == "ac"
