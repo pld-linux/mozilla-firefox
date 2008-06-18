@@ -32,7 +32,7 @@ Patch0:		%{name}-install.patch
 Patch1:		%{name}-gcc3.patch
 Patch2:		%{name}-agent.patch
 Patch3:		%{name}-agent-ac.patch
-Patch4:		%{name}-agent-ti.patch
+Patch4:		%{name}-ti-agent.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
