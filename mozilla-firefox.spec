@@ -29,9 +29,10 @@ Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/sourc
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
-Patch1:		%{name}-agent.patch
-Patch2:		%{name}-agent-ac.patch
-Patch3:		%{name}-gcc3.patch
+Patch1:		%{name}-gcc3.patch
+Patch2:		%{name}-agent.patch
+Patch3:		%{name}-agent-ac.patch
+Patch4:		%{name}-agent-ti.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
@@ -106,13 +107,21 @@ o zgodności ze standardami, wydajnością i przenośnością.
 %setup -qc -n %{name}-%{version}
 cd mozilla
 %patch0 -p1
-%if "%{pld_release}" == "ac"
-%patch2 -p1
-%else
-%patch1 -p1
-%endif
+
 %if "%{cc_version}" < "3.4"
-%patch3 -p2
+%patch1 -p2
+%endif
+
+%if "%{pld_release}" == "th"
+%patch2 -p1
+%endif
+
+%if "%{pld_release}" == "ac"
+%patch3 -p1
+%endif
+
+%if "%{pld_release}" == "ti"
+%patch4 -p1
 %endif
 
 %build
