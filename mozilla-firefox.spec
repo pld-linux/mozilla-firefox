@@ -1,9 +1,11 @@
+#
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
-# - system nss, xulrunner
+# - disable some options by default (fraud detection, application update etc.)
+# - xulrunner
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
@@ -21,7 +23,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	3.0
-Release:	2
+Release:	2.1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -54,10 +56,11 @@ BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
 BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.7
-BuildRequires:	nss-devel >= 1:3.11.3-3
+BuildRequires:	nss-devel >= 1:3.12-2
 BuildRequires:	pango-devel >= 1:1.6.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	sqlite3-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	startup-notification-devel
@@ -73,7 +76,7 @@ Requires:	browser-plugins >= 2.0
 Requires:	cairo >= 1.6.0
 Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
-Requires:	nss >= 1:3.11.3-3
+Requires:	nss >= 1:3.12-2
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
@@ -185,6 +188,7 @@ ac_add_options --enable-startup-notification
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
 ac_add_options --enable-system-myspell
+ac_add_options --enable-system-sqlite
 ac_add_options --enable-libxul
 ac_add_options --enable-xinerama
 ac_add_options --with-distribution-id=org.pld-linux
@@ -319,9 +323,6 @@ fi
 %{_libdir}/%{name}/.autoreg
 %{_libdir}/%{name}/application.ini
 %{_libdir}/%{name}/platform.ini
-# XXX: nss
-%{_libdir}/%{name}/libfreebl3.chk
-%{_libdir}/%{name}/libsoftokn3.chk
 
 %dir %{_libdir}/%{name}/components
 
