@@ -24,7 +24,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	3.0
-Release:	2.3
+Release:	2.4
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -38,6 +38,7 @@ Patch3:		%{name}-agent-ac.patch
 Patch4:		%{name}-ti-agent.patch
 Patch5:		%{name}-branding.patch
 Patch6:		%{name}-prefs.patch
+Patch7:		%{name}-nss_cflags.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
@@ -140,6 +141,7 @@ cd mozilla
 
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %build
 cd mozilla
