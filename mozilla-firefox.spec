@@ -72,7 +72,7 @@ BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
 %if %{with xulrunner}
-BuildRequires:	xulrunner-devel >= 1.9-1.2
+BuildRequires:	xulrunner-devel >= 1.9-2
 %endif
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
