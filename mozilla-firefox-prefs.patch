@@ -1,0 +1,70 @@
+diff -ur mozilla.orig/browser/app/profile/firefox.js mozilla/browser/app/profile/firefox.js
+--- mozilla.orig/browser/app/profile/firefox.js	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/app/profile/firefox.js	2008-06-21 15:25:48.000000000 +0200
+@@ -89,12 +89,12 @@
+ // App-specific update preferences
+ 
+ // Whether or not app updates are enabled
+-pref("app.update.enabled", true);
++pref("app.update.enabled", false);
+ 
+ // This preference turns on app.update.mode and allows automatic download and
+ // install to take place. We use a separate boolean toggle for this to make
+ // the UI easier to construct.
+-pref("app.update.auto", true);
++pref("app.update.auto", false);
+ 
+ // Defines how the Application Update Service notifies the user about updates:
+ //
+@@ -186,7 +186,7 @@
+ 
+ // Whether or not the application should check at startup each time if it 
+ // is the default browser.
+-pref("browser.shell.checkDefaultBrowser", true);
++pref("browser.shell.checkDefaultBrowser", false);
+ 
+ // 0 = blank, 1 = home (browser.startup.homepage), 2 = last visited page, 3 = resume previous browser session
+ // The behavior of option 3 is detailed at: http://wiki.mozilla.org/Session_Restore
+@@ -592,10 +592,10 @@
+ 
+ #ifdef MOZ_SAFE_BROWSING
+ // Safe browsing does nothing unless this pref is set
+-pref("browser.safebrowsing.enabled", true);
++pref("browser.safebrowsing.enabled", false);
+ 
+ // Prevent loading of pages identified as malware
+-pref("browser.safebrowsing.malware.enabled", true);
++pref("browser.safebrowsing.malware.enabled", false);
+ 
+ // Non-enhanced mode (local url lists) URL list to check for updates
+ pref("browser.safebrowsing.provider.0.updateURL", "http://safebrowsing.clients.google.com/safebrowsing/downloads?client={moz:client}&appver={moz:version}&pver=2.1");
+diff -ur mozilla.orig/browser/base/content/baseMenuOverlay.xul mozilla/browser/base/content/baseMenuOverlay.xul
+--- mozilla.orig/browser/base/content/baseMenuOverlay.xul	2008-06-21 12:55:29.000000000 +0200
++++ mozilla/browser/base/content/baseMenuOverlay.xul	2008-06-21 15:08:33.000000000 +0200
+@@ -97,12 +97,6 @@
+                   label="&helpReleaseNotes.label;"
+                   oncommand="openReleaseNotes(event)"
+                   onclick="checkForMiddleClick(this, event);"/>
+-        <menuseparator id="updateSeparator"/>
+-        <menuitem id="checkForUpdates"
+-                  accesskey="&updateCmd.accesskey;"
+-                  label="&updateCmd.label;"
+-                  class="menuitem-iconic"
+-                  oncommand="checkForUpdates();"/>
+         <menuseparator id="aboutSeparator"/>
+         <menuitem id="aboutName"
+                   accesskey="&aboutCmd.accesskey;"
+diff -ur mozilla.orig/browser/components/preferences/advanced.xul mozilla/browser/components/preferences/advanced.xul
+--- mozilla.orig/browser/components/preferences/advanced.xul	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/components/preferences/advanced.xul	2008-06-21 16:01:22.000000000 +0200
+@@ -267,10 +267,6 @@
+         <tabpanel id="updatePanel" orient="vertical" align="start">
+           <label control="autoUpdateGroup">&autoCheck.label;</label>
+           <vbox class="indent" id="autoUpdateGroup" role="group">
+-            <checkbox id="enableAppUpdate"
+-                      label="&enableAppUpdate.label;"
+-                      accesskey="&enableAppUpdate.accesskey;"
+-                      preference="app.update.enabled"/>
+             <checkbox id="enableAddonUpdate"
+                       label="&enableAddonsUpdate.label;"
+                       accesskey="&enableAddonsUpdate.accesskey;"
