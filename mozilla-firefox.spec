@@ -5,7 +5,8 @@
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
 # - disable some options by default (fraud detection, application update etc.)
-# - xulrunner
+# - review Rs/BRs for xulrunner build, surely not everything here is needed
+# - fix/remove noauto{dep,prov,req} for xulrunner build
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
@@ -13,6 +14,7 @@
 %bcond_without	gnomevfs	# disable GNOME comp. (gconf+libgnome+gnomevfs) and gnomevfs ext.
 %bcond_without	gnome		# disable all GNOME components (gnome+gnomeui+gnomevfs)
 %bcond_without	kerberos	# disable krb5 support
+%bcond_with	xulrunner	# build with system xulrunner
 
 %if %{without gnome}
 %undefine	with_gnomeui
@@ -23,7 +25,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	3.0
-Release:	2.1
+Release:	2.2
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -69,14 +71,22 @@ BuildRequires:	xorg-lib-libXft-devel >= 2.1
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
+%if %{with xulrunner}
+BuildRequires:	xulrunner-devel >= 1.9-1.2
+%endif
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
+%if %{without xulrunner}
 Requires:	browser-plugins >= 2.0
+%endif
 Requires:	cairo >= 1.6.0
 Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.12-2
+%if %{with xulrunner}
+%requires_eq	xulrunner
+%endif
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
@@ -192,6 +202,9 @@ ac_add_options --enable-system-sqlite
 ac_add_options --enable-libxul
 ac_add_options --enable-xinerama
 ac_add_options --with-distribution-id=org.pld-linux
+%if %{with xulrunner}
+ac_add_options --with-libxul-sdk=%{_libdir}/xulrunner-sdk
+%endif
 ac_add_options --with-pthreads
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-nspr
@@ -214,7 +227,9 @@ install -d \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
 	$RPM_BUILD_ROOT%{_datadir}/%{name}
 
+%if %{without xulrunner}
 %browser_plugins_add_browser %{name} -p %{_libdir}/%{name}/plugins
+%endif
 
 %{__make} -C obj-%{_target_cpu}/browser/installer stage-package \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -225,22 +240,28 @@ install -d \
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome $RPM_BUILD_ROOT%{_datadir}/%{name}/chrome
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults $RPM_BUILD_ROOT%{_datadir}/%{name}/defaults
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{name}/extensions
-mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/modules $RPM_BUILD_ROOT%{_datadir}/%{name}/modules
-mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
+%if %{without xulrunner}
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
+%endif
 ln -s ../../share/%{name}/chrome $RPM_BUILD_ROOT%{_libdir}/%{name}/chrome
 ln -s ../../share/%{name}/defaults $RPM_BUILD_ROOT%{_libdir}/%{name}/defaults
 ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions
-ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
 ln -s ../../share/%{name}/modules $RPM_BUILD_ROOT%{_libdir}/%{name}/modules
 ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
-ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
+%if %{without xulrunner}
+ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
+ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
+%endif
 
+%if %{without xulrunner}
 rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+%endif
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
@@ -291,12 +312,16 @@ exit 0
 
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
+%if %{without xulrunner}
 %update_browser_plugins
+%endif
 
 %postun
+%if %{without xulrunner}
 if [ "$1" = 0 ]; then
 	%update_browser_plugins
 fi
+%endif
 
 %files
 %defattr(644,root,root,755)
@@ -304,9 +329,11 @@ fi
 %attr(755,root,root) %{_bindir}/firefox
 %attr(755,root,root) %{_sbindir}/%{name}-chrome+xpcom-generate
 
+%if %{without xulrunner}
 # browser plugins v2
 %{_browserpluginsconfdir}/browsers.d/%{name}.*
 %config(noreplace) %verify(not md5 mtime size) %{_browserpluginsconfdir}/blacklist.d/%{name}.*.blacklist
+%endif
 
 %dir %{_libdir}/%{name}
 %attr(755,root,root) %{_libdir}/%{name}/*.so
@@ -322,21 +349,32 @@ fi
 # config?
 %{_libdir}/%{name}/.autoreg
 %{_libdir}/%{name}/application.ini
-%{_libdir}/%{name}/platform.ini
 
 %dir %{_libdir}/%{name}/components
 
 %{_libdir}/%{name}/components/aboutRobots.js
 %{_libdir}/%{name}/components/FeedConverter.js
-%{_libdir}/%{name}/components/FeedProcessor.js
 %{_libdir}/%{name}/components/FeedWriter.js
 %{_libdir}/%{name}/components/WebContentConverter.js
 %{_libdir}/%{name}/components/browser.xpt
 %{_libdir}/%{name}/components/fuelApplication.js
+%{_libdir}/%{name}/components/nsBrowserContentHandler.js
+%{_libdir}/%{name}/components/nsBrowserGlue.js
+%{_libdir}/%{name}/components/nsMicrosummaryService.js
+%{_libdir}/%{name}/components/nsPlacesTransactionsService.js
+%{_libdir}/%{name}/components/nsSafebrowsingApplication.js
+%{_libdir}/%{name}/components/nsSearchService.js
+%{_libdir}/%{name}/components/nsSearchSuggestions.js
+%{_libdir}/%{name}/components/nsSessionStartup.js
+%{_libdir}/%{name}/components/nsSessionStore.js
+%{_libdir}/%{name}/components/nsSetDefaultBrowser.js
+%{_libdir}/%{name}/components/nsSidebar.js
+%if %{without xulrunner}
+%{_libdir}/%{name}/platform.ini
+%{_libdir}/%{name}/components/FeedProcessor.js
 %{_libdir}/%{name}/components/jsconsole-clhandler.js
 %{_libdir}/%{name}/components/nsAddonRepository.js
 %{_libdir}/%{name}/components/nsBlocklistService.js
-%{_libdir}/%{name}/components/nsBrowserGlue.js
 %{_libdir}/%{name}/components/nsContentDispatchChooser.js
 %{_libdir}/%{name}/components/nsContentPrefService.js
 %{_libdir}/%{name}/components/nsDefaultCLH.js
@@ -349,16 +387,7 @@ fi
 %{_libdir}/%{name}/components/nsLoginInfo.js
 %{_libdir}/%{name}/components/nsLoginManager.js
 %{_libdir}/%{name}/components/nsLoginManagerPrompter.js
-%{_libdir}/%{name}/components/nsMicrosummaryService.js
-%{_libdir}/%{name}/components/nsPlacesTransactionsService.js
 %{_libdir}/%{name}/components/nsProxyAutoConfig.js
-%{_libdir}/%{name}/components/nsSafebrowsingApplication.js
-%{_libdir}/%{name}/components/nsSearchService.js
-%{_libdir}/%{name}/components/nsSearchSuggestions.js
-%{_libdir}/%{name}/components/nsSessionStartup.js
-%{_libdir}/%{name}/components/nsSessionStore.js
-%{_libdir}/%{name}/components/nsSetDefaultBrowser.js
-%{_libdir}/%{name}/components/nsSidebar.js
 %{_libdir}/%{name}/components/nsTaggingService.js
 %{_libdir}/%{name}/components/nsTryToClose.js
 %{_libdir}/%{name}/components/nsURLFormatter.js
@@ -369,37 +398,45 @@ fi
 %{_libdir}/%{name}/components/pluginGlue.js
 %{_libdir}/%{name}/components/storage-Legacy.js
 %{_libdir}/%{name}/components/txEXSLTRegExFunctions.js
-%{_libdir}/%{name}/components/nsBrowserContentHandler.js
+%endif
 
 %attr(755,root,root) %{_libdir}/%{name}/components/libbrowsercomps.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libbrowserdirprovider.so
+%if %{without xulrunner}
 %attr(755,root,root) %{_libdir}/%{name}/components/libdbusservice.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
+%endif
 
 %if %{with gnomevfs}
+%if %{without xulrunner}
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
+%endif
 %attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
 %endif
 
+%attr(755,root,root) %{_libdir}/%{name}/*.sh
+%attr(755,root,root) %{_libdir}/%{name}/firefox
+%if %{without xulrunner}
+%attr(755,root,root) %{_libdir}/%{name}/firefox-bin
 %dir %{_libdir}/%{name}/plugins
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
-%attr(755,root,root) %{_libdir}/%{name}/*.sh
 %attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
-%attr(755,root,root) %{_libdir}/%{name}/firefox
-%attr(755,root,root) %{_libdir}/%{name}/firefox-bin
+%endif
 %{_pixmapsdir}/mozilla-firefox.png
 %{_desktopdir}/mozilla-firefox.desktop
 
 # symlinks
 %{_libdir}/%{name}/chrome
 %{_libdir}/%{name}/defaults
-%{_libdir}/%{name}/dictionaries
 %{_libdir}/%{name}/extensions
-%{_libdir}/%{name}/greprefs
 %{_libdir}/%{name}/icons
 %{_libdir}/%{name}/modules
-%{_libdir}/%{name}/res
 %{_libdir}/%{name}/searchplugins
+%if %{without xulrunner}
+%{_libdir}/%{name}/dictionaries
+%{_libdir}/%{name}/greprefs
+%{_libdir}/%{name}/res
+%endif
 
 # browserconfig
 %{_libdir}/%{name}/browserconfig.properties
@@ -409,11 +446,13 @@ fi
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/chrome
 %{_datadir}/%{name}/defaults
-%{_datadir}/%{name}/greprefs
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/modules
-%{_datadir}/%{name}/res
 %{_datadir}/%{name}/searchplugins
+%if %{without xulrunner}
+%{_datadir}/%{name}/greprefs
+%{_datadir}/%{name}/res
+%endif
 
 %dir %{_datadir}/%{name}/extensions
 # -dom-inspector subpackage?
