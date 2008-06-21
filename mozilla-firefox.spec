@@ -4,7 +4,6 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
-# - disable some options by default (fraud detection, application update etc.)
 # - review Rs/BRs for xulrunner build, surely not everything here is needed
 # - fix/remove noauto{dep,prov,req} for xulrunner build
 #
@@ -25,7 +24,7 @@ Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
 Version:	3.0
-Release:	2.2
+Release:	2.3
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
@@ -37,6 +36,8 @@ Patch1:		%{name}-gcc3.patch
 Patch2:		%{name}-agent.patch
 Patch3:		%{name}-agent-ac.patch
 Patch4:		%{name}-ti-agent.patch
+Patch5:		%{name}-branding.patch
+Patch6:		%{name}-prefs.patch
 URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
@@ -136,6 +137,9 @@ cd mozilla
 %if "%{pld_release}" == "ti"
 %patch4 -p1
 %endif
+
+%patch5 -p1
+%patch6 -p1
 
 %build
 cd mozilla
