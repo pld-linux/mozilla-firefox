@@ -1,0 +1,46 @@
+diff -ur mozilla.orig/browser/app/firefox-branding.js mozilla/browser/app/firefox-branding.js
+--- mozilla.orig/browser/app/firefox-branding.js	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/app/firefox-branding.js	2008-06-21 15:31:20.000000000 +0200
+@@ -1,5 +1,6 @@
+-pref("startup.homepage_override_url","http://www.mozilla.org/projects/%APP%/%VERSION%/whatsnew/");
+-pref("startup.homepage_welcome_url","http://www.mozilla.org/projects/%APP%/%VERSION%/firstrun/");
++pref("browser.startup.homepage_override.mstone", "ignore");
++pref("startup.homepage_override_url","");
++pref("startup.homepage_welcome_url","");
+ // URL user can browse to manually if for some reason all update installation
+ // attempts fail.
+ pref("app.update.url.manual", "http://www.mozilla.org/products/%APP%/");
+@@ -8,7 +9,7 @@
+ pref("app.update.url.details", "http://www.mozilla.org/projects/%APP%/");
+ 
+ // Release notes URL
+-pref("app.releaseNotesURL", "http://www.mozilla.org/projects/%APP%/%VERSION%/releasenotes/");
++pref("app.releaseNotesURL", "http://www.mozilla.com/%LOCALE%/%APP%/%VERSION%/releasenotes/");
+ 
+ // Search codes belong only in builds with official branding
+ pref("browser.search.param.yahoo-fr", "");
+diff -ur mozilla.orig/browser/base/content/browserconfig.properties mozilla/browser/base/content/browserconfig.properties
+--- mozilla.orig/browser/base/content/browserconfig.properties	2008-06-21 12:55:29.000000000 +0200
++++ mozilla/browser/base/content/browserconfig.properties	2008-06-21 15:05:50.000000000 +0200
+@@ -1,2 +1,2 @@
+ # Do NOT localize or otherwise change these values
+-browser.startup.homepage=http://www.mozilla.org/projects/minefield/
++browser.startup.homepage=about:
+diff -ur mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd mozilla/browser/locales/en-US/chrome/branding/brand.dtd
+--- mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 16:13:49.000000000 +0200
+@@ -1,3 +1,3 @@
+-<!ENTITY  brandShortName        "Minefield">
+-<!ENTITY  brandFullName         "Minefield">            
++<!ENTITY  brandShortName        "Firefox Community Edition">
++<!ENTITY  brandFullName         "Firefox Community Edition">            
+ <!ENTITY  vendorShortName       "Mozilla">
+diff -ur mozilla.orig/browser/locales/en-US/chrome/branding/brand.properties mozilla/browser/locales/en-US/chrome/branding/brand.properties
+--- mozilla.orig/browser/locales/en-US/chrome/branding/brand.properties	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/locales/en-US/chrome/branding/brand.properties	2008-06-21 16:14:14.000000000 +0200
+@@ -1,3 +1,3 @@
+-brandShortName=Minefield
+-brandFullName=Minefield
++brandShortName=Firefox Community Edition
++brandFullName=Firefox Community Edition
+ vendorShortName=Mozilla
