@@ -25,7 +25,7 @@ diff -ur mozilla.orig/browser/base/content/browserconfig.properties mozilla/brow
 @@ -1,2 +1,2 @@
  # Do NOT localize or otherwise change these values
 -browser.startup.homepage=http://www.mozilla.org/projects/minefield/
-+browser.startup.homepage=about:
++browser.startup.homepage=http://www.pld-linux.org/
 diff -ur mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd mozilla/browser/locales/en-US/chrome/branding/brand.dtd
 --- mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 12:55:30.000000000 +0200
 +++ mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 16:13:49.000000000 +0200
