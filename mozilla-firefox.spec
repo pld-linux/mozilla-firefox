@@ -4,8 +4,6 @@
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
 # - make it more pld-like (bookmarks, default page etc..)
-# - review Rs/BRs for xulrunner build, surely not everything here is needed
-# - fix/remove noauto{dep,prov,req} for xulrunner build
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
@@ -87,7 +85,7 @@ Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.12-2
 %if %{with xulrunner}
-%requires_eq	xulrunner
+%requires_eq_to	xulrunner xulrunner-devel
 %endif
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
