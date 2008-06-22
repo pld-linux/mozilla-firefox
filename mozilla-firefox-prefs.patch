@@ -77,3 +77,28 @@ diff -ur mozilla.orig/browser/components/preferences/advanced.xul mozilla/browse
              <checkbox id="enableAddonUpdate"
                        label="&enableAddonsUpdate.label;"
                        accesskey="&enableAddonsUpdate.accesskey;"
+diff -ur mozilla.orig/docshell/resources/content/netError.xhtml mozilla/docshell/resources/content/netError.xhtml
+--- mozilla.orig/docshell/resources/content/netError.xhtml	2008-06-21 12:55:24.000000000 +0200
++++ mozilla/docshell/resources/content/netError.xhtml	2008-06-22 13:08:20.000000000 +0200
+@@ -334,8 +334,8 @@
+         <!-- Override section - For ssl errors only.  Removed on init for other
+              error types.  -->
+         <div id="securityOverrideDiv">
+-          <a id="securityOverrideLink" href="javascript:showSecuritySection();" >&securityOverride.linkText;</a>
+-          <div id="securityOverrideContent" style="display: none;">&securityOverride.warningText;</div>
++          <a id="securityOverrideLink" href="javascript:showSecuritySection();" style="display: none;">&securityOverride.linkText;</a>
++          <div id="securityOverrideContent">&securityOverride.warningText;</div>
+         </div>
+       </div>
+ 
+diff -ur mozilla.orig/browser/locales/en-US/chrome/overrides/netError.dtd mozilla/browser/locales/en-US/chrome/overrides/netError.dtd
+--- mozilla.orig/browser/locales/en-US/chrome/overrides/netError.dtd	2008-06-21 12:55:30.000000000 +0200
++++ mozilla/browser/locales/en-US/chrome/overrides/netError.dtd	2008-06-22 13:52:26.000000000 +0200
+@@ -175,6 +175,6 @@
+ <!ENTITY securityOverride.warningText "
+ <p>You should not add an exception if you are using an internet connection that you do not trust completely or if you are not used to seeing a warning for this server.</p>
+ 
+-<xul:button xmlns:xul='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' id='getMeOutOfHereButton' label='&securityOverride.getMeOutOfHereButton;'/>
+ <xul:button xmlns:xul='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' id='exceptionDialogButton' label='&securityOverride.exceptionButtonLabel;'/>
++<xul:button xmlns:xul='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul' id='getMeOutOfHereButton' label='&securityOverride.getMeOutOfHereButton;'/>
+ ">
