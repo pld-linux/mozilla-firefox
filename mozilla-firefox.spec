@@ -3,6 +3,8 @@
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
 #   for hints how to make locales
+# - (12:22:58)  patrys:  can you also move _libdir/mozilla-firefox to just _libdir/firefox?
+#   (12:23:25)  patrys:  it's not like we ship official firefox
 #
 # Conditional build:
 %bcond_with	tests		# enable tests (whatever they check)
