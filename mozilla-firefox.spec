@@ -63,6 +63,7 @@ BuildRequires:	nss-devel >= 1:3.12-2
 BuildRequires:	pango-devel >= 1:1.10.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	python-modules
 BuildRequires:	sqlite3-devel >= 3.5.9
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
