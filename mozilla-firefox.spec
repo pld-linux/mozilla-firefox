@@ -42,6 +42,7 @@ URL:		http://www.mozilla.org/projects/firefox/
 %{?with_gnomevfs:BuildRequires:	GConf2-devel >= 1.2.1}
 BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.6.0
+BuildRequires:	dbus-glib-devel >= 0.60
 BuildRequires:	glib2-devel
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 2:2.10
@@ -57,13 +58,12 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
-BuildRequires:	myspell-devel
 BuildRequires:	nspr-devel >= 1:4.7
 BuildRequires:	nss-devel >= 1:3.12-2
-BuildRequires:	pango-devel >= 1:1.6.0
+BuildRequires:	pango-devel >= 1:1.10.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
-BuildRequires:	sqlite3-devel
+BuildRequires:	sqlite3-devel >= 3.5.9
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	startup-notification-devel
@@ -82,9 +82,12 @@ Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
 %endif
 Requires:	cairo >= 1.6.0
+Requires:	gtk+2 >= 2:2.10
 Requires:	libpng(APNG) >= 0.10
 Requires:	nspr >= 1:4.7
 Requires:	nss >= 1:3.12-2
+Requires:	pango >= 1:1.10.0
+Requires:	sqlite3 >= 3.5.9
 %if %{with xulrunner}
 %requires_eq_to	xulrunner xulrunner-devel
 %endif
@@ -94,13 +97,10 @@ Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
 Obsoletes:	mozilla-firefox-libs
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# firefox/thunderbird/seamonkey provide their own versions
-%define		_noautoreqdep		libgkgfx.so libgtkxtbin.so libjsj.so libxpcom_compat.so libxpcom_core.so
-%define		_noautoprovfiles	%{_libdir}/%{name}/components
-# we don't want these to satisfy xulrunner-devel
-%define		_noautoprov		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
+# don't satisfy other packages (don't use %{name} here)
+%define		_noautoprovfiles	%{_libdir}/mozilla-firefox
 # and as we don't provide them, don't require either
-%define		_noautoreq		libgtkembedmoz.so libmozjs.so libxpcom.so libxul.so
+%define		_noautoreq	libmozjs.so libxpcom.so libxul.so
 
 %if "%{cc_version}" >= "3.4"
 %define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
@@ -202,7 +202,6 @@ ac_add_options --disable-xprint
 ac_add_options --enable-startup-notification
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
-ac_add_options --enable-system-myspell
 ac_add_options --enable-system-sqlite
 ac_add_options --enable-libxul
 ac_add_options --enable-xinerama
@@ -341,7 +340,12 @@ fi
 %endif
 
 %dir %{_libdir}/%{name}
-%attr(755,root,root) %{_libdir}/%{name}/*.so
+%attr(755,root,root) %{_libdir}/%{name}/libjemalloc.so
+%if %{without xulrunner}
+%attr(755,root,root) %{_libdir}/%{name}/libmozjs.so
+%attr(755,root,root) %{_libdir}/%{name}/libxpcom.so
+%attr(755,root,root) %{_libdir}/%{name}/libxul.so
+%endif
 %{_libdir}/%{name}/blocklist.xml
 
 %if %{with crashreporter}
