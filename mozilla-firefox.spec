@@ -1,3 +1,5 @@
+# NOTE:
+# - vulnreabilities log can be obtained from http://www.mozilla.org/security/known-vulnerabilities/firefox20.html
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
 # - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
@@ -14,7 +16,7 @@
 %undefine	with_gnomeui
 %undefine	with_gnomevfs
 %endif
-%define		firefox_ver	2.0.0.14
+%define		firefox_ver	2.0.0.16
 #
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
@@ -24,7 +26,7 @@ Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	9e9c13ba7b81f93f2fa10c6f256ee31e
+# Source0-md5:	90e0b7996a14fdbe6d4e6e4d87980647
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		mozilla-install.patch
