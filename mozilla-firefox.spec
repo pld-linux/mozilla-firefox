@@ -102,7 +102,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # don't satisfy other packages (don't use %{name} here)
 %define		_noautoprovfiles	%{_libdir}/mozilla-firefox
 # and as we don't provide them, don't require either
-%define		_noautoreq	libmozjs.so libxpcom.so libxul.so
+%define		_noautoreq	libmozjs.so libxpcom.so libxul.so libjemalloc.so
 
 %if "%{cc_version}" >= "3.4"
 %define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
