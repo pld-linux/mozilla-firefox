@@ -69,11 +69,15 @@ BuildRequires:	sqlite3-devel >= 3.5.9
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
 BuildRequires:	startup-notification-devel
+%if "%{pld_release}" == "ac"
+BuildRequires:	XFree86-devel
+%else
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXp-devel
 BuildRequires:	xorg-lib-libXt-devel
+%endif
 %if %{with xulrunner}
 BuildRequires:	xulrunner-devel >= 1.9-2
 %endif
