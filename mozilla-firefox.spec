@@ -23,12 +23,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	3.0.8
+Version:	3.0.10
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	5fb6c6f3e973516df83a573348377a2f
+# Source0-md5:	1012e835a5c130d18479bccdee240640
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
