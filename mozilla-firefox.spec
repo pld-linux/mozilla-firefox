@@ -146,7 +146,7 @@ cd mozilla-1.9.1
 %patch4 -p1
 %endif
 
-#%patch5 -p1
+%patch5 -p1
 %patch6 -p1
 %patch7 -p1
 
