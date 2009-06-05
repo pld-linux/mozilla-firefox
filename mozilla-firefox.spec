@@ -67,9 +67,9 @@ BuildRequires:	pango-devel >= 1:1.10.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules
-BuildRequires:	sqlite3-devel >= 3.5.9
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
+BuildRequires:	sqlite3-devel >= 3.5.9
 BuildRequires:	startup-notification-devel
 %if "%{pld_release}" == "ac"
 BuildRequires:	XFree86-devel
@@ -126,7 +126,7 @@ zgodnie z ideami ruchu otwartego oprogramowania oraz tworzoną z myślą
 o zgodności ze standardami, wydajnością i przenośnością.
 
 %prep
-%setup -qc -n %{name}-%{version}
+%setup -qc
 cd mozilla-1.9.1
 #%patch0 -p1
 
@@ -147,8 +147,8 @@ cd mozilla-1.9.1
 %endif
 
 #%patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
+%patch6 -p1
+%patch7 -p1
 
 %build
 cd mozilla-1.9.1
