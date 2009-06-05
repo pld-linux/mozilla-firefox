@@ -20,15 +20,17 @@
 %undefine	with_gnomevfs
 %endif
 
+%define		beta	b4
+
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	3.0.10
+Version:	3.5%{beta}
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}-source.tar.bz2
-# Source0-md5:	1012e835a5c130d18479bccdee240640
+# Source0-md5:	ff6bf463300cb56bcf750973b2af3d80
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -125,8 +127,8 @@ o zgodności ze standardami, wydajnością i przenośnością.
 
 %prep
 %setup -qc -n %{name}-%{version}
-cd mozilla
-%patch0 -p1
+cd mozilla-1.9.1
+#%patch0 -p1
 
 %if "%{cc_version}" < "3.4"
 %patch1 -p2
@@ -144,12 +146,12 @@ cd mozilla
 %patch4 -p1
 %endif
 
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
 
 %build
-cd mozilla
+cd mozilla-1.9.1
 cp -f %{_datadir}/automake/config.* build/autoconf
 cp -f %{_datadir}/automake/config.* nsprpub/build/autoconf
 
