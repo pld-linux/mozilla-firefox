@@ -49,6 +49,9 @@ BuildRequires:	dbus-glib-devel >= 0.60
 BuildRequires:	glib2-devel
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 2:2.10
+BuildRequires:	libiw-devel
+BuildRequires:	xorg-util-makedepend
+BuildRequires:	zlib-devel
 %if "%{pld_release}" == "ac"
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
 %else
