@@ -233,7 +233,7 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd mozilla
+cd mozilla-1.9.1
 install -d \
 	$RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_libdir}} \
 	$RPM_BUILD_ROOT{%{_pixmapsdir},%{_desktopdir}} \
