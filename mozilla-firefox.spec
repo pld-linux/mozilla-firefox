@@ -64,7 +64,7 @@ BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.2.7
 BuildRequires:	libstdc++-devel
-BuildRequires:	nspr-devel >= 1:4.7
+BuildRequires:	nspr-devel >= 4.8
 BuildRequires:	nss-devel >= 1:3.12-2
 BuildRequires:	pango-devel >= 1:1.10.0
 BuildRequires:	perl-modules >= 5.004
@@ -229,7 +229,7 @@ ac_add_options --with-system-zlib
 ac_add_options --with-default-mozilla-five-home=%{_libdir}/%{name}
 EOF
 
-%{__make} -j1 -f client.mk build \
+%{__make} -f client.mk build \
 	STRIP="/bin/true" \
 	CC="%{__cc}" \
 	CXX="%{__cxx}"
