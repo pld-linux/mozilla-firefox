@@ -1,3 +1,5 @@
+# NOTE
+# - we use iceweasel in pld linux
 #
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
