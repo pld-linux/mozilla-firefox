@@ -1,55 +1,21 @@
-diff -ur mozilla.orig/browser/app/firefox-branding.js mozilla/browser/app/firefox-branding.js
---- mozilla.orig/browser/app/firefox-branding.js	2008-06-21 12:55:30.000000000 +0200
-+++ mozilla/browser/app/firefox-branding.js	2008-06-21 15:31:20.000000000 +0200
-@@ -1,5 +1,6 @@
--pref("startup.homepage_override_url","http://www.mozilla.org/projects/%APP%/%VERSION%/whatsnew/");
--pref("startup.homepage_welcome_url","http://www.mozilla.org/projects/%APP%/%VERSION%/firstrun/");
-+pref("browser.startup.homepage_override.mstone", "ignore");
-+pref("startup.homepage_override_url","");
-+pref("startup.homepage_welcome_url","");
- // URL user can browse to manually if for some reason all update installation
- // attempts fail.
- pref("app.update.url.manual", "http://www.mozilla.org/products/%APP%/");
-@@ -8,7 +9,7 @@
- pref("app.update.url.details", "http://www.mozilla.org/projects/%APP%/");
+--- mozilla.orig/browser/app/application.ini	2010-02-04 15:47:13.000000000 +0100
++++ mozilla/browser/app/application.ini	2010-02-04 15:48:46.000000000 +0100
+@@ -37,8 +37,8 @@
  
- // Release notes URL
--pref("app.releaseNotesURL", "http://www.mozilla.org/projects/%APP%/%VERSION%/releasenotes/");
-+pref("app.releaseNotesURL", "http://www.mozilla.com/%LOCALE%/%APP%/%VERSION%/releasenotes/");
- 
- // Search codes belong only in builds with official branding
- pref("browser.search.param.yahoo-fr", "");
-diff -ur mozilla.orig/browser/base/content/browserconfig.properties mozilla/browser/base/content/browserconfig.properties
---- mozilla.orig/browser/base/content/browserconfig.properties	2008-06-21 12:55:29.000000000 +0200
-+++ mozilla/browser/base/content/browserconfig.properties	2008-06-21 15:05:50.000000000 +0200
-@@ -1,2 +1,2 @@
- # Do NOT localize or otherwise change these values
--browser.startup.homepage=http://www.mozilla.org/projects/minefield/
-+browser.startup.homepage=http://www.pld-linux.org/
-diff -ur mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd mozilla/browser/locales/en-US/chrome/branding/brand.dtd
---- mozilla.orig/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 12:55:30.000000000 +0200
-+++ mozilla/browser/locales/en-US/chrome/branding/brand.dtd	2008-06-21 16:13:49.000000000 +0200
-@@ -1,3 +1,3 @@
--<!ENTITY  brandShortName        "Minefield">
--<!ENTITY  brandFullName         "Minefield">            
-+<!ENTITY  brandShortName        "Firefox Community Edition">
-+<!ENTITY  brandFullName         "Firefox Community Edition">            
- <!ENTITY  vendorShortName       "Mozilla">
-diff -ur mozilla.orig/browser/locales/en-US/chrome/branding/brand.properties mozilla/browser/locales/en-US/chrome/branding/brand.properties
---- mozilla.orig/browser/locales/en-US/chrome/branding/brand.properties	2008-06-21 12:55:30.000000000 +0200
-+++ mozilla/browser/locales/en-US/chrome/branding/brand.properties	2008-06-21 16:14:14.000000000 +0200
-@@ -1,3 +1,3 @@
--brandShortName=Minefield
--brandFullName=Minefield
-+brandShortName=Firefox Community Edition
-+brandFullName=Firefox Community Edition
- vendorShortName=Mozilla
-diff -ur mozilla.orig/browser/locales/en-US/profile/bookmarks.html mozilla/browser/locales/en-US/profile/bookmarks.html
---- mozilla.orig/browser/locales/en-US/profile/bookmarks.html	2008-06-22 15:20:46.000000000 +0200
-+++ mozilla/browser/locales/en-US/profile/bookmarks.html	2008-06-22 17:42:09.000000000 +0200
-@@ -23,4 +23,12 @@
-         <DT><A HREF="http://en-US.www.mozilla.com/en-US/firefox/community/" ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHWSURBVHjaYvz//z8DJQAggJiQOe/fv2fv7Oz8rays/N+VkfG/iYnJfyD/1+rVq7ffu3dPFpsBAAHEAHIBCJ85c8bN2Nj4vwsDw/8zQLwKiO8CcRoQu0DxqlWrdsHUwzBAAIGJmTNnPgYa9j8UqhFElwPxf2MIDeIrKSn9FwSJoRkAEEAM0DD4DzMAyPi/G+QKY4hh5WAXGf8PDQ0FGwJ22d27CjADAAIIrLmjo+MXA9R2kAHvGBA2wwx6B8W7od6CeQcggKCmCEL8bgwxYCbUIGTDVkHDBia+CuotgACCueD3TDQN75D4xmAvCoK9ARMHBzAw0AECiBHkAlC0Mdy7x9ABNA3obAZXIAa6iKEcGlMVQHwWyjYuL2d4v2cPg8vZswx7gHyAAAK7AOif7SAbOqCmn4Ha3AHFsIDtgPq/vLz8P4MSkJ2W9h8ggBjevXvHDo4FQUQg/kdypqCg4H8lUIACnQ/SOBMYI8bAsAJFPcj1AAEEjwVQqLpAbXmH5BJjqI0gi9DTAAgDBBCcAVLkgmQ7yKCZxpCQxqUZhAECCJ4XgMl493ug21ZD+aDAXH0WLM4A9MZPXJkJIIAwTAR5pQMalaCABQUULttBGCCAGCnNzgABBgAMJ5THwGvJLAAAAABJRU5ErkJggg==" ID="rdf:#$42iCK1">Get Involved</A>
-         <DT><A HREF="http://en-US.www.mozilla.com/en-US/firefox/about/" ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHWSURBVHjaYvz//z8DJQAggJiQOe/fv2fv7Oz8rays/N+VkfG/iYnJfyD/1+rVq7ffu3dPFpsBAAHEAHIBCJ85c8bN2Nj4vwsDw/8zQLwKiO8CcRoQu0DxqlWrdsHUwzBAAIGJmTNnPgYa9j8UqhFElwPxf2MIDeIrKSn9FwSJoRkAEEAM0DD4DzMAyPi/G+QKY4hh5WAXGf8PDQ0FGwJ22d27CjADAAIIrLmjo+MXA9R2kAHvGBA2wwx6B8W7od6CeQcggKCmCEL8bgwxYCbUIGTDVkHDBia+CuotgACCueD3TDQN75D4xmAvCoK9ARMHBzAw0AECiBHkAlC0Mdy7x9ABNA3obAZXIAa6iKEcGlMVQHwWyjYuL2d4v2cPg8vZswx7gHyAAAK7AOif7SAbOqCmn4Ha3AHFsIDtgPq/vLz8P4MSkJ2W9h8ggBjevXvHDo4FQUQg/kdypqCg4H8lUIACnQ/SOBMYI8bAsAJFPcj1AAEEjwVQqLpAbXmH5BJjqI0gi9DTAAgDBBCcAVLkgmQ7yKCZxpCQxqUZhAECCJ4XgMl493ug21ZD+aDAXH0WLM4A9MZPXJkJIIAwTAR5pQMalaCABQUULttBGCCAGCnNzgABBgAMJ5THwGvJLAAAAABJRU5ErkJggg==" ID="rdf:#$52iCK1">About Us</A>
+ #filter substitution
+ [App]
+-Vendor=Mozilla
+-Name=Firefox
++Vendor=
++Name=Firefox Community Edition
+ Version=@APP_VERSION@
+ BuildID=@GRE_BUILDID@
+ #ifdef MOZ_SOURCE_REPO
+--- mozilla.orig/browser/locales/generic/profile/bookmarks.html.in	2009-06-24 10:20:29.000000000 +0200
++++ mozilla/browser/locales/generic/profile/bookmarks.html.in	2009-06-28 15:29:30.000000000 +0200
+@@ -24,4 +24,12 @@
+         <DT><A HREF="http://www.mozilla.com/@AB_CD@/firefox/community/" ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHWSURBVHjaYvz//z8DJQAggJiQOe/fv2fv7Oz8rays/N+VkfG/iYnJfyD/1+rVq7ffu3dPFpsBAAHEAHIBCJ85c8bN2Nj4vwsDw/8zQLwKiO8CcRoQu0DxqlWrdsHUwzBAAIGJmTNnPgYa9j8UqhFElwPxf2MIDeIrKSn9FwSJoRkAEEAM0DD4DzMAyPi/G+QKY4hh5WAXGf8PDQ0FGwJ22d27CjADAAIIrLmjo+MXA9R2kAHvGBA2wwx6B8W7od6CeQcggKCmCEL8bgwxYCbUIGTDVkHDBia+CuotgACCueD3TDQN75D4xmAvCoK9ARMHBzAw0AECiBHkAlC0Mdy7x9ABNA3obAZXIAa6iKEcGlMVQHwWyjYuL2d4v2cPg8vZswx7gHyAAAK7AOif7SAbOqCmn4Ha3AHFsIDtgPq/vLz8P4MSkJ2W9h8ggBjevXvHDo4FQUQg/kdypqCg4H8lUIACnQ/SOBMYI8bAsAJFPcj1AAEEjwVQqLpAbXmH5BJjqI0gi9DTAAgDBBCcAVLkgmQ7yKCZxpCQxqUZhAECCJ4XgMl493ug21ZD+aDAXH0WLM4A9MZPXJkJIIAwTAR5pQMalaCABQUULttBGCCAGCnNzgABBgAMJ5THwGvJLAAAAABJRU5ErkJggg==" ID="rdf:#$42iCK1">@firefox_community@</A>
+         <DT><A HREF="http://www.mozilla.com/@AB_CD@/firefox/about/" ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAHWSURBVHjaYvz//z8DJQAggJiQOe/fv2fv7Oz8rays/N+VkfG/iYnJfyD/1+rVq7ffu3dPFpsBAAHEAHIBCJ85c8bN2Nj4vwsDw/8zQLwKiO8CcRoQu0DxqlWrdsHUwzBAAIGJmTNnPgYa9j8UqhFElwPxf2MIDeIrKSn9FwSJoRkAEEAM0DD4DzMAyPi/G+QKY4hh5WAXGf8PDQ0FGwJ22d27CjADAAIIrLmjo+MXA9R2kAHvGBA2wwx6B8W7od6CeQcggKCmCEL8bgwxYCbUIGTDVkHDBia+CuotgACCueD3TDQN75D4xmAvCoK9ARMHBzAw0AECiBHkAlC0Mdy7x9ABNA3obAZXIAa6iKEcGlMVQHwWyjYuL2d4v2cPg8vZswx7gHyAAAK7AOif7SAbOqCmn4Ha3AHFsIDtgPq/vLz8P4MSkJ2W9h8ggBjevXvHDo4FQUQg/kdypqCg4H8lUIACnQ/SOBMYI8bAsAJFPcj1AAEEjwVQqLpAbXmH5BJjqI0gi9DTAAgDBBCcAVLkgmQ7yKCZxpCQxqUZhAECCJ4XgMl493ug21ZD+aDAXH0WLM4A9MZPXJkJIIAwTAR5pQMalaCABQUULttBGCCAGCnNzgABBgAMJ5THwGvJLAAAAABJRU5ErkJggg==" ID="rdf:#$52iCK1">@firefox_about@</A>
      </DL><p>
 +    <DT><H3>PLD Linux Distribution</H3>
 +    <DL><p>

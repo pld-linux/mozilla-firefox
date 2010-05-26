@@ -3,33 +3,6 @@
 
 LIBDIR="@LIBDIR@/mozilla-firefox"
 
-MOZARGS=
-MOZLOCALE="$(/usr/bin/locale | grep "^LC_MESSAGES=" | \
-		sed -e "s|LC_MESSAGES=||g" -e "s|\"||g" )"
-for MOZLANG in $(echo $LANGUAGE | tr ":" " ") $MOZLOCALE; do
-	eval MOZLANG="$(echo $MOZLANG | sed -e "s|_\([^.]*\).*|-\1|g")"
-
-	if [ -f $LIBDIR/chrome/$MOZLANG.jar ]; then
-		MOZARGS="-UILocale $MOZLANG"
-		break
-	fi
-done
-
-if [ -z "$MOZARGS" ]; then
-	# try harder
-	for MOZLANG in $(echo $LANGUAGE | tr ":" " ") $MOZLOCALE; do
-		eval MOZLANG="$(echo $MOZLANG | sed -e "s|_.*||g")"
-
-		LANGFILE=$(echo $LIBDIR/chrome/${MOZLANG}*.jar \
-				| sed 's/\s.*//g' )
-		if [ -f "$LANGFILE" ]; then
-			MOZLANG=$(basename "$LANGFILE" | sed 's/\.jar//')
-			MOZARGS="-UILocale $MOZLANG"
-			break
-		fi
-	done
-fi
-
 # compreg.dat and/or chrome.rdf will screw things up if it's from an
 # older version.  http://bugs.gentoo.org/show_bug.cgi?id=63999
 for f in ~/{.,.mozilla/}firefox/*/{compreg.dat,chrome.rdf,XUL.mfasl}; do
@@ -39,32 +12,28 @@ for f in ~/{.,.mozilla/}firefox/*/{compreg.dat,chrome.rdf,XUL.mfasl}; do
 	fi
 done
 
-if [ -n "$MOZARGS" ]; then
-	FIREFOX="$LIBDIR/firefox $MOZARGS"
-else
-	FIREFOX="$LIBDIR/firefox"
-fi
+FIREFOX="$LIBDIR/firefox"
+PWD=${PWD:-$(pwd)}
 
-if [ "$1" == "-remote" ]; then
+if [ "$1" = "-remote" ]; then
 	exec $FIREFOX "$@"
 else
-	PING=`$FIREFOX -remote 'ping()' 2>&1 >/dev/null`
-	if [ -n "$PING" ]; then
-		if [ -f "`pwd`/$1" ]; then
-			exec $FIREFOX "file://`pwd`/$1"
+	if ! $FIREFOX -remote 'ping()' 2>/dev/null; then
+		if [ -f "$PWD/$1" ]; then
+			exec $FIREFOX "file://$PWD/$1"
 		else
 			exec $FIREFOX "$@"
 		fi
 	else
 		if [ -z "$1" ]; then
 			exec $FIREFOX -remote 'xfeDoCommand(openBrowser)'
-		elif [ "$1" == "-mail" ]; then
+		elif [ "$1" = "-mail" ]; then
 			exec $FIREFOX -remote 'xfeDoCommand(openInbox)'
-		elif [ "$1" == "-compose" ]; then
+		elif [ "$1" = "-compose" ]; then
 			exec $FIREFOX -remote 'xfeDoCommand(composeMessage)'
 		else
-			if [ -f "`pwd`/$1" ]; then
-				URL="file://`pwd`/$1"
+			if [ -f "$PWD/$1" ]; then
+				URL="file://$PWD/$1"
 			else
 				URL="$1"
 			fi

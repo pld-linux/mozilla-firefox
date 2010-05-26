@@ -25,6 +25,14 @@ diff -ur mozilla.orig/browser/app/profile/firefox.js mozilla/browser/app/profile
  
  // 0 = blank, 1 = home (browser.startup.homepage), 2 = last visited page, 3 = resume previous browser session
  // The behavior of option 3 is detailed at: http://wiki.mozilla.org/Session_Restore
+@@ -391,6 +394,7 @@
+ pref("network.cookie.cookieBehavior", 0); // 0-Accept, 1-dontAcceptForeign, 2-dontUse
+ 
+ // l12n and i18n
++pref("intl.locale.matchOS", true);
+ pref("intl.accept_languages", "chrome://global/locale/intl.properties");
+ pref("intl.charsetmenu.browser.static", "chrome://global/locale/intl.properties");
+ pref("intl.charsetmenu.browser.more1",  "chrome://global/locale/intl.properties");
 @@ -445,7 +445,7 @@
  pref("alerts.totalOpenTime", 4000);
  
@@ -47,45 +55,6 @@ diff -ur mozilla.orig/browser/app/profile/firefox.js mozilla/browser/app/profile
  
  // Non-enhanced mode (local url lists) URL list to check for updates
  pref("browser.safebrowsing.provider.0.updateURL", "http://safebrowsing.clients.google.com/safebrowsing/downloads?client={moz:client}&appver={moz:version}&pver=2.1");
-@@ -739,7 +739,7 @@
- // 0 - don't pre-populate anything
- // 1 - pre-populate site URL, but don't fetch certificate
- // 2 - pre-populate site URL and pre-fetch certificate
--pref("browser.ssl_override_behavior", 1);
-+pref("browser.ssl_override_behavior", 2);
- 
- // Controls the display of domain in the identity box for SSL connections.
- // 0 - do not show domain
-diff -ur mozilla.orig/browser/base/content/baseMenuOverlay.xul mozilla/browser/base/content/baseMenuOverlay.xul
---- mozilla.orig/browser/base/content/baseMenuOverlay.xul	2008-06-21 12:55:29.000000000 +0200
-+++ mozilla/browser/base/content/baseMenuOverlay.xul	2008-06-21 15:08:33.000000000 +0200
-@@ -97,12 +97,6 @@
-                   label="&helpReleaseNotes.label;"
-                   oncommand="openReleaseNotes(event)"
-                   onclick="checkForMiddleClick(this, event);"/>
--        <menuseparator id="updateSeparator"/>
--        <menuitem id="checkForUpdates"
--                  accesskey="&updateCmd.accesskey;"
--                  label="&updateCmd.label;"
--                  class="menuitem-iconic"
--                  oncommand="checkForUpdates();"/>
-         <menuseparator id="aboutSeparator"/>
-         <menuitem id="aboutName"
-                   accesskey="&aboutCmd.accesskey;"
-diff -ur mozilla.orig/browser/components/preferences/advanced.xul mozilla/browser/components/preferences/advanced.xul
---- mozilla.orig/browser/components/preferences/advanced.xul	2008-06-21 12:55:30.000000000 +0200
-+++ mozilla/browser/components/preferences/advanced.xul	2008-06-21 16:01:22.000000000 +0200
-@@ -267,10 +267,6 @@
-         <tabpanel id="updatePanel" orient="vertical" align="start">
-           <label control="autoUpdateGroup">&autoCheck.label;</label>
-           <vbox class="indent" id="autoUpdateGroup" role="group">
--            <checkbox id="enableAppUpdate"
--                      label="&enableAppUpdate.label;"
--                      accesskey="&enableAppUpdate.accesskey;"
--                      preference="app.update.enabled"/>
-             <checkbox id="enableAddonUpdate"
-                       label="&enableAddonsUpdate.label;"
-                       accesskey="&enableAddonsUpdate.accesskey;"
 diff -ur mozilla.orig/browser/locales/en-US/chrome/overrides/netError.dtd mozilla/browser/locales/en-US/chrome/overrides/netError.dtd
 --- mozilla.orig/browser/locales/en-US/chrome/overrides/netError.dtd	2008-06-21 12:55:30.000000000 +0200
 +++ mozilla/browser/locales/en-US/chrome/overrides/netError.dtd	2008-06-22 13:52:26.000000000 +0200
