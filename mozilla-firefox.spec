@@ -1,5 +1,4 @@
-# NOTE
-# - we use iceweasel in pld linux
+# NOTE: PLD distributes iceweasel instead
 #
 # TODO:
 # - handle locales differently (runtime, since it's possible to do)
@@ -34,12 +33,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	3.6.3
+Version:	3.6.10
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	5e4541ab23084b7b14ba228291ce2688
+# Source0-md5:	59ee60ddfd8b33e99a24788d3b12adb3
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -57,7 +56,7 @@ URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	alsa-lib-devel
 BuildRequires:	automake
 BuildRequires:	bzip2-devel
-BuildRequires:	cairo-devel >= 1.6.0
+BuildRequires:	cairo-devel >= 1.8.8
 BuildRequires:	dbus-glib-devel >= 0.60
 %{?with_gnomevfs:BuildRequires:	gnome-vfs2-devel >= 2.0}
 BuildRequires:	gtk+2-devel >= 2:2.10
@@ -71,17 +70,17 @@ BuildRequires:	libiw-devel
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libnotify-devel
 BuildRequires:	libpng(APNG)-devel >= 0.10
-BuildRequires:	libpng-devel >= 1.2.7
+BuildRequires:	libpng-devel >= 1.2.17
 BuildRequires:	libstdc++-devel
-BuildRequires:	nspr-devel >= 1:4.8
+BuildRequires:	nspr-devel >= 1:4.8.6
 BuildRequires:	nss-devel >= 1:3.12.3
-BuildRequires:	pango-devel >= 1:1.10.0
+BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.453
-BuildRequires:	sqlite3-devel >= 3.6.15
+BuildRequires:	sqlite3-devel >= 3.7.2
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXft-devel >= 2.1
@@ -98,13 +97,16 @@ Requires(post):	mktemp >= 1.5-18
 %requires_eq_to	xulrunner xulrunner-devel
 %else
 Requires:	browser-plugins >= 2.0
-Requires:	cairo >= 1.6.0
+Requires:	cairo >= 1.8.8
+Requires:	dbus-glib >= 0.60
 Requires:	gtk+2 >= 2:2.18
 Requires:	libpng(APNG) >= 0.10
 Requires:	myspell-common
-Requires:	nspr >= 1:4.8
+Requires:	nspr >= 1:4.8.6
 Requires:	nss >= 1:3.12.3
+Requires:	pango >= 1:1.14.0
 Requires:	sqlite3 >= %{sqlite_build_version}
+Requires:	startup-notification >= 0.8
 %endif
 Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
@@ -271,6 +273,7 @@ mv $RPM_BUILD_ROOT%{_libdir}/%{name}/extensions $RPM_BUILD_ROOT%{_datadir}/%{nam
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/icons $RPM_BUILD_ROOT%{_datadir}/%{name}/icons
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/modules $RPM_BUILD_ROOT%{_datadir}/%{name}/modules
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins $RPM_BUILD_ROOT%{_datadir}/%{name}/searchplugins
+mv $RPM_BUILD_ROOT%{_libdir}/%{name}/browserconfig.properties $RPM_BUILD_ROOT%{_datadir}/%{name}
 %if %{without xulrunner}
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs $RPM_BUILD_ROOT%{_datadir}/%{name}/greprefs
 mv $RPM_BUILD_ROOT%{_libdir}/%{name}/res $RPM_BUILD_ROOT%{_datadir}/%{name}/res
@@ -282,6 +285,7 @@ ln -s ../../share/%{name}/extensions $RPM_BUILD_ROOT%{_libdir}/%{name}/extension
 ln -s ../../share/%{name}/modules $RPM_BUILD_ROOT%{_libdir}/%{name}/modules
 ln -s ../../share/%{name}/icons $RPM_BUILD_ROOT%{_libdir}/%{name}/icons
 ln -s ../../share/%{name}/searchplugins $RPM_BUILD_ROOT%{_libdir}/%{name}/searchplugins
+ln -s ../../share/%{name}/browserconfig.properties $RPM_BUILD_ROOT%{_libdir}/%{name}
 %if %{without xulrunner}
 ln -s ../../share/%{name}/greprefs $RPM_BUILD_ROOT%{_libdir}/%{name}/greprefs
 ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
@@ -293,6 +297,7 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 %endif
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+chmod 755 $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 cp -a browser/branding/unofficial/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
@@ -324,6 +329,7 @@ unset TMPDIR TMP || :
 
 rm -rf $HOME
 EOF
+chmod 755 $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -413,6 +419,7 @@ fi
 %{_libdir}/%{name}/components/nsFormAutoComplete.js
 %{_libdir}/%{name}/components/nsHandlerService.js
 %{_libdir}/%{name}/components/nsHelperAppDlg.js
+%{_libdir}/%{name}/components/nsINIProcessor.js
 %{_libdir}/%{name}/components/nsLivemarkService.js
 %{_libdir}/%{name}/components/nsLoginInfo.js
 %{_libdir}/%{name}/components/nsLoginManager.js
@@ -425,7 +432,6 @@ fi
 %{_libdir}/%{name}/components/nsTaggingService.js
 %{_libdir}/%{name}/components/nsTryToClose.js
 %{_libdir}/%{name}/components/nsURLFormatter.js
-%{_libdir}/%{name}/components/nsUpdateService.js
 %{_libdir}/%{name}/components/nsUpdateTimerManager.js
 %{_libdir}/%{name}/components/nsUrlClassifierLib.js
 %{_libdir}/%{name}/components/nsUrlClassifierListManager.js
@@ -443,10 +449,8 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libimgicon.so
 %endif
 
-%if %{with gnomevfs}
-%if %{without xulrunner}
+%if %{with gnomevfs} && %{without xulrunner}
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
-%endif
 %attr(755,root,root) %{_libdir}/%{name}/components/libnkgnomevfs.so
 %endif
 
@@ -457,6 +461,7 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/firefox-bin
 %attr(755,root,root) %{_libdir}/%{name}/plugins/*.so
 %attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
+%attr(755,root,root) %{_libdir}/%{name}/plugin-container
 %endif
 %{_pixmapsdir}/mozilla-firefox.png
 %{_desktopdir}/mozilla-firefox.desktop
@@ -468,14 +473,12 @@ fi
 %{_libdir}/%{name}/icons
 %{_libdir}/%{name}/modules
 %{_libdir}/%{name}/searchplugins
+%{_libdir}/%{name}/browserconfig.properties
 %if %{without xulrunner}
 %{_libdir}/%{name}/dictionaries
 %{_libdir}/%{name}/greprefs
 %{_libdir}/%{name}/res
 %endif
-
-# browserconfig
-%{_libdir}/%{name}/browserconfig.properties
 
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/chrome
@@ -483,6 +486,7 @@ fi
 %{_datadir}/%{name}/icons
 %{_datadir}/%{name}/modules
 %{_datadir}/%{name}/searchplugins
+%{_datadir}/%{name}/browserconfig.properties
 %if %{without xulrunner}
 %{_datadir}/%{name}/greprefs
 %{_datadir}/%{name}/res
