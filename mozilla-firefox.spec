@@ -33,12 +33,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	3.6.10
+Version:	3.6.12
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	59ee60ddfd8b33e99a24788d3b12adb3
+# Source0-md5:	80f4d83f23a7c45fc3f1904964ea2a5a
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -73,7 +73,7 @@ BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.2.17
 BuildRequires:	libstdc++-devel
 BuildRequires:	nspr-devel >= 1:4.8.6
-BuildRequires:	nss-devel >= 1:3.12.3
+BuildRequires:	nss-devel >= 1:3.12.8
 BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -103,7 +103,7 @@ Requires:	gtk+2 >= 2:2.18
 Requires:	libpng(APNG) >= 0.10
 Requires:	myspell-common
 Requires:	nspr >= 1:4.8.6
-Requires:	nss >= 1:3.12.3
+Requires:	nss >= 1:3.12.8
 Requires:	pango >= 1:1.14.0
 Requires:	sqlite3 >= %{sqlite_build_version}
 Requires:	startup-notification >= 0.8
