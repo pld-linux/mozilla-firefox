@@ -33,12 +33,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	3.6.13
+Version:	3.6.15
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-Source0:	ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	d7c90aed8209beefa74badf02e8eeae1
+Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
+# Source0-md5:	fcf8042948d91f1f3d9c33599b79cf35
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -292,7 +292,7 @@ ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 %endif
 
 %if %{without xulrunner}
-rm -rf $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 %endif
 
@@ -308,11 +308,11 @@ touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
 
 %if %{with xulrunner}
-rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/run-mozilla.sh
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/run-mozilla.sh
 %endif
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/LICENSE
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/README.txt
-rm $RPM_BUILD_ROOT%{_libdir}/%{name}/components/components.list
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/LICENSE
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/README.txt
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/components/components.list
 
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
