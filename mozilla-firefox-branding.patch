@@ -4,8 +4,8 @@
  
  #filter substitution
  [App]
--Vendor=Mozilla
--Name=Firefox
+-Vendor=@MOZ_APP_VENDOR@
+-Name=@MOZ_APP_BASENAME@
 +Vendor=
 +Name=Firefox Community Edition
  Version=@APP_VERSION@
