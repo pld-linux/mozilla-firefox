@@ -27,12 +27,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	7.0.1
+Version:	9.0.1
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	5b212db48630ba93bb30ec63cca17f4d
+# Source0-md5:	7cf2bd379792a9b232267c6a79680566
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -67,15 +67,15 @@ BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.4.1
 BuildRequires:	libstdc++-devel
 BuildRequires:	libvpx-devel
-BuildRequires:	nspr-devel >= 1:4.8.8
-BuildRequires:	nss-devel >= 1:3.12.10
+BuildRequires:	nspr-devel >= 1:4.8.9
+BuildRequires:	nss-devel >= 1:3.13.1
 BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.7.5-2
+BuildRequires:	sqlite3-devel >= 3.7.7.1
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -97,8 +97,8 @@ Requires:	gtk+2 >= 2:2.18
 Requires:	libpng >= 1.4.1
 Requires:	libpng(APNG) >= 0.10
 Requires:	myspell-common
-Requires:	nspr >= 1:4.8.8
-Requires:	nss >= 1:3.12.10
+Requires:	nspr >= 1:4.8.9
+Requires:	nss >= 1:3.13.1
 Requires:	pango >= 1:1.14.0
 Requires:	sqlite3 >= %{sqlite_build_version}
 Requires:	startup-notification >= 0.8
@@ -156,6 +156,10 @@ cd mozilla
 %patch6 -p1
 %patch7 -p1
 %patch8 -p2
+
+# config/rules.mk is patched by us and js/src/config/rules.mk
+# is supposed to be exact copy
+cp -a config/rules.mk js/src/config/rules.mk
 
 %build
 cd mozilla
@@ -303,7 +307,6 @@ touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
 %if %{with xulrunner}
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/run-mozilla.sh
 %endif
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/README.txt
 
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
