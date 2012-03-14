@@ -1,9 +1,6 @@
 # NOTE: PLD distributes iceweasel instead
 #
 # TODO:
-# - handle locales differently (runtime, since it's possible to do)
-# - see ftp://ftp.debian.org/debian/pool/main/m/mozilla-firefox/*diff*
-#   for hints how to make locales
 # - (12:22:58)  patrys:  can you also move _libdir/mozilla-firefox to just _libdir/firefox?
 #   (12:23:25)  patrys:  it's not like we ship official firefox
 # - fix wrapper script to allow playing with profiles (must not use -remote)
@@ -27,12 +24,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	9.0.1
+Version:	10.0.2
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	7cf2bd379792a9b232267c6a79680566
+# Source0-md5:	5ce038d591964f72c534fa33b75a62f5
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -53,7 +50,7 @@ BuildRequires:	bzip2-devel
 BuildRequires:	cairo-devel >= 1.10.2-5
 BuildRequires:	dbus-glib-devel >= 0.60
 BuildRequires:	glib2-devel >= 1:2.18
-BuildRequires:	gtk+2-devel >= 2:2.10
+BuildRequires:	gtk+2-devel >= 2:2.14
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
 BuildRequires:	hunspell-devel
 BuildRequires:	libIDL-devel >= 0.8.0
@@ -66,12 +63,13 @@ BuildRequires:	libnotify-devel >= 0.4
 BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.4.1
 BuildRequires:	libstdc++-devel
-BuildRequires:	libvpx-devel
+BuildRequires:	libvpx-devel >= 1.0.0
 BuildRequires:	nspr-devel >= 1:4.8.9
 BuildRequires:	nss-devel >= 1:3.13.1
 BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
+BuildRequires:	pkgconfig(libffi) >= 3.0.9
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
@@ -93,7 +91,8 @@ Requires(post):	mktemp >= 1.5-18
 Requires:	browser-plugins >= 2.0
 Requires:	cairo >= 1.10.2-5
 Requires:	dbus-glib >= 0.60
-Requires:	gtk+2 >= 2:2.18
+Requires:	glib2 >= 1:2.18
+Requires:	gtk+2 >= 2:2.14
 Requires:	libpng >= 1.4.1
 Requires:	libpng(APNG) >= 0.10
 Requires:	myspell-common
@@ -133,6 +132,9 @@ o zgodności ze standardami, wydajnością i przenośnością.
 %setup -qc
 mv -f mozilla-release mozilla
 cd mozilla
+
+# libvpx fix
+grep -q VPX_CODEC_USE_INPUT_PARTITION configure.in && sed -i 's#VPX_CODEC_USE_INPUT_PARTITION#VPX_CODEC_USE_INPUT_FRAGMENTS#' configure || exit 1
 
 %patch0 -p1
 
@@ -227,6 +229,7 @@ ac_add_options --with-libxul-sdk=$(pkg-config --variable=sdkdir libxul)
 %endif
 ac_add_options --with-pthreads
 ac_add_options --with-system-bz2
+ac_add_options --with-system-ffi
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
