@@ -1,16 +1,16 @@
---- mozilla.orig/browser/app/application.ini	2010-02-04 15:47:13.000000000 +0100
-+++ mozilla/browser/app/application.ini	2010-02-04 15:48:46.000000000 +0100
-@@ -37,8 +37,8 @@
- 
+--- mozilla/build/application.ini.in.orig	2012-03-13 02:36:39.000000000 +0100
++++ mozilla/build/application.ini.in	2012-03-24 19:29:15.284836726 +0100
+@@ -43,8 +43,8 @@
+ #endif
  #filter substitution
  [App]
 -Vendor=@MOZ_APP_VENDOR@
 -Name=@MOZ_APP_BASENAME@
 +Vendor=
 +Name=Firefox Community Edition
- Version=@APP_VERSION@
- BuildID=@GRE_BUILDID@
- #ifdef MOZ_SOURCE_REPO
+ Version=@MOZ_APP_VERSION@
+ #ifdef MOZ_APP_PROFILE
+ Profile=@MOZ_APP_PROFILE@
 --- mozilla.orig/browser/locales/generic/profile/bookmarks.html.in	2009-06-24 10:20:29.000000000 +0200
 +++ mozilla/browser/locales/generic/profile/bookmarks.html.in	2009-06-28 15:29:30.000000000 +0200
 @@ -24,4 +24,12 @@

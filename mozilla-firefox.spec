@@ -24,12 +24,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	10.0.2
+Version:	11.0
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	5ce038d591964f72c534fa33b75a62f5
+# Source0-md5:	4b07acf47857aff72776d805409cdd1b
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
 Patch0:		%{name}-install.patch
@@ -56,6 +56,8 @@ BuildRequires:	hunspell-devel
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libdnet-devel
 BuildRequires:	libevent-devel >= 1.4.7
+# standalone libffi 3.0.9 or gcc's from 4.5(?)+
+BuildRequires:	libffi-devel >= 6:3.0.9
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libiw-devel
 BuildRequires:	libjpeg-devel >= 6b
@@ -64,8 +66,8 @@ BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 1.4.1
 BuildRequires:	libstdc++-devel
 BuildRequires:	libvpx-devel >= 1.0.0
-BuildRequires:	nspr-devel >= 1:4.8.9
-BuildRequires:	nss-devel >= 1:3.13.1
+BuildRequires:	nspr-devel >= 1:4.9
+BuildRequires:	nss-devel >= 1:3.13.3
 BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
@@ -106,6 +108,7 @@ Provides:	wwwbrowser
 Obsoletes:	mozilla-firebird
 Obsoletes:	mozilla-firefox-lang-en < 2.0.0.8-3
 Obsoletes:	mozilla-firefox-libs
+Conflicts:	mozilla-firefox-lang-resources < %{version}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't satisfy other packages (don't use %{name} here)
@@ -186,6 +189,7 @@ ac_add_options --localstatedir=%{_localstatedir}
 ac_add_options --sharedstatedir=%{_sharedstatedir}
 ac_add_options --mandir=%{_mandir}
 ac_add_options --infodir=%{_infodir}
+ac_add_options --disable-elf-hack
 %if %{?debug:1}0
 ac_add_options --disable-optimize
 ac_add_options --enable-debug
@@ -383,6 +387,7 @@ fi
 
 %dir %{_libdir}/%{name}/components
 
+%{_libdir}/%{name}/components/ChromeProfileMigrator.js
 %{_libdir}/%{name}/components/FeedConverter.js
 %{_libdir}/%{name}/components/FeedWriter.js
 %{_libdir}/%{name}/components/PlacesProtocolHandler.js
@@ -501,8 +506,6 @@ fi
 %endif
 
 %dir %{_datadir}/%{name}/extensions
-# -dom-inspector subpackage?
-#%{_datadir}/%{name}/extensions/inspector@mozilla.org
 # the signature of the default theme
 %{_datadir}/%{name}/extensions/{972ce4c6-7e08-4474-a285-3208198ce6fd}
 
