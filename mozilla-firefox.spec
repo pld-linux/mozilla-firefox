@@ -24,23 +24,24 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	11.0
+Version:	12.0
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	4b07acf47857aff72776d805409cdd1b
+# Source0-md5:	80c3e5927274de7f181fb5f931ac5fd4
 Source1:	%{name}.desktop
 Source2:	%{name}.sh
-Patch0:		%{name}-install.patch
-Patch1:		%{name}-gcc3.patch
-Patch2:		%{name}-agent.patch
-Patch3:		%{name}-agent-ac.patch
-Patch4:		%{name}-ti-agent.patch
-Patch5:		%{name}-branding.patch
-Patch6:		%{name}-prefs.patch
-Patch7:		%{name}-nss_cflags.patch
-Patch8:		%{name}-no-subshell.patch
+Patch0:		%{name}-branding.patch
+Patch1:		%{name}-install.patch
+Patch2:		%{name}-gcc3.patch
+Patch3:		%{name}-agent.patch
+Patch4:		%{name}-agent-ac.patch
+Patch5:		%{name}-ti-agent.patch
+Patch6:		%{name}-nss_cflags.patch
+Patch7:		%{name}-prefs.patch
+Patch9:		%{name}-no-subshell.patch
+Patch10:	%{name}-bug-722975-workaround.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	GConf2-devel >= 1.2.1
 BuildRequires:	OpenGL-devel
@@ -75,7 +76,7 @@ BuildRequires:	pkgconfig(libffi) >= 3.0.9
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.7.7.1
+BuildRequires:	sqlite3-devel >= 3.7.10
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -113,8 +114,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # don't satisfy other packages (don't use %{name} here)
 %define		_noautoprovfiles	%{_libdir}/mozilla-firefox
+%if %{without xulrunner}
 # and as we don't provide them, don't require either
-%define		_noautoreq	libmozjs.so libxpcom.so libxul.so %{!?with_xulrunner:libmozalloc.so}
+%define		_noautoreq	libmozjs.so libxpcom.so libxul.so libmozalloc.so
+%endif
 
 %if "%{cc_version}" >= "3.4"
 %define		specflags	-fno-strict-aliasing -fno-tree-vrp -fno-stack-protector
@@ -136,31 +139,30 @@ o zgodności ze standardami, wydajnością i przenośnością.
 mv -f mozilla-release mozilla
 cd mozilla
 
-# libvpx fix
-grep -q VPX_CODEC_USE_INPUT_PARTITION configure.in && sed -i 's#VPX_CODEC_USE_INPUT_PARTITION#VPX_CODEC_USE_INPUT_FRAGMENTS#' configure || exit 1
-
 %patch0 -p1
+%patch1 -p1
 
 %if "%{cc_version}" < "3.4"
-%patch1 -p2
+%patch2 -p2
 %endif
 
 %if "%{pld_release}" == "th"
-%patch2 -p1
-%endif
-
-%if "%{pld_release}" == "ac"
 %patch3 -p1
 %endif
 
-%if "%{pld_release}" == "ti"
+%if "%{pld_release}" == "ac"
 %patch4 -p1
 %endif
 
+%if "%{pld_release}" == "ti"
 %patch5 -p1
+%endif
+
 %patch6 -p1
 %patch7 -p1
-%patch8 -p2
+
+%patch9 -p2
+%patch10 -p1
 
 # config/rules.mk is patched by us and js/src/config/rules.mk
 # is supposed to be exact copy
@@ -298,6 +300,8 @@ ln -s ../../share/%{name}/res $RPM_BUILD_ROOT%{_libdir}/%{name}/res
 %if %{without xulrunner}
 %{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
+%{__rm} -r $RPM_BUILD_ROOT%{_libdir}/%{name}/hyphenation
+ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/hyphenation
 %endif
 
 sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
@@ -368,6 +372,7 @@ fi
 
 %dir %{_libdir}/%{name}
 %if %{without xulrunner}
+%attr(755,root,root) %{_libdir}/%{name}/libmozalloc.so
 %attr(755,root,root) %{_libdir}/%{name}/libmozjs.so
 %attr(755,root,root) %{_libdir}/%{name}/libxpcom.so
 %attr(755,root,root) %{_libdir}/%{name}/libxul.so
@@ -390,6 +395,7 @@ fi
 %{_libdir}/%{name}/components/ChromeProfileMigrator.js
 %{_libdir}/%{name}/components/FeedConverter.js
 %{_libdir}/%{name}/components/FeedWriter.js
+%{_libdir}/%{name}/components/FirefoxProfileMigrator.js
 %{_libdir}/%{name}/components/PlacesProtocolHandler.js
 %{_libdir}/%{name}/components/Weave.js
 %{_libdir}/%{name}/components/WebContentConverter.js
@@ -403,9 +409,13 @@ fi
 %{_libdir}/%{name}/components/nsSessionStore.js
 %{_libdir}/%{name}/components/nsSetDefaultBrowser.js
 %{_libdir}/%{name}/components/nsSidebar.js
+%{_libdir}/%{name}/components/PageThumbsProtocol.js
+%{_libdir}/%{name}/components/ProfileMigrator.js
 
 %{_libdir}/%{name}/components/components.manifest
 %{_libdir}/%{name}/components/interfaces.manifest
+
+%{_libdir}/%{name}/update-settings.ini
 
 %if %{without xulrunner}
 %{_libdir}/%{name}/platform.ini
@@ -446,7 +456,6 @@ fi
 %{_libdir}/%{name}/components/nsSearchService.js
 %{_libdir}/%{name}/components/nsSearchSuggestions.js
 %{_libdir}/%{name}/components/nsTaggingService.js
-%{_libdir}/%{name}/components/nsTryToClose.js
 %{_libdir}/%{name}/components/nsURLFormatter.js
 %{_libdir}/%{name}/components/nsUpdateTimerManager.js
 %{_libdir}/%{name}/components/nsUrlClassifierHashCompleter.js
@@ -490,6 +499,7 @@ fi
 %{_libdir}/%{name}/xulrunner
 %else
 %{_libdir}/%{name}/dictionaries
+%{_libdir}/%{name}/hyphenation
 %{_libdir}/%{name}/greprefs.js
 %{_libdir}/%{name}/res
 %endif
