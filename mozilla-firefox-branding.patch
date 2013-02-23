@@ -1,5 +1,5 @@
---- mozilla/build/application.ini.in.orig	2012-03-13 02:36:39.000000000 +0100
-+++ mozilla/build/application.ini.in	2012-03-24 19:29:15.284836726 +0100
+--- mozilla/build/application.ini.orig	2012-03-13 02:36:39.000000000 +0100
++++ mozilla/build/application.ini	2012-03-24 19:29:15.284836726 +0100
 @@ -43,8 +43,8 @@
  #endif
  #filter substitution

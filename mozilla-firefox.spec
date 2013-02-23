@@ -21,27 +21,33 @@
 %define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
 %endif
 
+%define		nspr_ver	4.9.5
+%define		nss_ver		3.14.3
+
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	12.0
+Version:	19.0
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
-Source0:	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	80c3e5927274de7f181fb5f931ac5fd4
-Source1:	%{name}.desktop
-Source2:	%{name}.sh
+Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
+# Source0-md5:	3dc732b6ce177792b43324f4bc7164d8
+Source3:	%{name}.desktop
+Source4:	%{name}.sh
 Patch0:		%{name}-branding.patch
 Patch1:		%{name}-install.patch
 Patch2:		%{name}-gcc3.patch
 Patch3:		%{name}-agent.patch
 Patch4:		%{name}-agent-ac.patch
 Patch5:		%{name}-ti-agent.patch
-Patch6:		%{name}-nss_cflags.patch
 Patch7:		%{name}-prefs.patch
 Patch9:		%{name}-no-subshell.patch
-Patch10:	%{name}-bug-722975-workaround.patch
+Patch10:	%{name}-system-cairo.patch
+Patch11:	%{name}-middle_click_paste.patch
+Patch12:	%{name}-packaging.patch
+# Edit patch below and restore --system-site-packages when system virtualenv gets 1.7 upgrade
+Patch13:	%{name}-system-virtualenv.patch
 URL:		http://www.mozilla.org/projects/firefox/
 BuildRequires:	GConf2-devel >= 1.2.1
 BuildRequires:	OpenGL-devel
@@ -50,7 +56,7 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel
 BuildRequires:	cairo-devel >= 1.10.2-5
 BuildRequires:	dbus-glib-devel >= 0.60
-BuildRequires:	glib2-devel >= 1:2.18
+BuildRequires:	glib2-devel >= 1:2.20
 BuildRequires:	gtk+2-devel >= 2:2.14
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
 BuildRequires:	hunspell-devel
@@ -61,22 +67,25 @@ BuildRequires:	libevent-devel >= 1.4.7
 BuildRequires:	libffi-devel >= 6:3.0.9
 %{?with_gnomeui:BuildRequires:	libgnomeui-devel >= 2.2.0}
 BuildRequires:	libiw-devel
+# requires libjpeg-turbo implementing at least libjpeg 6b API
 BuildRequires:	libjpeg-devel >= 6b
+BuildRequires:	libjpeg-turbo-devel
 BuildRequires:	libnotify-devel >= 0.4
 BuildRequires:	libpng(APNG)-devel >= 0.10
-BuildRequires:	libpng-devel >= 1.4.1
+BuildRequires:	libpng-devel >= 1.5.13
 BuildRequires:	libstdc++-devel
 BuildRequires:	libvpx-devel >= 1.0.0
-BuildRequires:	nspr-devel >= 1:4.9
-BuildRequires:	nss-devel >= 1:3.13.3
+BuildRequires:	nspr-devel >= 1:%{nspr_ver}
+BuildRequires:	nss-devel >= 1:%{nss_ver}
 BuildRequires:	pango-devel >= 1:1.14.0
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	pkgconfig(libffi) >= 3.0.9
 BuildRequires:	python-modules
+BuildRequires:	python-virtualenv
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.7.10
+BuildRequires:	sqlite3-devel >= 3.7.14.1
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -88,19 +97,21 @@ BuildRequires:	xulrunner-devel >= 2:%{version}
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
+Requires:	desktop-file-utils
 %if %{with xulrunner}
 %requires_eq_to	xulrunner xulrunner-devel
 %else
 Requires:	browser-plugins >= 2.0
 Requires:	cairo >= 1.10.2-5
 Requires:	dbus-glib >= 0.60
-Requires:	glib2 >= 1:2.18
+Requires:	glib2 >= 1:2.20
 Requires:	gtk+2 >= 2:2.14
-Requires:	libpng >= 1.4.1
+Requires:	libjpeg-turbo
+Requires:	libpng >= 1.5.13
 Requires:	libpng(APNG) >= 0.10
 Requires:	myspell-common
-Requires:	nspr >= 1:4.8.9
-Requires:	nss >= 1:3.13.1
+Requires:	nspr >= 1:%{nspr_ver}
+Requires:	nss >= 1:%{nss_ver}
 Requires:	pango >= 1:1.14.0
 Requires:	sqlite3 >= %{sqlite_build_version}
 Requires:	startup-notification >= 0.8
@@ -112,11 +123,13 @@ Obsoletes:	mozilla-firefox-libs
 Conflicts:	mozilla-firefox-lang-resources < %{version}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		filterout_cpp		-D_FORTIFY_SOURCE=[0-9]+
+
 # don't satisfy other packages (don't use %{name} here)
 %define		_noautoprovfiles	%{_libdir}/mozilla-firefox
 %if %{without xulrunner}
 # and as we don't provide them, don't require either
-%define		_noautoreq	libmozjs.so libxpcom.so libxul.so libmozalloc.so
+%define		_noautoreq	libmozalloc.so libmozjs.so libxpcom.so libxul.so
 %endif
 
 %if "%{cc_version}" >= "3.4"
@@ -158,11 +171,13 @@ cd mozilla
 %patch5 -p1
 %endif
 
-%patch6 -p1
 %patch7 -p1
 
 %patch9 -p2
-%patch10 -p1
+%patch10 -p2
+%patch11 -p2
+%patch12 -p2
+%patch13 -p2
 
 # config/rules.mk is patched by us and js/src/config/rules.mk
 # is supposed to be exact copy
@@ -176,6 +191,10 @@ cat << EOF > .mozconfig
 . \$topsrcdir/browser/config/mozconfig
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-%{_target_cpu}
+# parallel build fails on _xpidlgen/
+%if %{without xulrunner}
+mk_add_options MOZ_MAKE_FLAGS=%{_smp_mflags}
+%endif
 
 # Options for 'configure' (same as command-line options).
 ac_add_options --prefix=%{_prefix}
@@ -304,20 +323,16 @@ ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/dictionaries
 ln -s %{_datadir}/myspell $RPM_BUILD_ROOT%{_libdir}/%{name}/hyphenation
 %endif
 
-sed 's,@LIBDIR@,%{_libdir},' %{SOURCE2} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
+sed 's,@LIBDIR@,%{_libdir},' %{SOURCE4} > $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/mozilla-firefox
 ln -s mozilla-firefox $RPM_BUILD_ROOT%{_bindir}/firefox
 
 cp -a browser/branding/unofficial/content/icon64.png $RPM_BUILD_ROOT%{_pixmapsdir}/mozilla-firefox.png
-cp -a %{SOURCE1} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
+cp -a %{SOURCE3} $RPM_BUILD_ROOT%{_desktopdir}/%{name}.desktop
 
 # files created by firefox -register
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/compreg.dat
 touch $RPM_BUILD_ROOT%{_libdir}/%{name}/components/xpti.dat
-
-%if %{with xulrunner}
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/run-mozilla.sh
-%endif
 
 cat << 'EOF' > $RPM_BUILD_ROOT%{_sbindir}/%{name}-chrome+xpcom-generate
 #!/bin/sh
@@ -354,6 +369,7 @@ exit 0
 %post
 %{_sbindir}/%{name}-chrome+xpcom-generate
 %update_browser_plugins
+%update_desktop_database
 
 %postun
 if [ "$1" = 0 ]; then
@@ -392,11 +408,16 @@ fi
 
 %dir %{_libdir}/%{name}/components
 
+%{_libdir}/%{name}/components/Aitc.js
 %{_libdir}/%{name}/components/ChromeProfileMigrator.js
+%{_libdir}/%{name}/components/DownloadsStartup.js
+%{_libdir}/%{name}/components/DownloadsUI.js
 %{_libdir}/%{name}/components/FeedConverter.js
 %{_libdir}/%{name}/components/FeedWriter.js
 %{_libdir}/%{name}/components/FirefoxProfileMigrator.js
+%{_libdir}/%{name}/components/PageThumbsProtocol.js
 %{_libdir}/%{name}/components/PlacesProtocolHandler.js
+%{_libdir}/%{name}/components/ProfileMigrator.js
 %{_libdir}/%{name}/components/Weave.js
 %{_libdir}/%{name}/components/WebContentConverter.js
 %{_libdir}/%{name}/components/browser.xpt
@@ -404,26 +425,26 @@ fi
 %{_libdir}/%{name}/components/nsBrowserContentHandler.js
 %{_libdir}/%{name}/components/nsBrowserGlue.js
 %{_libdir}/%{name}/components/nsPrivateBrowsingService.js
-%{_libdir}/%{name}/components/nsSafebrowsingApplication.js
 %{_libdir}/%{name}/components/nsSessionStartup.js
 %{_libdir}/%{name}/components/nsSessionStore.js
 %{_libdir}/%{name}/components/nsSetDefaultBrowser.js
 %{_libdir}/%{name}/components/nsSidebar.js
-%{_libdir}/%{name}/components/PageThumbsProtocol.js
-%{_libdir}/%{name}/components/ProfileMigrator.js
 
 %{_libdir}/%{name}/components/components.manifest
 %{_libdir}/%{name}/components/interfaces.manifest
 
-%{_libdir}/%{name}/update-settings.ini
-
 %if %{without xulrunner}
+%{_libdir}/%{name}/dependentlibs.list
 %{_libdir}/%{name}/platform.ini
+%{_libdir}/%{name}/components/AppsService.js
+%{_libdir}/%{name}/components/BrowserElementParent.js
 %{_libdir}/%{name}/components/ConsoleAPI.js
+%{_libdir}/%{name}/components/ContactManager.js
 %{_libdir}/%{name}/components/FeedProcessor.js
 %{_libdir}/%{name}/components/GPSDGeolocationProvider.js
 %{_libdir}/%{name}/components/NetworkGeolocationProvider.js
 %{_libdir}/%{name}/components/PlacesCategoriesStarter.js
+%{_libdir}/%{name}/components/SettingsManager.js
 %{_libdir}/%{name}/components/TelemetryPing.js
 %{_libdir}/%{name}/components/addonManager.js
 %{_libdir}/%{name}/components/amContentHandler.js
@@ -432,6 +453,7 @@ fi
 %{_libdir}/%{name}/components/contentSecurityPolicy.js
 %{_libdir}/%{name}/components/crypto-SDR.js
 %{_libdir}/%{name}/components/jsconsole-clhandler.js
+%{_libdir}/%{name}/components/messageWakeupService.js
 %{_libdir}/%{name}/components/nsBadCertHandler.js
 %{_libdir}/%{name}/components/nsBlocklistService.js
 %{_libdir}/%{name}/components/nsContentDispatchChooser.js
@@ -457,7 +479,6 @@ fi
 %{_libdir}/%{name}/components/nsSearchSuggestions.js
 %{_libdir}/%{name}/components/nsTaggingService.js
 %{_libdir}/%{name}/components/nsURLFormatter.js
-%{_libdir}/%{name}/components/nsUpdateTimerManager.js
 %{_libdir}/%{name}/components/nsUrlClassifierHashCompleter.js
 %{_libdir}/%{name}/components/nsUrlClassifierLib.js
 %{_libdir}/%{name}/components/nsUrlClassifierListManager.js
@@ -466,6 +487,9 @@ fi
 %{_libdir}/%{name}/components/storage-mozStorage.js
 %{_libdir}/%{name}/components/txEXSLTRegExFunctions.js
 %endif
+
+%{_libdir}/%{name}/webapprt
+%attr(755,root,root) %{_libdir}/%{name}/webapprt-stub
 
 %attr(755,root,root) %{_libdir}/%{name}/components/libbrowsercomps.so
 %if %{without xulrunner}
