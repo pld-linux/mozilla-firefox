@@ -21,17 +21,18 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	25.0
+Version:	25.0.1
 Release:	1
 License:	MPL 1.1 or GPL v2+ or LGPL v2.1+
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	90ac047e83079a9046192c732e195329
+# Source0-md5:	b5b57d3ea937a339e0ed7ebea604b430
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
 Source6:	vendor-ac.js
 Patch0:		%{name}-branding.patch
+Patch1:		%{name}-941837.patch
 Patch7:		%{name}-prefs.patch
 Patch9:		%{name}-no-subshell.patch
 Patch11:	%{name}-middle_click_paste.patch
@@ -139,6 +140,7 @@ mv -f mozilla-release mozilla
 cd mozilla
 
 %patch0 -p1
+%patch1 -p1
 %patch7 -p1
 %patch9 -p2
 %patch11 -p2
