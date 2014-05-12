@@ -40,7 +40,6 @@ Patch12:	%{name}-packaging.patch
 Patch13:	%{name}-system-virtualenv.patch
 Patch15:	%{name}-Disable-Firefox-Health-Report.patch
 URL:		http://www.mozilla.org/projects/firefox/
-BuildRequires:	GConf2-devel >= 1.2.1
 BuildRequires:	OpenGL-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	automake
@@ -62,7 +61,6 @@ BuildRequires:	libicu-devel >= 50.1
 # requires libjpeg-turbo implementing at least libjpeg 6b API
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libjpeg-turbo-devel
-BuildRequires:	libnotify-devel >= 0.4
 BuildRequires:	libpng(APNG)-devel >= 0.10
 BuildRequires:	libpng-devel >= 2:1.6.7
 BuildRequires:	libstdc++-devel >= 6:4.4
@@ -220,7 +218,6 @@ ac_add_options --enable-chrome-format=omni
 ac_add_options --enable-default-toolkit=%{?with_gtk3:cairo-gtk3}%{!?with_gtk3:cairo-gtk2}
 ac_add_options --enable-extensions="default,gio"
 ac_add_options --enable-gio
-ac_add_options --enable-libnotify
 ac_add_options --enable-libxul
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
