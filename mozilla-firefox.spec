@@ -11,7 +11,7 @@
 %bcond_without	kerberos	# disable krb5 support
 %bcond_with	xulrunner	# system xulrunner [no longer supported]
 # - disabled shared_js - https://bugzilla.mozilla.org/show_bug.cgi?id=1039964
-%bcond_with	shared_js
+%bcond_with	shared_js	# shared libmozjs library [broken]
 
 %if %{without xulrunner}
 # The actual sqlite version (see RHBZ#480989):
@@ -24,12 +24,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	33.0.1
+Version:	33.0.2
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	5a1c4b0b2349e3db94b45bd3f03f9288
+# Source0-md5:	385ad037451f141b68515c73cad01704
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -48,6 +48,7 @@ BuildRequires:	automake
 BuildRequires:	bzip2-devel
 BuildRequires:	cairo-devel >= 1.10.2-5
 BuildRequires:	dbus-glib-devel >= 0.60
+BuildRequires:	freetype-devel >= 1:2.1.8
 BuildRequires:	gcc-c++ >= 6:4.4
 BuildRequires:	glib2-devel >= 1:2.20
 BuildRequires:	gstreamer-devel >= 1.0
@@ -55,7 +56,7 @@ BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %{!?with_gtk3:BuildRequires:	gtk+2-devel >= 2:2.14}
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.0.0}
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
-BuildRequires:	hunspell-devel
+BuildRequires:	hunspell-devel >= 1.2.3
 BuildRequires:	libIDL-devel >= 0.8.0
 BuildRequires:	libdnet-devel
 BuildRequires:	libevent-devel >= 1.4.7
@@ -77,8 +78,8 @@ BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	pkgconfig(libffi) >= 3.0.9
 BuildRequires:	pulseaudio-devel
-BuildRequires:	python-modules
-BuildRequires:	python-virtualenv
+BuildRequires:	python-modules >= 1:2.5
+BuildRequires:	python-virtualenv >= 1.9.1-4
 BuildRequires:	readline-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
