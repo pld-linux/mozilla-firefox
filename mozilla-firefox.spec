@@ -9,25 +9,27 @@
 %bcond_with	tests		# enable tests (whatever they check)
 %bcond_with	gtk3		# GTK+ 3.x instead of 2.x
 %bcond_without	kerberos	# disable krb5 support
-%bcond_without	xulrunner	# system xulrunner
+%bcond_with	xulrunner	# system xulrunner [no longer supported]
+# - disabled shared_js - https://bugzilla.mozilla.org/show_bug.cgi?id=1039964
+%bcond_with	shared_js
 
 %if %{without xulrunner}
 # The actual sqlite version (see RHBZ#480989):
 %define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
 %endif
 
-%define		nspr_ver	4.10.3
-%define		nss_ver		3.16
+%define		nspr_ver	4.10.6
+%define		nss_ver		3.17.1
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	29.0.1
+Version:	33.0.1
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	ca37addc3a69ef30247e00375dd93cd0
+# Source0-md5:	5a1c4b0b2349e3db94b45bd3f03f9288
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -48,6 +50,8 @@ BuildRequires:	cairo-devel >= 1.10.2-5
 BuildRequires:	dbus-glib-devel >= 0.60
 BuildRequires:	gcc-c++ >= 6:4.4
 BuildRequires:	glib2-devel >= 1:2.20
+BuildRequires:	gstreamer-devel >= 1.0
+BuildRequires:	gstreamer-plugins-base-devel >= 1.0
 %{!?with_gtk3:BuildRequires:	gtk+2-devel >= 2:2.14}
 %{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.0.0}
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
@@ -62,21 +66,23 @@ BuildRequires:	libicu-devel >= 50.1
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libjpeg-turbo-devel
 BuildRequires:	libpng(APNG)-devel >= 0.10
-BuildRequires:	libpng-devel >= 2:1.6.7
+BuildRequires:	libpng-devel >= 2:1.6.10
 BuildRequires:	libstdc++-devel >= 6:4.4
 BuildRequires:	libvpx-devel >= 1.3.0
 BuildRequires:	nspr-devel >= 1:%{nspr_ver}
 BuildRequires:	nss-devel >= 1:%{nss_ver}
-BuildRequires:	pango-devel >= 1:1.14.0
+BuildRequires:	pango-devel >= 1:1.22.0
 BuildRequires:	pixman-devel >= 0.19.2
 BuildRequires:	perl-modules >= 5.004
 BuildRequires:	pkgconfig
 BuildRequires:	pkgconfig(libffi) >= 3.0.9
+BuildRequires:	pulseaudio-devel
 BuildRequires:	python-modules
 BuildRequires:	python-virtualenv
+BuildRequires:	readline-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.8.2
+BuildRequires:	sqlite3-devel >= 3.8.5
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -100,13 +106,13 @@ Requires:	glib2 >= 1:2.20
 %{!?with_gtk3:Requires:	gtk+2 >= 2:2.14}
 %{?with_gtk3:Requires:	gtk+3 >= 3.0.0}
 Requires:	libjpeg-turbo
-Requires:	libpng >= 2:1.6.7
+Requires:	libpng >= 2:1.6.10
 Requires:	libpng(APNG) >= 0.10
 Requires:	libvpx >= 1.3.0
 Requires:	myspell-common
 Requires:	nspr >= 1:%{nspr_ver}
 Requires:	nss >= 1:%{nss_ver}
-Requires:	pango >= 1:1.14.0
+Requires:	pango >= 1:1.22.0
 Requires:	sqlite3 >= %{sqlite_build_version}
 Requires:	startup-notification >= 0.8
 %endif
@@ -150,17 +156,12 @@ cd mozilla
 
 %build
 cd mozilla
-cp -f %{_datadir}/automake/config.* build/autoconf
+cp -pf %{_datadir}/automake/config.* build/autoconf
 
-cat << EOF > .mozconfig
-. \$topsrcdir/browser/config/mozconfig
+cat << 'EOF' > .mozconfig
+. $topsrcdir/browser/config/mozconfig
 
 mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-%{_target_cpu}
-# parallel build fails on _xpidlgen/
-%if %{without xulrunner}
-mk_add_options MOZ_MAKE_FLAGS=%{_smp_mflags}
-%endif
-mk_add_options PROFILE_GEN_SCRIPT='@PYTHON@ @MOZ_OBJDIR@/_profile/pgo/profileserver.py'
 
 # Options for 'configure' (same as command-line options).
 ac_add_options --build=%{_target_platform}
@@ -216,14 +217,15 @@ ac_add_options --disable-xterm-updates
 ac_add_options --enable-canvas
 ac_add_options --enable-chrome-format=omni
 ac_add_options --enable-default-toolkit=%{?with_gtk3:cairo-gtk3}%{!?with_gtk3:cairo-gtk2}
-ac_add_options --enable-extensions="default,gio"
+ac_add_options --enable-extensions=default
 ac_add_options --enable-gio
+ac_add_options --enable-gstreamer=1.0
 ac_add_options --enable-libxul
 ac_add_options --enable-mathml
 ac_add_options --enable-pango
 ac_add_options --enable-readline
 ac_add_options --enable-safe-browsing
-ac_add_options --enable-shared-js
+%{?with_shared_js:ac_add_options --enable-shared-js}
 ac_add_options --enable-startup-notification
 ac_add_options --enable-svg
 ac_add_options --enable-system-cairo
@@ -251,10 +253,10 @@ ac_add_options --with-system-icu
 ac_add_options --with-x
 EOF
 
-%{__make} -f client.mk build \
-	STRIP="/bin/true" \
+%{__make} -j1 -f client.mk build \
 	CC="%{__cc}" \
-	CXX="%{__cxx}"
+	CXX="%{__cxx}" \
+	MOZ_MAKE_FLAGS="%{_smp_mflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -434,7 +436,7 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libdbusservice.so
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
 %attr(755,root,root) %{_libdir}/%{name}/libmozalloc.so
-%attr(755,root,root) %{_libdir}/%{name}/libmozjs.so
+%{?with_shared_js:%attr(755,root,root) %{_libdir}/%{name}/libmozjs.so}
 %attr(755,root,root) %{_libdir}/%{name}/libxul.so
 %attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
 %attr(755,root,root) %{_libdir}/%{name}/plugin-container
