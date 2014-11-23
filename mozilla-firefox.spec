@@ -19,17 +19,17 @@
 %endif
 
 %define		nspr_ver	4.10.6
-%define		nss_ver		3.17.1
+%define		nss_ver		3.17.2
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	33.0.2
+Version:	33.1.1
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	385ad037451f141b68515c73cad01704
+# Source0-md5:	2c23350a10d508f1d9b9a5f82df5dd93
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
