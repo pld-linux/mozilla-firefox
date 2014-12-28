@@ -10,8 +10,7 @@
 %bcond_with	gtk3		# GTK+ 3.x instead of 2.x
 %bcond_without	kerberos	# disable krb5 support
 %bcond_with	xulrunner	# system xulrunner [no longer supported]
-# - disabled shared_js - https://bugzilla.mozilla.org/show_bug.cgi?id=1039964
-%bcond_with	shared_js	# shared libmozjs library [broken]
+%bcond_without	shared_js	# shared libmozjs library
 
 %if %{without xulrunner}
 # The actual sqlite version (see RHBZ#480989):
@@ -24,12 +23,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	33.1.1
+Version:	34.0.5
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	2c23350a10d508f1d9b9a5f82df5dd93
+# Source0-md5:	d9b7e4819899e23466f5b0750408f128
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -79,11 +78,12 @@ BuildRequires:	pkgconfig
 BuildRequires:	pkgconfig(libffi) >= 3.0.9
 BuildRequires:	pulseaudio-devel
 BuildRequires:	python-modules >= 1:2.5
+BuildRequires:	python-simplejson
 BuildRequires:	python-virtualenv >= 1.9.1-4
 BuildRequires:	readline-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.8.5
+BuildRequires:	sqlite3-devel >= 3.8.6
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -130,7 +130,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoprovfiles	%{_libdir}/mozilla-firefox
 %if %{without xulrunner}
 # and as we don't provide them, don't require either
-%define		_noautoreq	libmozalloc.so libmozjs.so libxpcom.so libxul.so
+%define		_noautoreq	libmozalloc.so libmozjs.so libmozsandbox.so libxul.so
 %endif
 
 %description
@@ -242,6 +242,7 @@ ac_add_options --with-libxul-sdk=$(pkg-config --variable=sdkdir libxul)
 %endif
 ac_add_options --with-pthreads
 ac_add_options --with-system-bz2
+ac_add_options --with-system-icu
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-libevent
 ac_add_options --with-system-libvpx
@@ -250,7 +251,6 @@ ac_add_options --with-system-nss
 ac_add_options --with-system-ply
 ac_add_options --with-system-png
 ac_add_options --with-system-zlib
-ac_add_options --with-system-icu
 ac_add_options --with-x
 EOF
 
@@ -438,6 +438,7 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
 %attr(755,root,root) %{_libdir}/%{name}/libmozalloc.so
 %{?with_shared_js:%attr(755,root,root) %{_libdir}/%{name}/libmozjs.so}
+%attr(755,root,root) %{_libdir}/%{name}/libmozsandbox.so
 %attr(755,root,root) %{_libdir}/%{name}/libxul.so
 %attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
 %attr(755,root,root) %{_libdir}/%{name}/plugin-container
