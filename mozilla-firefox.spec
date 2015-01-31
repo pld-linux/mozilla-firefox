@@ -23,12 +23,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	34.0.5
+Version:	35.0.1
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	d9b7e4819899e23466f5b0750408f128
+# Source0-md5:	82eda528e4570b181aadcee602afda2d
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -151,7 +151,7 @@ cd mozilla
 %patch7 -p1
 %patch9 -p2
 %patch11 -p2
-%patch12 -p2
+%patch12 -p1
 %patch13 -p2
 %patch15 -p1
 
