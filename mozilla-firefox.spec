@@ -10,7 +10,7 @@
 %bcond_with	gtk3		# GTK+ 3.x instead of 2.x
 %bcond_without	kerberos	# disable krb5 support
 %bcond_with	xulrunner	# system xulrunner [no longer supported]
-%bcond_without	shared_js	# shared libmozjs library
+%bcond_with	shared_js	# shared libmozjs library
 
 %if %{without xulrunner}
 # The actual sqlite version (see RHBZ#480989):
@@ -23,12 +23,12 @@
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	35.0.1
+Version:	37.0.2
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	82eda528e4570b181aadcee602afda2d
+# Source0-md5:	755c04ee31dbcd28ed4d351b67fe8a8f
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -66,7 +66,7 @@ BuildRequires:	libicu-devel >= 50.1
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libjpeg-turbo-devel
 BuildRequires:	libpng(APNG)-devel >= 0.10
-BuildRequires:	libpng-devel >= 2:1.6.10
+BuildRequires:	libpng-devel >= 2:1.6.13
 BuildRequires:	libstdc++-devel >= 6:4.4
 BuildRequires:	libvpx-devel >= 1.3.0
 BuildRequires:	nspr-devel >= 1:%{nspr_ver}
@@ -95,19 +95,19 @@ BuildRequires:	xulrunner-devel >= 2:%{version}
 BuildRequires:	zip
 BuildRequires:	zlib-devel >= 1.2.3
 Requires(post):	mktemp >= 1.5-18
+Requires:	browser-plugins >= 2.0
 Requires:	desktop-file-utils
 Requires:	hicolor-icon-theme
 %if %{with xulrunner}
 %requires_eq_to	xulrunner xulrunner-devel
 %else
-Requires:	browser-plugins >= 2.0
 Requires:	cairo >= 1.10.2-5
 Requires:	dbus-glib >= 0.60
 Requires:	glib2 >= 1:2.20
 %{!?with_gtk3:Requires:	gtk+2 >= 2:2.14}
 %{?with_gtk3:Requires:	gtk+3 >= 3.0.0}
 Requires:	libjpeg-turbo
-Requires:	libpng >= 2:1.6.10
+Requires:	libpng >= 2:1.6.13
 Requires:	libpng(APNG) >= 0.10
 Requires:	libvpx >= 1.3.0
 Requires:	myspell-common
@@ -130,7 +130,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_noautoprovfiles	%{_libdir}/mozilla-firefox
 %if %{without xulrunner}
 # and as we don't provide them, don't require either
-%define		_noautoreq	libmozalloc.so libmozjs.so libmozsandbox.so libxul.so
+%define		_noautoreq	libmozalloc.so libmozjs.so libxul.so
 %endif
 
 %description
@@ -438,11 +438,14 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/components/libmozgnome.so
 %attr(755,root,root) %{_libdir}/%{name}/libmozalloc.so
 %{?with_shared_js:%attr(755,root,root) %{_libdir}/%{name}/libmozjs.so}
-%attr(755,root,root) %{_libdir}/%{name}/libmozsandbox.so
 %attr(755,root,root) %{_libdir}/%{name}/libxul.so
-%attr(755,root,root) %{_libdir}/%{name}/mozilla-xremote-client
 %attr(755,root,root) %{_libdir}/%{name}/plugin-container
 %{_libdir}/%{name}/dictionaries
 %{_libdir}/%{name}/chrome.manifest
 %{_libdir}/%{name}/omni.ja
+
+%dir %{_libdir}/%{name}/gmp-clearkey
+%dir %{_libdir}/%{name}/gmp-clearkey/0.1
+%{_libdir}/%{name}/gmp-clearkey/0.1/clearkey.info
+%attr(755,root,root) %{_libdir}/%{name}/gmp-clearkey/0.1/libclearkey.so
 %endif
