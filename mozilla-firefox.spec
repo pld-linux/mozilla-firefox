@@ -17,18 +17,18 @@
 %define		sqlite_build_version %(pkg-config --silence-errors --modversion sqlite3 2>/dev/null || echo ERROR)
 %endif
 
-%define		nspr_ver	4.10.6
-%define		nss_ver		3.17.2
+%define		nspr_ver	4.10.8
+%define		nss_ver		3.18.1
 
 Summary:	Firefox Community Edition web browser
 Summary(pl.UTF-8):	Firefox Community Edition - przeglądarka WWW
 Name:		mozilla-firefox
-Version:	37.0.2
+Version:	38.0.1
 Release:	1
 License:	MPL v2.0
 Group:		X11/Applications/Networking
 Source0:	http://releases.mozilla.org/pub/mozilla.org/firefox/releases/%{version}/source/firefox-%{version}.source.tar.bz2
-# Source0-md5:	755c04ee31dbcd28ed4d351b67fe8a8f
+# Source0-md5:	3c496e4ec072327b1ef2b820f15dff26
 Source3:	%{name}.desktop
 Source4:	%{name}.sh
 Source5:	vendor.js
@@ -49,15 +49,16 @@ BuildRequires:	cairo-devel >= 1.10.2-5
 BuildRequires:	dbus-glib-devel >= 0.60
 BuildRequires:	freetype-devel >= 1:2.1.8
 BuildRequires:	gcc-c++ >= 6:4.4
-BuildRequires:	glib2-devel >= 1:2.20
+BuildRequires:	glib2-devel >= 1:2.22
 BuildRequires:	gstreamer-devel >= 1.0
 BuildRequires:	gstreamer-plugins-base-devel >= 1.0
-%{!?with_gtk3:BuildRequires:	gtk+2-devel >= 2:2.14}
-%{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.0.0}
+%{!?with_gtk3:BuildRequires:	gtk+2-devel >= 2:2.18.0}
+%{?with_gtk3:BuildRequires:	gtk+3-devel >= 3.4.0}
 %{?with_kerberos:BuildRequires:	heimdal-devel >= 0.7.1}
 BuildRequires:	hunspell-devel >= 1.2.3
 BuildRequires:	libIDL-devel >= 0.8.0
-BuildRequires:	libdnet-devel
+# DECnet (dnprogs.spec), not dummy net (libdnet.spec)
+#BuildRequires:	libdnet-devel
 BuildRequires:	libevent-devel >= 1.4.7
 # standalone libffi 3.0.9 or gcc's from 4.5(?)+
 BuildRequires:	libffi-devel >= 6:3.0.9
@@ -66,7 +67,7 @@ BuildRequires:	libicu-devel >= 50.1
 BuildRequires:	libjpeg-devel >= 6b
 BuildRequires:	libjpeg-turbo-devel
 BuildRequires:	libpng(APNG)-devel >= 0.10
-BuildRequires:	libpng-devel >= 2:1.6.13
+BuildRequires:	libpng-devel >= 2:1.6.16
 BuildRequires:	libstdc++-devel >= 6:4.4
 BuildRequires:	libvpx-devel >= 1.3.0
 BuildRequires:	nspr-devel >= 1:%{nspr_ver}
@@ -83,7 +84,7 @@ BuildRequires:	python-virtualenv >= 1.9.1-4
 BuildRequires:	readline-devel
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	rpmbuild(macros) >= 1.601
-BuildRequires:	sqlite3-devel >= 3.8.6
+BuildRequires:	sqlite3-devel >= 3.8.9
 BuildRequires:	startup-notification-devel >= 0.8
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
@@ -103,11 +104,11 @@ Requires:	hicolor-icon-theme
 %else
 Requires:	cairo >= 1.10.2-5
 Requires:	dbus-glib >= 0.60
-Requires:	glib2 >= 1:2.20
-%{!?with_gtk3:Requires:	gtk+2 >= 2:2.14}
-%{?with_gtk3:Requires:	gtk+3 >= 3.0.0}
+Requires:	glib2 >= 1:2.22
+%{!?with_gtk3:Requires:	gtk+2 >= 2:2.18.0}
+%{?with_gtk3:Requires:	gtk+3 >= 3.4.0}
 Requires:	libjpeg-turbo
-Requires:	libpng >= 2:1.6.13
+Requires:	libpng >= 2:1.6.16
 Requires:	libpng(APNG) >= 0.10
 Requires:	libvpx >= 1.3.0
 Requires:	myspell-common
